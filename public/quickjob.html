@@ -1,0 +1,1898 @@
+﻿<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>QuickJob Campus · Pitch Deck & iOS Prototype</title>
+  <style>
+    :root {
+      --bg: #F3E4C9;
+      --surface: #FFF9EE;
+      --surface-warm: #E8D1AE;
+      --fg: #2E1F15;
+      --fg-2: #4B3525;
+      --muted: #755F4D;
+      --meta: #8A5F41;
+      --border: #D8BE96;
+      --border-soft: #EAD9BD;
+      --accent: #8A5F41;
+      --accent-on: #FFFFFF;
+      --accent-hover: color-mix(in oklab, var(--accent), black 8%);
+      --accent-active: color-mix(in oklab, var(--accent), black 14%);
+      --success: #16A34A;
+      --warn: #D97706;
+      --danger: #DC2626;
+      --font-display: Georgia, "Iowan Old Style", "Times New Roman", serif;
+      --font-body: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      --font-mono: "Geist Mono", ui-monospace, Menlo, monospace;
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 18px;
+      --text-xl: 24px;
+      --text-2xl: 36px;
+      --text-3xl: 54px;
+      --text-4xl: 76px;
+      --leading-body: 1.52;
+      --leading-tight: 1.04;
+      --tracking-display: -0.025em;
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-12: 48px;
+      --section-y-desktop: 104px;
+      --section-y-tablet: 72px;
+      --section-y-phone: 52px;
+      --radius-sm: 10px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-pill: 9999px;
+      --elev-flat: none;
+      --elev-ring: 0 0 0 1px var(--border);
+      --elev-raised: 0 22px 58px rgba(46, 31, 21, 0.15);
+      --focus-ring: 0 0 0 4px rgba(138, 95, 65, 0.24);
+      --motion-fast: 150ms;
+      --motion-base: 240ms;
+      --ease-standard: cubic-bezier(0.22, 1, 0.36, 1);
+      --container-max: 1180px;
+      --container-gutter-desktop: 36px;
+      --container-gutter-tablet: 24px;
+      --container-gutter-phone: 16px;
+      --primary: var(--accent);
+      --bg-main: var(--bg);
+      --text-dark: var(--fg);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 16% 14%, color-mix(in oklab, var(--surface-warm), transparent 25%), transparent 28%),
+        var(--bg-main);
+      color: var(--text-dark);
+      font-family: var(--font-body);
+      font-size: var(--text-base);
+      line-height: var(--leading-body);
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    button, input { font: inherit; }
+    button { cursor: pointer; }
+    h1, h2, h3, h4, p { margin: 0; }
+    h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; }
+    p { text-wrap: pretty; }
+    .deck-shell { min-height: 100vh; height: 100vh; display: grid; grid-template-rows: 76px 1fr 48px; overflow: hidden; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-4);
+      padding: 14px clamp(var(--space-4), 4vw, var(--space-8));
+      background: linear-gradient(135deg, color-mix(in oklab, var(--fg), white 4%), color-mix(in oklab, var(--primary), black 18%));
+      border-bottom: 1px solid color-mix(in oklab, var(--accent-on), transparent 86%);
+      color: var(--accent-on);
+      box-shadow: 0 18px 46px rgba(46, 31, 21, 0.18);
+      backdrop-filter: blur(18px);
+    }
+    .brand-lockup { display: flex; align-items: center; gap: var(--space-3); min-width: 0; }
+    .brand-mark {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: var(--surface);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, 0.18);
+      overflow: hidden;
+    }
+    .brand-mark img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .brand-copy strong { display: block; font-family: var(--font-display); font-size: var(--text-lg); letter-spacing: var(--tracking-display); color: var(--accent-on); }
+    .brand-copy span { display: block; color: color-mix(in oklab, var(--accent-on), transparent 24%); font-size: var(--text-xs); }
+    .slide-nav { display: flex; align-items: center; gap: var(--space-2); }
+    .nav-btn, .btn-primary, .btn-secondary, .segmented button, .icon-action {
+      border: 0;
+      border-radius: var(--radius-md);
+      transition: transform var(--motion-fast) var(--ease-standard), background var(--motion-base) var(--ease-standard), color var(--motion-base) var(--ease-standard), box-shadow var(--motion-base) var(--ease-standard);
+    }
+    .nav-btn {
+      width: 42px;
+      height: 42px;
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,0.12);
+      color: var(--accent-on);
+      border: 1px solid rgba(255,255,255,0.18);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.14);
+    }
+    .nav-btn:hover, .btn-secondary:hover, .icon-action:hover { box-shadow: var(--focus-ring); }
+    .nav-btn:active, .btn-primary:active, .btn-secondary:active, .segmented button:active, .icon-action:active { transform: scale(0.97); }
+    .counter { min-width: 78px; text-align: center; font-family: var(--font-mono); color: var(--accent-on); font-size: var(--text-sm); padding: 8px 10px; border-radius: var(--radius-pill); background: rgba(255,255,255,0.10); border: 1px solid rgba(255,255,255,0.16); }
+    .slides { position: relative; overflow: hidden; min-height: 0; height: 100%; }
+    .slide {
+      display: none;
+      height: 100%;
+      padding: clamp(var(--space-5), 3.4vw, var(--space-8));
+      animation: fade-slide var(--motion-base) var(--ease-standard) both;
+    }
+    .slide.active { display: grid; }
+    .slide-inner {
+      width: min(100%, 1240px);
+      margin: auto;
+      display: grid;
+      gap: var(--space-8);
+    }
+    .topbar {
+      margin: 0;
+      width: 100%;
+      min-width: 100%;
+      border-radius: 0 0 28px 28px;
+    }
+    .topbar::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: -1px;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(243,228,201,.7), transparent);
+    }
+    .brand-mark { flex: 0 0 auto; }
+    .slide.active .slide-kicker,
+    .slide.active .hero-title,
+    .slide.active .section-title,
+    .slide.active .lead,
+    .slide.active .panel,
+    .slide.active .card,
+    .slide.active .metric,
+    .slide.active .blueprint-card {
+      animation: code-rise 620ms var(--ease-standard) both;
+    }
+    .slide.active .lead { animation-delay: 80ms; }
+    .slide.active .panel, .slide.active .card, .slide.active .metric, .slide.active .blueprint-card { animation-delay: 130ms; }
+    .panel, .card, .metric, .blueprint-card { position: relative; overflow: hidden; }
+    .panel::before, .card::before, .metric::before, .blueprint-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, color-mix(in oklab, var(--primary), transparent 92%) 1px, transparent 1px),
+        linear-gradient(0deg, color-mix(in oklab, var(--primary), transparent 94%) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(135deg, black, transparent 70%);
+      opacity: .55;
+    }
+    .panel > *, .card > *, .metric > *, .blueprint-card > * { position: relative; z-index: 1; }
+    .code-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 11px;
+      border-radius: var(--radius-pill);
+      background: color-mix(in oklab, var(--fg), transparent 8%);
+      color: var(--bg-main);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      font-weight: 800;
+      box-shadow: 0 12px 28px rgba(46,31,21,.14);
+    }
+    .code-chip::before { content: "</>"; color: color-mix(in oklab, var(--bg-main), var(--primary) 28%); }
+    .market-stack .market-bar, .lane-row, .roadmap-step {
+      transition: transform var(--motion-base) var(--ease-standard), box-shadow var(--motion-base) var(--ease-standard);
+    }
+    .market-stack .market-bar:hover, .lane-row:hover, .roadmap-step:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 18px 36px rgba(46,31,21,.12);
+    }
+    .deck-footer {
+      background: linear-gradient(90deg, color-mix(in oklab, var(--bg-main), white 14%), color-mix(in oklab, var(--surface), var(--bg-main) 28%));
+      border-top: 1px solid color-mix(in oklab, var(--primary), transparent 82%);
+    }
+    @keyframes code-rise {
+      from { opacity: 0; transform: translateY(18px) scale(.985); filter: blur(4px); }
+      to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    }
+    .slide-kicker {
+      width: fit-content;
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-pill);
+      background: color-mix(in oklab, var(--accent), transparent 86%);
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-size: var(--text-xs);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .hero-title { font-size: clamp(48px, 8vw, var(--text-4xl)); line-height: var(--leading-tight); letter-spacing: var(--tracking-display); max-width: 920px; }
+    .section-title { font-size: clamp(38px, 5vw, var(--text-3xl)); line-height: 1.08; letter-spacing: var(--tracking-display); max-width: 820px; }
+    .lead { font-size: clamp(18px, 2vw, var(--text-xl)); color: var(--fg-2); max-width: 760px; }
+    .muted { color: var(--muted); }
+    .grid-2 { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(320px, 0.95fr); gap: var(--space-8); align-items: center; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); }
+    .panel, .card, .metric, .blueprint-card {
+      background: color-mix(in oklab, var(--surface), transparent 4%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--elev-ring);
+    }
+    .panel { padding: clamp(var(--space-5), 3vw, var(--space-8)); }
+    .card, .metric, .blueprint-card { padding: var(--space-5); }
+    .card h3, .metric h3, .blueprint-card h3 { font-size: var(--text-xl); margin-bottom: var(--space-3); }
+    .card p, .blueprint-card p, .metric p { color: var(--muted); }
+    .metric strong { display: block; font-family: var(--font-display); font-size: clamp(34px, 5vw, var(--text-3xl)); line-height: 1; margin-bottom: var(--space-2); color: var(--primary); }
+    .founders { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-2);
+      padding: var(--space-2) var(--space-3);
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--fg-2);
+      font-size: var(--text-sm);
+      font-weight: 700;
+    }
+    .problem-list { display: grid; gap: var(--space-4); }
+    .problem-row { display: grid; grid-template-columns: 44px 1fr; gap: var(--space-4); align-items: start; }
+    .problem-row span:first-child {
+      width: 44px;
+      height: 44px;
+      border-radius: var(--radius-md);
+      display: grid;
+      place-items: center;
+      background: color-mix(in oklab, var(--accent), transparent 88%);
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-weight: 800;
+    }
+    .market-stack { display: grid; gap: var(--space-4); }
+    .market-bar { display: grid; grid-template-columns: 110px 1fr; gap: var(--space-4); align-items: center; }
+    .bar-track { height: 18px; border-radius: var(--radius-pill); background: var(--border-soft); overflow: hidden; }
+    .bar-fill { height: 100%; border-radius: inherit; background: var(--primary); }
+    .bar-fill.sam { width: 62%; }
+    .bar-fill.tam { width: 100%; }
+    .bar-fill.som { width: 28%; }
+    .revenue-lane { display: grid; gap: var(--space-4); }
+    .lane-row { display: grid; grid-template-columns: 150px 1fr auto; gap: var(--space-4); align-items: center; padding-block: var(--space-4); border-bottom: 1px solid var(--border-soft); }
+    .lane-row:last-child { border-bottom: 0; }
+    .aarrr { display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--space-3); }
+    .aarrr-card { padding: var(--space-4); border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--surface); }
+    .aarrr-card b { display: block; font-family: var(--font-display); font-size: var(--text-xl); margin-bottom: var(--space-2); }
+    .runway-line { position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--space-4); padding-top: var(--space-8); }
+    .runway-line::before { content: ""; position: absolute; top: 18px; left: 5%; right: 5%; height: 2px; background: var(--border); }
+    .milestone { position: relative; padding: var(--space-5); background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+    .milestone::before { content: ""; position: absolute; top: -25px; left: var(--space-5); width: 14px; height: 14px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 6px var(--bg-main); }
+    .prototype-layout { display: grid; grid-template-columns: minmax(320px, 0.86fr) minmax(390px, 1fr); gap: var(--space-8); align-items: center; }    .title-hero-copy { max-width: 760px; }
+    .title-wordmark { display: inline-flex; align-items: center; gap: var(--space-4); margin-bottom: var(--space-5); }
+    .title-logo { width: 76px; height: 76px; border-radius: 22px; object-fit: cover; box-shadow: 0 16px 40px rgba(46, 31, 21, 0.18); }
+    .title-hero-copy .hero-title { max-width: 720px; }
+    .title-tagline { margin-top: var(--space-4); font-size: clamp(24px, 3vw, 38px); font-family: var(--font-display); font-weight: 800; color: var(--primary); letter-spacing: var(--tracking-display); }
+    .phone-showcase { position: relative; min-height: min(620px, calc(100vh - 210px)); display: grid; place-items: center; isolation: isolate; perspective: 1200px; }
+    .phone-showcase::before { content: ""; position: absolute; width: 620px; height: 240px; border: 2px solid color-mix(in oklab, var(--primary), transparent 72%); border-top: 0; border-radius: 0 0 50% 50%; bottom: 54px; left: 50%; transform: translateX(-50%) rotate(-3deg); z-index: -2; }
+    .phone-showcase::after { content: ""; position: absolute; width: 560px; height: 180px; border-radius: 50%; background: radial-gradient(circle, rgba(138, 95, 65, 0.22), transparent 66%); bottom: 26px; left: 50%; transform: translateX(-50%); filter: blur(18px); z-index: -3; }
+    .mini-iphone { --phone-w: 205px; position: absolute; width: var(--phone-w); aspect-ratio: 9 / 19.5; padding: 9px; border-radius: 38px; background: linear-gradient(145deg, #2E1F15, #17100B); box-shadow: 0 34px 70px rgba(46, 31, 21, 0.30), inset 0 0 0 1px rgba(255,255,255,0.10); transform-style: preserve-3d; }
+    .mini-iphone::before { content: ""; position: absolute; top: 10px; left: 50%; width: 74px; height: 22px; border-radius: var(--radius-pill); transform: translateX(-50%); background: #120C08; z-index: 3; }
+    .mini-iphone.center { --phone-w: clamp(205px, 16vw, 235px); z-index: 3; transform: translateY(4px) rotateY(0deg) rotateZ(0deg); animation: phone-float 4.2s var(--ease-standard) infinite alternate; }
+    .mini-iphone.left { left: 34px; top: 116px; z-index: 1; transform: rotateZ(-10deg) rotateY(18deg) translateY(36px); opacity: 0.92; animation: phone-left 4.8s var(--ease-standard) infinite alternate; }
+    .mini-iphone.right { right: 20px; top: 112px; z-index: 1; transform: rotateZ(9deg) rotateY(-18deg) translateY(40px); opacity: 0.92; animation: phone-right 4.8s var(--ease-standard) infinite alternate; }
+    .mini-screen { height: 100%; overflow: hidden; border-radius: 30px; background: var(--bg-main); border: 1px solid color-mix(in oklab, var(--border), white 20%); padding: 42px 13px 14px; display: flex; flex-direction: column; gap: 10px; }
+    .mini-status { display: flex; align-items: center; justify-content: space-between; font-size: 8px; font-weight: 900; color: var(--text-dark); opacity: 0.82; }
+    .mini-brand-row { display: flex; align-items: center; gap: 8px; }
+    .mini-logo { width: 28px; height: 28px; border-radius: 9px; object-fit: cover; box-shadow: 0 6px 16px rgba(46,31,21,.16); }
+    .mini-search { height: 27px; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); }
+    .mini-map { flex: 1; min-height: 86px; border-radius: 18px; position: relative; background: linear-gradient(135deg, var(--surface-warm), var(--surface)); border: 1px solid var(--border); overflow: hidden; }
+    .mini-map::before, .mini-map::after { content: ""; position: absolute; border-radius: 50%; background: color-mix(in oklab, var(--primary), transparent 82%); }
+    .mini-map::before { width: 96px; height: 96px; right: -28px; top: -22px; }
+    .mini-map::after { width: 72px; height: 72px; left: -18px; bottom: -18px; }
+    .mini-pin { position: absolute; width: 10px; height: 10px; border-radius: 50%; background: var(--primary); box-shadow: 0 0 0 6px color-mix(in oklab, var(--primary), transparent 82%); }
+    .mini-card { padding: 10px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 10px 24px rgba(46,31,21,.08); }
+    .mini-line { height: 7px; border-radius: var(--radius-pill); background: var(--border-soft); margin-top: 7px; }
+    .mini-line.dark { width: 68%; background: var(--text-dark); opacity: .9; margin-top: 0; }
+    .mini-line.accent { width: 46%; background: var(--primary); }
+    .mini-wallet { display: grid; gap: 8px; padding: 12px; border-radius: 18px; color: var(--accent-on); background: var(--primary); }
+    .mini-wallet strong { font-size: 18px; }
+    .mini-timeline { display: grid; gap: 8px; }
+    .mini-timeline span { display: block; height: 32px; border-radius: 14px; background: var(--surface); border: 1px solid var(--border); }
+
+    .blueprint-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--space-4); }
+    .code-block { font-family: var(--font-mono); font-size: var(--text-xs); line-height: 1.6; color: var(--fg-2); white-space: pre-wrap; background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-md); padding: var(--space-4); overflow: auto; max-height: 250px; }
+
+    .iphone-wrapper {
+      width: min(390px, 92vw);
+      aspect-ratio: 9 / 19.5;
+      margin-inline: auto;
+      padding: 14px;
+      border-radius: 48px;
+      background: color-mix(in oklab, var(--fg), black 12%);
+      box-shadow: 0 34px 80px rgba(46, 31, 21, 0.35), inset 0 0 0 2px rgba(255, 255, 255, 0.08);
+      position: relative;
+    }
+    .iphone-wrapper::before {
+      content: "";
+      position: absolute;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 116px;
+      height: 34px;
+      border-radius: var(--radius-pill);
+      background: color-mix(in oklab, var(--fg), black 20%);
+      z-index: 4;
+    }
+    .iphone-screen {
+      position: relative;
+      height: 100%;
+      overflow: hidden;
+      border-radius: 36px;
+      background: var(--bg-main);
+      border: 1px solid color-mix(in oklab, var(--border), white 20%);
+    }
+    .statusbar {
+      position: absolute;
+      z-index: 5;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 54px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+      color: var(--text-dark);
+      font-size: 13px;
+      font-weight: 800;
+      pointer-events: none;
+    }
+    .home-indicator {
+      position: absolute;
+      z-index: 6;
+      bottom: 8px;
+      left: 50%;
+      width: 126px;
+      height: 5px;
+      border-radius: var(--radius-pill);
+      transform: translateX(-50%);
+      background: color-mix(in oklab, var(--fg), transparent 42%);
+    }
+    .screen {
+      position: absolute;
+      inset: 0;
+      display: none;
+      flex-direction: column;
+      padding: 66px 20px 28px;
+      background: var(--bg-main);
+      animation: fluid-swipe var(--motion-base) var(--ease-standard) both;
+    }
+    .screen.active { display: flex; }
+    .screen.splash { align-items: center; justify-content: center; text-align: center; }
+    .screen-title { font-size: 30px; line-height: 1.08; letter-spacing: var(--tracking-display); margin-bottom: var(--space-3); }
+    .screen-copy { color: var(--muted); font-size: var(--text-sm); }
+    .app-logo {
+      width: 96px;
+      height: 96px;
+      border-radius: 28px;
+      display: grid;
+      place-items: center;
+      margin-bottom: var(--space-5);
+      background: var(--primary);
+      color: var(--accent-on);
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 900;
+      animation: fade-in-scale 900ms var(--ease-standard) both;
+    }
+    .btn-primary {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 48px;
+      padding: 0 var(--space-5);
+      background: var(--primary);
+      color: var(--accent-on);
+      font-weight: 800;
+      box-shadow: 0 12px 26px rgba(138, 95, 65, 0.22);
+    }
+    .btn-primary:hover { background: var(--accent-hover); transform: translateY(-1px); }
+    .btn-primary:active { background: var(--accent-active); transform: scale(0.98); }
+    .btn-secondary {
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 44px;
+      padding: 0 var(--space-4);
+      background: var(--surface);
+      color: var(--fg);
+      border: 1px solid var(--border);
+      font-weight: 800;
+    }
+    .onboarding-visual { flex: 1; min-height: 250px; display: grid; place-items: center; }
+    .cv-card {
+      width: 220px;
+      padding: var(--space-5);
+      border-radius: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: var(--elev-raised);
+      transform: rotate(-3deg);
+    }
+    .cv-line { height: 10px; border-radius: var(--radius-pill); background: var(--border-soft); margin-top: var(--space-3); }
+    .cv-line.short { width: 58%; }
+    .slash { margin-top: var(--space-5); padding: var(--space-3); border-radius: var(--radius-pill); color: var(--accent-on); background: var(--primary); font-weight: 900; text-align: center; }
+    .app-header { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); margin-bottom: var(--space-4); }
+    .avatar { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; color: var(--accent-on); background: var(--primary); font-weight: 900; }
+    .search-box { display: flex; align-items: center; gap: var(--space-2); padding: var(--space-3); border-radius: var(--radius-md); background: var(--surface); border: 1px solid var(--border); color: var(--muted); font-size: var(--text-sm); margin-bottom: var(--space-4); }
+    .map-widget { height: 138px; border-radius: 26px; background: linear-gradient(135deg, color-mix(in oklab, var(--surface-warm), white 16%), var(--surface)); border: 1px solid var(--border); position: relative; overflow: hidden; margin-bottom: var(--space-4); }
+    .map-widget::before, .map-widget::after { content: ""; position: absolute; border-radius: 50%; background: color-mix(in oklab, var(--accent), transparent 82%); }
+    .map-widget::before { width: 160px; height: 160px; right: -40px; top: -38px; }
+    .map-widget::after { width: 110px; height: 110px; left: -26px; bottom: -30px; }
+    .pin { position: absolute; width: 16px; height: 16px; border-radius: 50% 50% 50% 0; background: var(--primary); transform: rotate(-45deg); box-shadow: 0 0 0 8px color-mix(in oklab, var(--accent), transparent 80%); }
+    .pin.one { left: 84px; top: 68px; }
+    .pin.two { right: 88px; top: 48px; }
+    .pin.three { right: 142px; bottom: 34px; }
+    .job-list { display: grid; gap: var(--space-3); overflow: auto; padding-bottom: var(--space-5); }
+    .job-card {
+      padding: var(--space-4);
+      border-radius: 22px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      box-shadow: 0 12px 30px rgba(46, 31, 21, 0.08);
+      display: grid;
+      gap: var(--space-2);
+    }
+    .job-card:hover { transform: translateY(-2px); box-shadow: var(--elev-raised); }
+    .job-card-top { display: flex; align-items: start; justify-content: space-between; gap: var(--space-3); }
+    .job-card h4 { font-size: var(--text-base); }
+    .job-meta { display: flex; flex-wrap: wrap; gap: var(--space-2); color: var(--muted); font-size: var(--text-xs); }
+    .detail-card { display: grid; gap: var(--space-4); padding: var(--space-5); border-radius: 26px; background: var(--surface); border: 1px solid var(--border); box-shadow: var(--elev-raised); }
+    .task-list { display: grid; gap: var(--space-3); }
+    .task-item { display: flex; gap: var(--space-3); align-items: start; color: var(--fg-2); font-size: var(--text-sm); }
+    .task-item::before { content: ""; width: 8px; height: 8px; margin-top: 7px; border-radius: 50%; background: var(--primary); flex: 0 0 auto; }
+    .success-pop {
+      position: absolute;
+      left: 20px;
+      right: 20px;
+      bottom: 34px;
+      display: none;
+      padding: var(--space-4);
+      border-radius: 24px;
+      background: var(--fg);
+      color: var(--accent-on);
+      box-shadow: var(--elev-raised);
+      animation: pop-success 420ms var(--ease-standard) both;
+      z-index: 8;
+    }
+    .success-pop.show { display: block; }
+    .wallet-card { padding: var(--space-5); border-radius: 28px; background: var(--primary); color: var(--accent-on); box-shadow: var(--elev-raised); margin-bottom: var(--space-4); }
+    .wallet-card strong { display: block; font-family: var(--font-display); font-size: 38px; line-height: 1; margin-top: var(--space-2); }
+    .timeline { display: grid; gap: var(--space-3); }
+    .timeline-item { display: grid; grid-template-columns: 18px 1fr; gap: var(--space-3); }
+    .timeline-dot { width: 14px; height: 14px; border-radius: 50%; background: var(--primary); margin-top: 4px; box-shadow: 0 0 0 5px color-mix(in oklab, var(--accent), transparent 85%); }
+    .timeline-card { padding: var(--space-3); border-radius: var(--radius-md); background: var(--surface); border: 1px solid var(--border); font-size: var(--text-sm); }
+    .bottom-tabs { margin-top: auto; display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-2); padding-top: var(--space-3); }
+    .bottom-tabs button { border: 0; padding: var(--space-2); border-radius: var(--radius-md); background: transparent; color: var(--muted); font-size: var(--text-xs); font-weight: 800; }
+    .bottom-tabs button.active { background: color-mix(in oklab, var(--accent), transparent 86%); color: var(--primary); }
+    .segmented { display: flex; gap: var(--space-2); flex-wrap: wrap; }
+    .segmented button { padding: var(--space-2) var(--space-3); background: var(--surface); border: 1px solid var(--border); color: var(--fg); font-weight: 800; }
+    .segmented button.active { background: var(--primary); color: var(--accent-on); }
+    .footer-note { padding: 12px clamp(var(--space-4), 4vw, var(--space-8)); display: flex; justify-content: space-between; gap: var(--space-4); color: var(--muted); font-size: var(--text-xs); border-top: 1px solid var(--border-soft); }
+
+    .code-grid {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      opacity: .16;
+      background-image: linear-gradient(rgba(46,31,21,.22) 1px, transparent 1px), linear-gradient(90deg, rgba(46,31,21,.22) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: radial-gradient(circle at 68% 42%, black, transparent 68%);
+    }
+    .slide::before { content: ""; position: absolute; inset: 76px 0 48px; pointer-events: none; background: radial-gradient(circle at 80% 22%, rgba(138,95,65,.12), transparent 30%); opacity: .9; }
+    .slide { position: relative; }
+    .slide-inner { position: relative; z-index: 1; }
+    .team-stage { position: relative; min-height: 560px; display: grid; align-items: center; }
+    .terminal-card {
+      position: absolute;
+      inset: 24px 0 auto auto;
+      width: min(520px, 92%);
+      padding: 18px;
+      border-radius: 24px;
+      background: color-mix(in oklab, var(--fg), black 6%);
+      color: var(--accent-on);
+      box-shadow: 0 28px 80px rgba(46,31,21,.28);
+      border: 1px solid rgba(255,255,255,.12);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      overflow: hidden;
+    }
+    .terminal-card::before { content: ""; display: block; width: 58px; height: 10px; margin-bottom: 16px; border-radius: 999px; background: linear-gradient(90deg, #ef4444 0 10px, #f59e0b 10px 22px, #16A34A 22px 34px); }
+    .terminal-line { display: block; opacity: .86; margin-top: 8px; }
+    .terminal-line b { color: #F3E4C9; font-weight: 800; }
+    .team-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--space-5); align-items: end; margin-top: 0; }
+    .member-card {
+      position: relative;
+      padding: 12px;
+      min-height: 360px;
+      border-radius: 34px;
+      background: linear-gradient(180deg, color-mix(in oklab, var(--surface), white 4%), var(--surface));
+      border: 1px solid var(--border);
+      box-shadow: 0 24px 58px rgba(46,31,21,.16);
+      overflow: hidden;
+      transform: translateY(0);
+      animation: member-rise 700ms var(--ease-standard) both;
+    }
+    .member-card:nth-child(2) { transform: translateY(-32px); animation-delay: 90ms; }
+    .member-card:nth-child(3) { animation-delay: 180ms; }
+    .photo-frame {
+      height: 230px;
+      border-radius: 26px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, color-mix(in oklab, var(--primary), transparent 72%), color-mix(in oklab, var(--bg-main), white 16%));
+      border: 1px dashed color-mix(in oklab, var(--primary), transparent 38%);
+      color: var(--primary);
+      font-family: var(--font-mono);
+      font-weight: 900;
+    }
+    .member-card h3 { margin-top: var(--space-4); font-size: var(--text-xl); }
+    .member-role { margin-top: 6px; color: var(--muted); font-size: var(--text-sm); }
+    .member-chip { margin-top: var(--space-3); display: inline-flex; padding: 7px 10px; border-radius: var(--radius-pill); background: color-mix(in oklab, var(--primary), transparent 86%); color: var(--primary); font-size: 11px; font-family: var(--font-mono); font-weight: 900; }
+    .app-logo img, .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; display: block; }
+    @keyframes member-rise { from { opacity: 0; transform: translateY(34px) rotateX(8deg); } to { opacity: 1; transform: translateY(0) rotateX(0); } }
+    @keyframes phone-float { from { transform: translateY(10px) rotateY(0deg); } to { transform: translateY(-8px) rotateY(0deg); } }
+    @keyframes phone-left { from { transform: rotateZ(-10deg) rotateY(18deg) translateY(42px); } to { transform: rotateZ(-13deg) rotateY(20deg) translateY(26px); } }
+    @keyframes phone-right { from { transform: rotateZ(9deg) rotateY(-18deg) translateY(44px); } to { transform: rotateZ(12deg) rotateY(-20deg) translateY(28px); } }
+    @keyframes fade-slide { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes fade-in-scale { from { opacity: 0; transform: scale(0.86); } to { opacity: 1; transform: scale(1); } }
+    @keyframes fluid-swipe { from { opacity: 0; transform: translateX(28px) scale(0.98); } to { opacity: 1; transform: translateX(0) scale(1); } }
+    @keyframes pop-success { from { opacity: 0; transform: translateY(24px) scale(0.94); } to { opacity: 1; transform: translateY(0) scale(1); } }
+
+    @media (max-width: 980px) {
+      .grid-2, .prototype-layout, .grid-3, .aarrr, .runway-line, .blueprint-grid { grid-template-columns: 1fr; }
+      .slide { min-height: auto; }
+      .slides { min-height: auto; }
+      .lane-row, .market-bar { grid-template-columns: 1fr; }
+      .topbar { position: static; }
+      .brand-copy span { display: none; }
+    }
+    @media (max-width: 620px) {
+      .slide-nav { width: 100%; justify-content: space-between; }
+      .topbar { flex-wrap: wrap; }
+      .footer-note { flex-direction: column; }
+      .hero-title { font-size: 42px; }
+    }
+
+    /* Final presentation fit overrides */
+    .deck-shell { width: 100vw; grid-template-rows: 76px minmax(0, 1fr) 48px; }
+    .topbar { position: relative; width: 100vw; min-width: 100vw; max-width: none; margin: 0; border-radius: 0; box-sizing: border-box; padding: 12px clamp(20px, 4vw, 46px); }
+    .brand-mark { width: 52px; height: 52px; }
+    .slide { min-height: 0; overflow: hidden; padding: clamp(18px, 2.4vw, 30px); }
+    .slide-inner { width: min(100%, 1260px); max-height: 100%; align-items: center; gap: clamp(16px, 2vw, 32px); }
+    .hero-title { font-size: clamp(46px, 7vw, 70px); }
+    .section-title { font-size: clamp(34px, 4.3vw, 50px); }
+    .lead { font-size: clamp(17px, 1.75vw, 22px); }
+    .phone-showcase { min-height: min(540px, calc(100vh - 190px)); }
+    .mini-iphone { --phone-w: 184px; }
+    .mini-iphone.center { --phone-w: clamp(190px, 15vw, 220px); }
+    .team-stage { min-height: min(500px, calc(100vh - 210px)); }
+    .member-card { min-height: 318px; }
+    .photo-frame { height: 188px; }
+    .aarrr { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+    .aarrr-card { min-height: 150px; }
+  
+    /* Prototype v2: full install-to-cashout app flow */
+    .prototype-layout { grid-template-columns: minmax(300px, .78fr) minmax(430px, 1.08fr); gap: clamp(20px, 3vw, 44px); }
+    .prototype-copy-panel { max-width: 620px; }
+    .prototype-flow-list { display: grid; gap: 10px; margin-top: var(--space-5); }
+    .flow-step { display: grid; grid-template-columns: 34px 1fr; gap: 12px; align-items: start; padding: 12px; border: 1px solid var(--border); border-radius: 16px; background: color-mix(in oklab, var(--surface), transparent 8%); }
+    .flow-step span { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 12px; color: var(--accent-on); background: var(--primary); font-family: var(--font-mono); font-size: 12px; font-weight: 900; }
+    .flow-step strong { display: block; color: var(--text-dark); font-size: 14px; }
+    .flow-step small { display: block; color: var(--muted); margin-top: 2px; line-height: 1.45; }
+    .prototype-layout .segmented { gap: 8px; }
+    .prototype-layout .segmented button { font-size: 11px; padding: 8px 10px; }
+    .iphone-wrapper { width: min(430px, calc(100vh * .47), 94vw); padding: 13px; border-radius: 54px; background: linear-gradient(145deg, #2E1F15, #120c08 72%); box-shadow: 0 38px 90px rgba(46,31,21,.38), 0 0 0 1px rgba(255,255,255,.12) inset; }
+    .iphone-wrapper::before { width: 118px; height: 35px; top: 12px; }
+    .iphone-screen { border-radius: 41px; }
+    .screen { padding: 64px 18px 30px; gap: 12px; overflow: hidden; }
+    .screen.scrollable { overflow-y: auto; padding-bottom: 42px; }
+    .statusbar { height: 52px; padding: 0 28px; }
+    .install-hero { flex: 1; display: grid; align-content: center; justify-items: center; text-align: center; gap: 14px; }
+    .install-badge { display: inline-flex; align-items: center; gap: 8px; padding: 9px 12px; border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--border); color: var(--fg-2); font-size: 12px; font-weight: 900; }
+    .app-logo img, .avatar img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+    .login-card { display: grid; gap: 12px; padding: 16px; border-radius: 26px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 18px 42px rgba(46,31,21,.10); }
+    .input-field { display: grid; gap: 6px; }
+    .input-field label { font-size: 12px; font-weight: 900; color: var(--fg-2); }
+    .input-field input { width: 100%; border: 1px solid var(--border); border-radius: 15px; padding: 13px 14px; background: var(--bg-main); color: var(--text-dark); font: inherit; outline: none; }
+    .input-field input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(138,95,65,.15); }
+    .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .role-card { min-height: 108px; display: grid; align-content: space-between; padding: 14px; border-radius: 22px; background: var(--surface); border: 1px solid var(--border); text-align: left; }
+    .role-card.active { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(138,95,65,.13); }
+    .role-icon { width: 34px; height: 34px; display: grid; place-items: center; border-radius: 12px; background: color-mix(in oklab, var(--primary), transparent 82%); color: var(--primary); font-weight: 900; }
+    .pref-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+    .pref-pill { border: 1px solid var(--border); border-radius: 14px; padding: 11px 10px; background: var(--surface); color: var(--fg-2); font-size: 12px; font-weight: 900; }
+    .pref-pill.active { color: var(--accent-on); background: var(--primary); border-color: var(--primary); }
+    .metric-strip { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-bottom: 12px; }
+    .metric-mini { padding: 10px; border-radius: 16px; background: var(--surface); border: 1px solid var(--border); }
+    .metric-mini strong { display: block; font-size: 16px; color: var(--text-dark); }
+    .quick-filter { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; margin-bottom: 10px; }
+    .quick-filter span { white-space: nowrap; padding: 8px 10px; border-radius: var(--radius-pill); background: var(--surface); border: 1px solid var(--border); color: var(--fg-2); font-size: 11px; font-weight: 900; }
+    .quick-filter span.active { background: var(--primary); color: var(--accent-on); }
+    .detail-company { display: flex; align-items: center; gap: 12px; }
+    .company-mark { width: 42px; height: 42px; border-radius: 15px; display: grid; place-items: center; background: color-mix(in oklab, var(--primary), transparent 83%); color: var(--primary); font-weight: 900; }
+    .portfolio-summary { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+    .cashout-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px; border-radius: 18px; background: var(--surface); border: 1px solid var(--border); }
+    .cashout-row strong { font-size: 14px; color: var(--text-dark); }
+    .bottom-tabs { position: sticky; bottom: 0; background: linear-gradient(180deg, transparent, var(--bg-main) 18%); padding-top: 12px; }
+    @media (max-height: 820px) { .iphone-wrapper { width: min(380px, 94vw); } .prototype-layout { grid-template-columns: minmax(280px,.85fr) minmax(370px,1fr); } .screen-title { font-size: 25px; } .map-widget { height: 112px; } .job-card { padding: 12px; } }
+  
+    /* Interaction + Dynamic Island fix */
+    .slide[data-od-id="slide-prototype"] .slide-inner,
+    .slide[data-od-id="slide-prototype"] .prototype-layout,
+    .slide[data-od-id="slide-prototype"] .iphone-wrapper,
+    .slide[data-od-id="slide-prototype"] .iphone-screen {
+      pointer-events: auto;
+    }
+
+    .iphone-wrapper {
+      isolation: isolate;
+      touch-action: manipulation;
+    }
+
+    .iphone-wrapper::before {
+      top: 15px;
+      width: 112px;
+      height: 32px;
+      border-radius: 999px;
+      background:
+        radial-gradient(circle at 78% 50%, rgba(255,255,255,.22) 0 3px, transparent 4px),
+        linear-gradient(180deg, #090604, #17100b);
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,.08),
+        0 6px 16px rgba(0,0,0,.28);
+      pointer-events: none;
+      z-index: 20;
+    }
+
+    .iphone-screen {
+      pointer-events: auto;
+      box-shadow: inset 0 0 0 1px rgba(255,255,255,.35);
+    }
+
+    .iphone-screen .statusbar,
+    .iphone-screen .home-indicator {
+      pointer-events: none;
+    }
+
+    .iphone-screen .screen {
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .iphone-screen .screen.active {
+      pointer-events: auto;
+      z-index: 2;
+    }
+
+    .iphone-screen button,
+    .iphone-screen input,
+    .iphone-screen .job-card,
+    .iphone-screen .role-card,
+    .iphone-screen .pref-pill {
+      pointer-events: auto;
+      touch-action: manipulation;
+      position: relative;
+      z-index: 3;
+    }
+
+    .iphone-screen .btn-primary,
+    .iphone-screen .job-card,
+    .iphone-screen .role-card,
+    .iphone-screen .pref-pill,
+    .iphone-screen .cashout-row {
+      cursor: pointer;
+    }
+
+    .screen.scrollable {
+      overscroll-behavior: contain;
+      -webkit-overflow-scrolling: touch;
+    }
+  
+    /* Prototype touch + fit final override */
+    .slide[data-od-id="slide-prototype"] {
+      overflow: hidden;
+    }
+
+    .slide[data-od-id="slide-prototype"] .slide-inner {
+      height: calc(100vh - 154px);
+      min-height: 0;
+      align-items: center;
+      overflow: visible;
+      pointer-events: auto;
+    }
+
+    .slide[data-od-id="slide-prototype"] .prototype-layout {
+      grid-template-columns: minmax(280px, .72fr) minmax(300px, 420px);
+      gap: clamp(18px, 2.4vw, 36px);
+    }
+
+    .slide[data-od-id="slide-prototype"] .prototype-copy-panel {
+      align-self: center;
+    }
+
+    .slide[data-od-id="slide-prototype"] .prototype-flow-list {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+    }
+
+    .slide[data-od-id="slide-prototype"] .flow-step {
+      padding: 9px;
+      grid-template-columns: 28px 1fr;
+    }
+
+    .slide[data-od-id="slide-prototype"] .flow-step span {
+      width: 28px;
+      height: 28px;
+      border-radius: 10px;
+    }
+
+    .slide[data-od-id="slide-prototype"] .iphone-wrapper {
+      width: min(360px, 40vh, 82vw);
+      max-height: calc(100vh - 188px);
+      aspect-ratio: 9 / 19.5;
+      margin-inline: auto;
+      padding: 11px;
+      border-radius: 46px;
+      transform: none;
+      pointer-events: auto !important;
+      z-index: 30;
+    }
+
+    .slide[data-od-id="slide-prototype"] .iphone-screen {
+      height: 100%;
+      border-radius: 35px;
+      pointer-events: auto !important;
+      isolation: isolate;
+    }
+
+    .slide[data-od-id="slide-prototype"] .iphone-wrapper::before {
+      top: 10px;
+      width: 96px;
+      height: 28px;
+      z-index: 60;
+      pointer-events: none !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .statusbar,
+    .slide[data-od-id="slide-prototype"] .home-indicator {
+      pointer-events: none !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .screen {
+      padding: 58px 16px 26px;
+      pointer-events: none !important;
+      z-index: 1;
+    }
+
+    .slide[data-od-id="slide-prototype"] .screen.active {
+      display: flex;
+      pointer-events: auto !important;
+      z-index: 20;
+    }
+
+    .slide[data-od-id="slide-prototype"] .screen.active * {
+      pointer-events: auto;
+    }
+
+    .slide[data-od-id="slide-prototype"] .screen-title {
+      font-size: 24px;
+    }
+
+    .slide[data-od-id="slide-prototype"] .map-widget {
+      height: 108px;
+    }
+
+    .slide[data-od-id="slide-prototype"] .job-card,
+    .slide[data-od-id="slide-prototype"] .role-card,
+    .slide[data-od-id="slide-prototype"] .btn-primary,
+    .slide[data-od-id="slide-prototype"] .btn-secondary,
+    .slide[data-od-id="slide-prototype"] .pref-pill,
+    .slide[data-od-id="slide-prototype"] .bottom-tabs button,
+    .slide[data-od-id="slide-prototype"] input {
+      position: relative;
+      z-index: 50;
+      cursor: pointer;
+      touch-action: manipulation;
+      pointer-events: auto !important;
+    }
+
+    @media (max-width: 980px) {
+      .slide[data-od-id="slide-prototype"] .slide-inner {
+        height: auto;
+        overflow-y: auto;
+      }
+      .slide[data-od-id="slide-prototype"] .prototype-layout {
+        grid-template-columns: 1fr;
+      }
+      .slide[data-od-id="slide-prototype"] .iphone-wrapper {
+        width: min(340px, 86vw);
+        max-height: none;
+      }
+    }
+  
+    /* Prototype click + iPhone crop hotfix */
+    .slide[data-od-id="slide-prototype"] {
+      overflow: hidden !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .slide-inner {
+      height: calc(100dvh - 150px) !important;
+      max-height: calc(100dvh - 150px) !important;
+      overflow: visible !important;
+      align-items: center !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .prototype-layout {
+      grid-template-columns: minmax(260px, .78fr) minmax(300px, 370px) !important;
+      gap: clamp(16px, 2vw, 30px) !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .iphone-wrapper {
+      width: min(330px, calc((100dvh - 190px) * 0.4615), 78vw) !important;
+      max-height: calc(100dvh - 196px) !important;
+      aspect-ratio: 9 / 19.5 !important;
+      padding: 10px !important;
+      border-radius: 42px !important;
+      position: relative !important;
+      z-index: 100 !important;
+      pointer-events: auto !important;
+      touch-action: manipulation !important;
+      transform: translateZ(0) !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .iphone-wrapper::before {
+      top: 22px !important;
+      width: 94px !important;
+      height: 28px !important;
+      z-index: 4 !important;
+      pointer-events: none !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .iphone-screen {
+      border-radius: 32px !important;
+      overflow: hidden !important;
+      position: relative !important;
+      z-index: 1 !important;
+      pointer-events: auto !important;
+      touch-action: manipulation !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .statusbar {
+      z-index: 3 !important;
+      height: 56px !important;
+      padding: 0 28px !important;
+      pointer-events: none !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .home-indicator {
+      z-index: 3 !important;
+      pointer-events: none !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .screen {
+      z-index: 1 !important;
+      display: none !important;
+      pointer-events: none !important;
+      padding: 64px 16px 24px !important;
+      overflow: hidden !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .screen.active {
+      z-index: 2 !important;
+      display: flex !important;
+      pointer-events: auto !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .screen.scrollable.active {
+      overflow-y: auto !important;
+      scrollbar-width: none;
+    }
+
+    .slide[data-od-id="slide-prototype"] .screen.scrollable.active::-webkit-scrollbar {
+      display: none;
+    }
+
+    .slide[data-od-id="slide-prototype"] .screen.active :where(button, input, .job-card, .role-card, .pref-pill, .cashout-row, .bottom-tabs) {
+      pointer-events: auto !important;
+      touch-action: manipulation !important;
+      position: relative !important;
+      z-index: 5 !important;
+    }
+
+    .slide[data-od-id="slide-prototype"] .code-grid,
+    .slide[data-od-id="slide-prototype"]::before {
+      pointer-events: none !important;
+    }
+  
+    /* Final prototype access + tap fix */
+    .topbar { pointer-events: auto !important; }
+    .slide-nav, .slide-nav * { pointer-events: auto !important; }
+    .prototype-jump {
+      position: fixed;
+      right: 24px;
+      bottom: 24px;
+      z-index: 9999;
+      border: 1px solid rgba(243, 228, 201, .42);
+      background: linear-gradient(135deg, var(--primary), #5f3f2a);
+      color: var(--bg-main);
+      border-radius: 999px;
+      padding: 12px 16px;
+      font: 800 12px/1 var(--font-mono);
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      box-shadow: 0 18px 44px rgba(46,31,21,.28);
+      cursor: pointer;
+      transition: transform .18s ease, filter .18s ease;
+    }
+    .prototype-jump:hover { transform: translateY(-2px); filter: brightness(1.05); }
+    .prototype-jump:active { transform: translateY(0) scale(.98); }
+    .slide[data-od-id="slide-prototype"] {
+      overflow: visible !important;
+    }
+    .slide[data-od-id="slide-prototype"] .prototype-layout {
+      grid-template-columns: minmax(280px, .78fr) minmax(320px, .92fr) !important;
+      align-items: center !important;
+      gap: clamp(14px, 2.2vw, 30px) !important;
+      max-height: calc(100vh - 126px) !important;
+    }
+    .slide[data-od-id="slide-prototype"] .iphone-wrapper {
+      width: min(340px, 38vw, calc((100vh - 190px) * .462)) !important;
+      min-width: 292px !important;
+      transform: none !important;
+      position: relative !important;
+      z-index: 200 !important;
+      pointer-events: auto !important;
+      touch-action: manipulation !important;
+    }
+    .slide[data-od-id="slide-prototype"] .iphone-screen {
+      position: relative !important;
+      z-index: 1 !important;
+      pointer-events: auto !important;
+      touch-action: pan-y manipulation !important;
+    }
+    .slide[data-od-id="slide-prototype"] .iphone-wrapper::before {
+      top: 20px !important;
+      z-index: 3 !important;
+      pointer-events: none !important;
+    }
+    .slide[data-od-id="slide-prototype"] .screen.active,
+    .slide[data-od-id="slide-prototype"] .screen.active * {
+      pointer-events: auto !important;
+      touch-action: manipulation;
+    }
+    .slide[data-od-id="slide-prototype"] .statusbar,
+    .slide[data-od-id="slide-prototype"] .home-indicator,
+    .slide[data-od-id="slide-prototype"]::before,
+    .slide[data-od-id="slide-prototype"]::after,
+    .deck-shell::before,
+    .deck-shell::after {
+      pointer-events: none !important;
+    }
+    @media (max-width: 980px) {
+      .prototype-jump { right: 14px; bottom: 14px; }
+      .slide[data-od-id="slide-prototype"] .prototype-layout { grid-template-columns: 1fr !important; overflow: auto !important; }
+      .slide[data-od-id="slide-prototype"] .iphone-wrapper { width: min(330px, 88vw) !important; }
+    }
+
+    /* Competitor Matrix Quadrant 2x2 */
+    .competitor-matrix {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr;
+      gap: var(--space-2);
+      position: relative;
+      background: var(--surface);
+      border: 2px solid var(--border);
+      border-radius: var(--radius-lg);
+      aspect-ratio: 4 / 3;
+      width: min(100%, 480px);
+      margin: auto;
+      padding: var(--space-5);
+      box-shadow: var(--elev-ring);
+      overflow: visible;
+    }
+    .competitor-matrix::before {
+      content: "";
+      position: absolute;
+      top: 0; bottom: 0; left: 50%;
+      width: 2px;
+      background: color-mix(in oklab, var(--border), transparent 30%);
+    }
+    .competitor-matrix::after {
+      content: "";
+      position: absolute;
+      left: 0; right: 0; top: 50%;
+      height: 2px;
+      background: color-mix(in oklab, var(--border), transparent 30%);
+    }
+    .axis-label {
+      position: absolute;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 800;
+    }
+    .axis-y-top { top: -24px; left: 50%; transform: translateX(-50%); }
+    .axis-y-bottom { bottom: -24px; left: 50%; transform: translateX(-50%); }
+    .axis-x-right { right: -40px; top: 50%; transform: translateY(-50%) rotate(90deg); }
+    .axis-x-left { left: -40px; top: 50%; transform: translateY(-50%) rotate(-90deg); }
+
+    .competitor-dot {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transform: translate(-50%, -50%);
+    }
+    .competitor-dot span {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--muted);
+      border: 2px solid var(--surface);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+    }
+    .competitor-dot strong {
+      font-size: 10px;
+      color: var(--fg);
+      white-space: nowrap;
+    }
+    .competitor-dot.us {
+      z-index: 5;
+    }
+    .competitor-dot.us span {
+      background: var(--primary);
+      box-shadow: 0 0 0 6px color-mix(in oklab, var(--primary), transparent 80%);
+      animation: pulse-dot 2.2s infinite alternate;
+    }
+    .competitor-dot.us strong {
+      color: var(--primary);
+      font-weight: 900;
+    }
+    @keyframes pulse-dot {
+      from { transform: scale(1); }
+      to { transform: scale(1.15); }
+    }
+
+    /* Customer Journey Flow */
+    .journey-flow {
+      display: grid;
+      grid-template-columns: repeat(6, minmax(0, 1fr));
+      gap: var(--space-3);
+      margin-top: var(--space-4);
+    }
+    .journey-step {
+      background: color-mix(in oklab, var(--surface), transparent 4%);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--space-4);
+      position: relative;
+      transition: transform var(--motion-base) var(--ease-standard), box-shadow var(--motion-base) var(--ease-standard);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+    .journey-step:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 28px rgba(46,31,21,0.08);
+      border-color: var(--primary);
+    }
+    .journey-step-num {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--primary);
+      font-weight: 800;
+      background: color-mix(in oklab, var(--primary), transparent 88%);
+      padding: 4px 8px;
+      border-radius: var(--radius-pill);
+      width: fit-content;
+      text-transform: uppercase;
+    }
+    .journey-step h4 {
+      font-size: var(--text-sm);
+      font-weight: 800;
+    }
+    .journey-step ul {
+      padding-left: 12px;
+      margin: 0;
+      font-size: 11px;
+      color: var(--muted);
+      display: grid;
+      gap: 5px;
+    }
+    .journey-step ul li {
+      line-height: 1.35;
+    }
+
+    @media (max-width: 980px) {
+      .journey-flow {
+        grid-template-columns: 1fr;
+      }
+      .competitor-matrix {
+        width: 100%;
+        max-width: 380px;
+      }
+    }
+
+  </style>
+</head>
+<body>
+  <div class="deck-shell">
+    <header class="topbar">
+      <div class="brand-lockup">
+        <div class="brand-mark"><img src="mpljyd5e-Logo-QuickJob.png" alt="Logo QuickJob Campus" /></div>
+        <div class="brand-copy">
+          <strong>QuickJob Campus</strong>
+          <span>Kerja Sampingan, Mudah & Dekat</span>
+        </div>
+      </div>
+      <div class="slide-nav" aria-label="Navigasi slide">
+        <button class="nav-btn" type="button" id="prevSlide" aria-label="Slide sebelumnya">‹</button>
+        <span class="counter" id="slideCounter">01 / 08</span>
+        <button class="nav-btn" type="button" id="nextSlide" aria-label="Slide berikutnya">›</button>
+      </div>
+    </header>
+
+        <main class="slides" id="slides">
+      <!-- SLIDE 1: Cover -->
+      <section class="slide active" data-od-id="slide-title" data-screen-label="01 Title & Hook">
+        <div class="slide-inner grid-2">
+          <div class="title-hero-copy">
+            <p class="slide-kicker">Slide 1 · Title & Hook</p>
+            <div class="title-wordmark">
+              <img class="title-logo" src="mpljyd5e-Logo-QuickJob.png" alt="Logo QuickJob Campus" />
+              <span class="chip">Kerja Sampingan, Mudah & Dekat</span>
+            </div>
+            <h1 class="hero-title">QuickJob Campus</h1>
+            <p class="title-tagline">Micro-job dekat kampus, tanpa CV.</p>
+            <p class="lead" style="margin-top: var(--space-5); max-width: 650px;">Platform berbasis lokasi yang mempertemukan mahasiswa Yogyakarta dengan UMKM sekitar kampus untuk kerja cepat, portofolio otomatis, dan poin yang bisa menjadi uang.</p>
+            <div class="founders" style="margin-top: var(--space-6);">
+              <span class="chip">Reynard</span>
+              <span class="chip">Nick</span>
+              <span class="chip">Raymondo</span>
+            </div>
+          </div>
+          <div class="phone-showcase" aria-label="Preview tiga layar aplikasi QuickJob Campus">
+            <div class="mini-iphone left" aria-hidden="true"><div class="mini-screen"><div class="mini-status"><span>9:41</span><span>5G</span></div><div class="mini-brand-row"><img class="mini-logo" src="mpljyd5e-Logo-QuickJob.png" alt="" /><div class="mini-line dark"></div></div><div class="mini-search"></div><div class="mini-map"><span class="mini-pin" style="left: 52px; top: 58px;"></span><span class="mini-pin" style="right: 44px; top: 42px;"></span></div><div class="mini-card"><div class="mini-line dark"></div><div class="mini-line"></div><div class="mini-line accent"></div></div></div></div>
+            <div class="mini-iphone center" aria-hidden="true"><div class="mini-screen"><div class="mini-status"><span>9:41</span><span>100%</span></div><div class="mini-brand-row"><img class="mini-logo" src="mpljyd5e-Logo-QuickJob.png" alt="" /><div><div class="mini-line dark" style="width: 92px"></div><div class="mini-line" style="width: 72px"></div></div></div><div class="mini-card"><div class="mini-line dark"></div><div class="mini-line"></div><div class="mini-line" style="width: 82%"></div></div><div class="mini-card"><div class="mini-line dark" style="width: 76%"></div><div class="mini-line"></div><div class="mini-line accent"></div></div><div class="mini-card" style="border-color: var(--primary);"><div class="mini-line dark" style="width: 64%"></div><div class="mini-line"></div><div class="mini-line accent" style="width: 66%"></div></div></div></div>
+            <div class="mini-iphone right" aria-hidden="true"><div class="mini-screen"><div class="mini-status"><span>9:41</span><span>5G</span></div><div class="mini-wallet"><span>Poin siap cair</span><strong>Rp128.000</strong></div><div class="mini-timeline"><span></span><span></span><span></span><span></span></div></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 2: Team (remains slide 2 as requested by user) -->
+      <section class="slide" data-od-id="slide-team" data-screen-label="02 Team">
+        <div class="code-grid" aria-hidden="true"></div>
+        <div class="slide-inner grid-2">
+          <div>
+            <p class="slide-kicker">Slide 2 · Team</p>
+            <h2 class="section-title">Tim kecil yang membangun jembatan kerja cepat di sekitar kampus.</h2>
+            <p class="lead" style="margin-top: var(--space-5);">Halaman ini disiapkan untuk tiga foto anggota kelompok. Nanti kirim fotonya, lalu saya pasang langsung ke masing-masing frame tanpa mengubah layout.</p>
+            <div class="panel" style="margin-top: var(--space-6);">
+              <p class="muted">Narasi singkat: QuickJob Campus dikerjakan oleh tim yang memahami dua sisi pasar — mahasiswa yang butuh pengalaman dan UMKM yang butuh tenaga cepat.</p>
+            </div>
+          </div>
+          <div class="team-stage">
+            <div class="team-grid" aria-label="Frame foto anggota kelompok">
+              <article class="member-card">
+                <div class="photo-frame">FOTO 01</div>
+                <h3>Reynard</h3>
+                <p class="member-role">Founder · Product & Market</p>
+                <span class="member-chip">campus demand</span>
+              </article>
+              <article class="member-card">
+                <div class="photo-frame">FOTO 02</div>
+                <h3>Nick</h3>
+                <p class="member-role">Founder · Prototype & UX</p>
+                <span class="member-chip">mobile flow</span>
+              </article>
+              <article class="member-card">
+                <div class="photo-frame">FOTO 03</div>
+                <h3>Raymondo</h3>
+                <p class="member-role">Founder · Business & Growth</p>
+                <span class="member-chip">UMKM supply</span>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 3: Permasalahan (Problem) -->
+      <section class="slide" data-od-id="slide-problem" data-screen-label="03 Permasalahan">
+        <div class="slide-inner grid-2">
+          <div>
+            <p class="slide-kicker">Slide 3 · Permasalahan</p>
+            <h2 class="section-title">Kesenjangan antara kebutuhan finansial mahasiswa Yogyakarta & operasional UMKM lokal.</h2>
+            <p class="lead" style="margin-top: var(--space-5);">Dengan lebih dari 350.000 mahasiswa aktif di DIY, terdapat potensi angkatan kerja yang sangat besar namun belum teroptimalisasi dengan baik.</p>
+          </div>
+          <div class="grid-2" style="grid-template-columns: 1fr; gap: var(--space-4);">
+            <div class="panel">
+              <h3 style="font-size: var(--text-lg); font-weight: 800; margin-bottom: var(--space-2); color: var(--primary);">Bagi Mahasiswa:</h3>
+              <ul style="padding-left: var(--space-5); color: var(--muted); display: grid; gap: 8px; font-size: var(--text-sm);">
+                <li>Kesulitan mencari kerja sampingan yang cocok dengan jadwal kuliah yang dinamis.</li>
+                <li>Hambatan administratif yang tinggi (proses rekrutmen formal, CV, surat lamaran).</li>
+                <li>Sulitnya membangun portofolio awal untuk melamar kerja setelah lulus kuliah.</li>
+              </ul>
+            </div>
+            <div class="panel">
+              <h3 style="font-size: var(--text-lg); font-weight: 800; margin-bottom: var(--space-2); color: var(--fg-2);">Bagi UMKM (Kafe, Event, Toko):</h3>
+              <ul style="padding-left: var(--space-5); color: var(--muted); display: grid; gap: 8px; font-size: var(--text-sm);">
+                <li>Sering mengalami lonjakan pesanan mendadak atau kekurangan staf (staf utama absen).</li>
+                <li>Proses rekrutmen pekerja harian/part-time memakan waktu lama dan tidak efisien.</li>
+                <li>Risiko ketidakcocokan pekerja karena kurangnya verifikasi rekam jejak lokal.</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 4: Solusi & Nilai Lebih (Solution) -->
+      <section class="slide" data-od-id="slide-solution" data-screen-label="04 Nilai Lebih & Solusi">
+        <div class="slide-inner">
+          <div>
+            <p class="slide-kicker">Slide 4 · Nilai Lebih & Solusi</p>
+            <h2 class="section-title">Micro-job berbasis lokasi, tanpa CV, dengan portofolio otomatis.</h2>
+          </div>
+          <div class="code-chip" style="margin-bottom: var(--space-5);">solution.modules</div>
+          <div class="grid-3">
+            <div class="card">
+              <h3>Kerja Tanpa CV</h3>
+              <p>Mahasiswa mendaftar cepat dengan data dasar, preferensi waktu, dan area kampus. Kredibilitas dibangun setelah tugas diselesaikan.</p>
+            </div>
+            <div class="card">
+              <h3>Matching Real-Time</h3>
+              <p>Lowongan pekerjaan ditampilkan berdasarkan jarak radius dekat kampus, urgensi tugas, dan kecocokan jadwal kosong mahasiswa.</p>
+            </div>
+            <div class="card">
+              <h3>Auto Portfolio Builder</h3>
+              <p>Setiap pekerjaan yang selesai secara otomatis terekam menjadi riwayat pengalaman terverifikasi untuk peluang berikutnya.</p>
+            </div>
+          </div>
+          <div class="panel"><p class="lead">Naskah pitch: “QuickJob Campus bukan job portal biasa. Ini adalah lapisan kerja instan di sekitar kampus: mahasiswa mendapat pengalaman nyata, UMKM mendapat bantuan cepat, dan rekam jejak tumbuh otomatis dari pekerjaan yang sudah diselesaikan.”</p></div>
+        </div>
+      </section>
+
+      <!-- SLIDE 5: Keunggulan Kompetitif (Competitive Advantage) -->
+      <section class="slide" data-od-id="slide-competitive" data-screen-label="05 Keunggulan Kompetitif">
+        <div class="slide-inner grid-2">
+          <div>
+            <p class="slide-kicker">Slide 5 · Keunggulan Kompetitif</p>
+            <h2 class="section-title">Mengapa QuickJob Campus Berbeda & Unggul?</h2>
+            <p class="lead" style="margin-top: var(--space-5);">Kami mengeliminasi hambatan masuk bagi mahasiswa dan UMKM dengan menciptakan platform mikro-lokal yang super-efisien.</p>
+          </div>
+          <div class="grid-2" style="grid-template-columns: 1fr; gap: var(--space-4);">
+            <div class="panel">
+              <h3 style="font-size: var(--text-lg); font-weight: 800; color: var(--primary);">Matching Super Cepat</h3>
+              <p class="muted" style="font-size: var(--text-sm); margin-top: 4px;">Menghubungkan UMKM yang membutuhkan bantuan mendesak dengan mahasiswa terdekat dalam hitungan menit, bukan hari.</p>
+            </div>
+            <div class="panel">
+              <h3 style="font-size: var(--text-lg); font-weight: 800; color: var(--primary);">Sistem Gamifikasi & Kepercayaan</h3>
+              <p class="muted" style="font-size: var(--text-sm); margin-top: 4px;">Pemberian insentif koin yang dapat ditukar uang dan rating dua arah terverifikasi menjamin kualitas kinerja kedua belah pihak.</p>
+            </div>
+            <div class="panel">
+              <h3 style="font-size: var(--text-lg); font-weight: 800; color: var(--primary);">Hyperlocal Focus</h3>
+              <p class="muted" style="font-size: var(--text-sm); margin-top: 4px;">Fokus eksklusif pada radius operasional 0–5 km di sekitar kawasan kampus padat mahasiswa di Yogyakarta.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 6: Besaran Market (Market Size) -->
+      <section class="slide" data-od-id="slide-market" data-screen-label="06 Besaran Market">
+        <div class="slide-inner grid-2">
+          <div>
+            <p class="slide-kicker">Slide 6 · Besaran Market</p>
+            <h2 class="section-title">Mulai dari Yogyakarta, lalu replikasi ke kota kampus nasional.</h2>
+            <p class="lead" style="margin-top: var(--space-5);">Angka berikut diposisikan sebagai target TAM/SAM/SOM berdasarkan riset primer mahasiswa aktif dan densitas UMKM sekitar kampus.</p>
+          </div>
+          <div class="code-chip" style="margin-bottom: var(--space-5);">market.scan Yogyakarta</div>
+          <div class="panel market-stack">
+            <div class="market-bar">
+              <strong>TAM Nasional</strong>
+              <div>
+                <div class="bar-track"><div class="bar-fill tam"></div></div>
+                <p class="muted">8,3 Juta Mahasiswa aktif Indonesia + jutaan UMKM di kota-kota pendidikan.</p>
+              </div>
+            </div>
+            <div class="market-bar">
+              <strong>SAM DIY</strong>
+              <div>
+                <div class="bar-track"><div class="bar-fill sam"></div></div>
+                <p class="muted">350.000+ Mahasiswa aktif di Yogyakarta (DIY) sebagai pasar layanan awal.</p>
+              </div>
+            </div>
+            <div class="market-bar">
+              <strong>SOM 12 Bulan</strong>
+              <div>
+                <div class="bar-track"><div class="bar-fill som"></div></div>
+                <p class="muted">Fokus 10.000 mahasiswa aktif di kampus prioritas (UGM, UNY, UMY) & 500 UMKM mitra.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 7: Produk (Product Description) -->
+      <section class="slide" data-od-id="slide-product" data-screen-label="07 Produk & Teknologi">
+        <div class="slide-inner grid-2">
+          <div>
+            <p class="slide-kicker">Slide 7 · Produk & Teknologi</p>
+            <h2 class="section-title">Aplikasi Mobile Berbasis Lokasi & Onboarding Tanpa CV.</h2>
+            <p class="lead" style="margin-top: var(--space-5);">QuickJob Campus dirancang khusus dengan UI/UX modern untuk perangkat seluler demi kecepatan akses:</p>
+            <ul style="color: var(--muted); margin-top: var(--space-4); display: grid; gap: 12px; padding-left: 20px; font-size: var(--text-sm);">
+              <li><b>Mini-Map Live:</b> Mahasiswa dapat mendeteksi lowongan langsung lewat peta interaktif di sekitar kampus mereka.</li>
+              <li><b>Profile Auto-Portofolio:</b> Pengalaman ter-update secara otomatis setelah pekerjaan diselesaikan, menggantikan CV konvensional.</li>
+              <li><b>Dompet Poin Terintegrasi:</b> Mahasiswa mengumpulkan koin bonus yang dapat dicairkan langsung ke E-Wallet (Gopay/OVO/Dana).</li>
+            </ul>
+          </div>
+          <div class="phone-showcase" style="min-height: min(440px, calc(100vh - 250px));">
+            <img src="mpllzig9-image.png" alt="Tampilan Aplikasi QuickJob Campus" style="width: 76%; max-width: 250px; border-radius: 28px; box-shadow: var(--elev-raised); border: 4px solid #2E1F15;" />
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 8: Model Bisnis (Business Model & Projections) -->
+      <section class="slide" data-od-id="slide-business-model" data-screen-label="08 Model Bisnis">
+        <div class="slide-inner grid-2">
+          <div>
+            <p class="slide-kicker">Slide 8 · Model Bisnis & Proyeksi Pendapatan</p>
+            <h2 class="section-title">Komisi transaksi ringan dan subscription boost untuk UMKM.</h2>
+            <div class="panel" style="margin-top: var(--space-5);">
+              <h3 style="font-size: var(--text-base); font-weight: 800; margin-bottom: var(--space-2); color: var(--primary);">Proyeksi Pendapatan 1 Tahun (Yogyakarta)</h3>
+              <p style="font-family: var(--font-mono); font-size: var(--text-xs); color: var(--fg-2); line-height: 1.6;">
+                Rumus: Market Share * Income per Transaksi<br>
+                = (5% dari 350.000 mhs = 17.500 mhs) * 2 job/bln * 12 bln * komisi rata-rata Rp5.000<br>
+                = 420.000 transaksi/tahun * Rp5.000 * 5% komisi = <b>Rp105.000.000 / tahun</b> (Komisi Dasar)
+              </p>
+            </div>
+          </div>
+          <div class="panel revenue-lane">
+            <div class="lane-row">
+              <strong>Komisi Transaksi</strong>
+              <p class="muted">5% komisi dari nilai pekerjaan yang diselesaikan (Estimasi Rp2.500 – Rp7.500 per job).</p>
+              <span class="chip">5% Fee</span>
+            </div>
+            <div class="lane-row">
+              <strong>Subscription Boost</strong>
+              <p class="muted">UMKM membayar untuk visibilitas lowongan di area kampus (Rp35.000/minggu atau Rp75.000/bulan).</p>
+              <span class="chip">Boost Plan</span>
+            </div>
+            <div class="lane-row">
+              <strong>Freemium Boost</strong>
+              <p class="muted">Opsi boost instan sekali tayang seharga Rp1.000 per lowongan bagi UMKM mikro budget terbatas.</p>
+              <span class="chip">Rp1.000 / post</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 9: Rencana Pemasaran (Marketing Plan - Customer Journey) -->
+      <section class="slide" data-od-id="slide-marketing-plan" data-screen-label="09 Rencana Pemasaran">
+        <div class="slide-inner">
+          <div>
+            <p class="slide-kicker">Slide 9 · Rencana Pemasaran (Customer Journey)</p>
+            <h2 class="section-title">Customer Journey & Strategi Distribusi Pemasaran</h2>
+          </div>
+          <div class="journey-flow">
+            <div class="journey-step">
+              <span class="journey-step-num">01 Awareness</span>
+              <h4>Menjangkau Target</h4>
+              <ul>
+                <li>Konten TikTok & IG harian</li>
+                <li>Targeted Meta & TikTok Ads</li>
+                <li>Booth & banner di kampus</li>
+              </ul>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-num">02 Interest</span>
+              <h4>Menarik Minat</h4>
+              <ul>
+                <li>Landing page interaktif</li>
+                <li>Konten YouTube edukatif</li>
+                <li>Testimoni mahasiswa</li>
+              </ul>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-num">03 Consideration</span>
+              <h4>Mempertimbangkan</h4>
+              <ul>
+                <li>Kemudahan Tanpa CV</li>
+                <li>Rating tepercaya</li>
+                <li>Kejelasan portofolio</li>
+              </ul>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-num">04 Conversion</span>
+              <h4>Mulai Transaksi</h4>
+              <ul>
+                <li>Daftar cepat gratis</li>
+                <li>Match otomatis jarak</li>
+                <li>Boost gratis 1 bln UMKM</li>
+              </ul>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-num">05 Retention</span>
+              <h4>Terus Menggunakan</h4>
+              <ul>
+                <li>Sistem Poin → Uang</li>
+                <li>Notifikasi lowongan baru</li>
+                <li>Rekomendasi personal</li>
+              </ul>
+            </div>
+            <div class="journey-step">
+              <span class="journey-step-num">06 Advocacy</span>
+              <h4>Merekomendasikan</h4>
+              <ul>
+                <li>Program referral viral</li>
+                <li>Komunitas WhatsApp aktif</li>
+                <li>Share portofolio</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 10: Analisis Kompetitor (Competitor Quadrant Matrix) -->
+      <section class="slide" data-od-id="slide-competitors" data-screen-label="10 Analisis Kompetitor">
+        <div class="slide-inner grid-2">
+          <div>
+            <p class="slide-kicker">Slide 10 · Analisis Kompetitor</p>
+            <h2 class="section-title">QuickJob Campus menempati ceruk pasar mikro-job lokal mahasiswa yang belum tersentuh.</h2>
+            <p class="lead" style="margin-top: var(--space-5);">Platform lain fokus pada karir formal jangka panjang atau jasa freelance online profesional. Kami fokus eksklusif pada mahasiswa dan UMKM terdekat.</p>
+            <div class="panel" style="margin-top: var(--space-6);">
+              <p class="muted"><b>Moat kami:</b> Kecepatan rekrutmen, peniadaan CV, verifikasi berbasis lokasi dekat kampus, dan gamifikasi sistem poin.</p>
+            </div>
+          </div>
+          <div>
+            <div class="competitor-matrix" aria-label="Grafik kuadran posisi kompetitor">
+              <span class="axis-label axis-y-top">Fokus Lokasi & Mahasiswa (Tinggi)</span>
+              <span class="axis-label axis-y-bottom">Fokus Lokasi (Rendah)</span>
+              <span class="axis-label axis-x-right">Fleksibilitas (Tinggi)</span>
+              <span class="axis-label axis-x-left">Fleksibilitas (Rendah)</span>
+              
+              <!-- QuickJob Campus (Top-Right) -->
+              <div class="competitor-dot us" style="left: 80%; top: 20%;">
+                <span></span>
+                <strong>QuickJob Campus</strong>
+              </div>
+              
+              <!-- LinkedIn (Bottom-Right) -->
+              <div class="competitor-dot" style="left: 75%; top: 75%;">
+                <span></span>
+                <strong>LinkedIn / Upwork</strong>
+              </div>
+              
+              <!-- Glints/Kalibrr (Bottom-Left) -->
+              <div class="competitor-dot" style="left: 25%; top: 80%;">
+                <span></span>
+                <strong>Glints / Kalibrr</strong>
+              </div>
+              
+              <!-- Portal Lowongan Kampus (Top-Left) -->
+              <div class="competitor-dot" style="left: 30%; top: 35%;">
+                <span></span>
+                <strong>Portal Lowongan Kampus</strong>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 11: Proyeksi Keuangan (Financial Projection & Use of Funds) -->
+      <section class="slide" data-od-id="slide-financial-projection" data-screen-label="11 Proyeksi Keuangan">
+        <div class="slide-inner grid-2">
+          <div>
+            <p class="slide-kicker">Slide 11 · Kebutuhan & Alokasi Dana</p>
+            <h2 class="section-title">Kebutuhan pendanaan awal Rp45–70 Juta (Seed Funding).</h2>
+            <p class="lead" style="margin-top: var(--space-5);">Dana ini akan digunakan untuk mempercepat validasi produk di pasar lokal (Yogyakarta) dan membangun traksi pengguna awal.</p>
+          </div>
+          <div class="grid-2" style="grid-template-columns: 1fr; gap: var(--space-4);">
+            <div class="panel">
+              <h3 style="font-size: var(--text-lg); font-weight: 800; color: var(--primary); margin-bottom: var(--space-3);">Alokasi Penggunaan Dana</h3>
+              <div style="display: grid; gap: var(--space-3);">
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: var(--text-sm); font-weight: 800;"><span>Pengembangan MVP & Produk</span><span>50%</span></div>
+                  <div style="height: 8px; border-radius: var(--radius-pill); background: var(--border-soft); overflow: hidden; margin-top: 4px;">
+                    <div style="width: 50%; height: 100%; background: var(--primary);"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: var(--text-sm); font-weight: 800;"><span>Akuisisi Pengguna Awal (Marketing)</span><span>30%</span></div>
+                  <div style="height: 8px; border-radius: var(--radius-pill); background: var(--border-soft); overflow: hidden; margin-top: 4px;">
+                    <div style="width: 30%; height: 100%; background: var(--primary);"></div>
+                  </div>
+                </div>
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: var(--text-sm); font-weight: 800;"><span>Operasional & Legalitas</span><span>20%</span></div>
+                  <div style="height: 8px; border-radius: var(--radius-pill); background: var(--border-soft); overflow: hidden; margin-top: 4px;">
+                    <div style="width: 20%; height: 100%; background: var(--primary);"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <h3>Rencana Alokasi</h3>
+              <p style="font-size: var(--text-sm);">Dana dialokasikan secara efisien demi mencapai Break-Even Point (BEP) dalam 6–12 bulan pertama dengan operasional yang lean.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 12: Traksi & Validasi (AARRR KPIs) -->
+      <section class="slide" data-od-id="slide-traction" data-screen-label="12 Traksi & Validasi">
+        <div class="slide-inner">
+          <div>
+            <p class="slide-kicker">Slide 12 · Traksi & Validasi (Framework AARRR)</p>
+            <h2 class="section-title">Matriks Pertumbuhan & Target KPI Validasi Awal</h2>
+          </div>
+          <div class="code-chip" style="margin-bottom: var(--space-5);">growth.loop AARRR</div>
+          <div class="aarrr">
+            <div class="aarrr-card">
+              <b>Acquisition</b>
+              <p class="muted">5.000 user baru/bulan dari campus ambassador & Meta/TikTok Ads.</p>
+            </div>
+            <div class="aarrr-card">
+              <b>Activation</b>
+              <p class="muted">85% signup rate & selesai setup profil tanpa CV setelah download.</p>
+            </div>
+            <div class="aarrr-card">
+              <b>Retention</b>
+              <p class="muted">45% Monthly Active Users (MAU) bertransaksi berulang.</p>
+            </div>
+            <div class="aarrr-card">
+              <b>Revenue</b>
+              <p class="muted">Fee komisi 5%, 80 boost subs aktif, BEP dalam 6-12 bulan.</p>
+            </div>
+            <div class="aarrr-card">
+              <b>Referral</b>
+              <p class="muted">30% akuisisi pengguna baru didapatkan dari program referral berhadiah koin.</p>
+            </div>
+          </div>
+          <p class="lead">Naskah pitch: “Loop pertumbuhan kami didasarkan pada retensi: semakin banyak mahasiswa menyelesaikan pekerjaan, semakin kuat portofolio otomatis mereka; semakin cepat UMKM mendapat staf, semakin sering mereka kembali memposting lowongan.”</p>
+        </div>
+      </section>
+
+      <!-- SLIDE 13: Milestones (3 Years Timeline) -->
+      <section class="slide" data-od-id="slide-milestones" data-screen-label="13 Milestone Bisnis">
+        <div class="slide-inner">
+          <div>
+            <p class="slide-kicker">Slide 13 · Milestone Perencanaan 3 Tahun</p>
+            <h2 class="section-title">Milestone pengembangan bisnis dari Yogyakarta ke tingkat nasional.</h2>
+            <p class="lead" style="margin-top: var(--space-4);">Membangun pondasi lokal yang kokoh sebelum mereplikasi model bisnis ke kota-kota kampus padat di Indonesia.</p>
+          </div>
+          <div class="code-chip" style="margin-bottom: var(--space-5);">runway.forecast 3yr</div>
+          <div class="runway-line">
+            <div class="milestone">
+              <h3>Bulan 0–6</h3>
+              <p class="muted">Membangun MVP, validasi onboarding tanpa CV, menjaring 500 mahasiswa & 50 cafe pilot di Yogyakarta.</p>
+            </div>
+            <div class="milestone">
+              <h3>Tahun 1</h3>
+              <p class="muted">Dominasi pasar Yogyakarta, aktivasi 5 kampus besar, BEP tercapai, integrasi sistem pembayaran otomatis.</p>
+            </div>
+            <div class="milestone">
+              <h3>Tahun 2</h3>
+              <p class="muted">Ekspansi regional ke kota kampus tetangga (Surakarta, Semarang, Bandung), integrasi korporasi promotor event.</p>
+            </div>
+            <div class="milestone">
+              <h3>Tahun 3</h3>
+              <p class="muted">Ekspansi nasional (Jakarta, Surabaya, Malang), peluncuran platform lowongan terintegrasi premium.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 14: Complete App Prototype (iOS Mockup) -->
+      <section class="slide" data-od-id="slide-prototype" data-screen-label="14 Prototipe Aplikasi">
+        <div class="slide-inner prototype-layout">
+          <div class="prototype-copy-panel">
+            <p class="slide-kicker">Prototype lengkap · iOS app</p>
+            <h2 class="section-title">Flow dari pertama install sampai mahasiswa apply kerja dan mencairkan poin.</h2>
+            <p class="lead" style="margin-top: var(--space-5);">Page ini sekarang mensimulasikan aplikasi QuickJob Campus yang lengkap: splash pembuka, login/daftar, pilih peran mahasiswa, onboarding preferensi, dashboard lokasi, detail lowongan, apply tanpa CV, portofolio otomatis, dan dompet poin.</p>
+            <div class="segmented" style="margin-top: var(--space-5);" aria-label="Pilih layar prototype">
+              <button type="button" class="app-switch active" data-target="splash">Splash</button>
+              <button type="button" class="app-switch" data-target="login">Login</button>
+              <button type="button" class="app-switch" data-target="role">Role</button>
+              <button type="button" class="app-switch" data-target="onboarding">Setup</button>
+              <button type="button" class="app-switch" data-target="dashboard">Home</button>
+              <button type="button" class="app-switch" data-target="detail">Detail</button>
+              <button type="button" class="app-switch" data-target="portfolio">Portfolio</button>
+              <button type="button" class="app-switch" data-target="wallet">Wallet</button>
+            </div>
+            <div class="prototype-flow-list">
+              <div class="flow-step"><span>01</span><div><strong>Pertama install</strong><small>Brand muncul singkat, tagline jelas, lalu otomatis masuk ke login.</small></div></div>
+              <div class="flow-step"><span>02</span><div><strong>Masuk tanpa CV</strong><small>Login nomor HP kampus, pilih role mahasiswa, lalu set minat dan radius.</small></div></div>
+              <div class="flow-step"><span>03</span><div><strong>Matching lokasi</strong><small>Dashboard menampilkan peta mini, filter shift, dan job terdekat di Yogyakarta.</small></div></div>
+              <div class="flow-step"><span>04</span><div><strong>Apply → Portfolio → Wallet</strong><small>Apply Tanpa CV memicu sukses state, proyek masuk portofolio, poin bisa dicairkan.</small></div></div>
+            </div>
+          </div>
+
+          <div class="iphone-wrapper" aria-label="Prototype iPhone QuickJob Campus">
+            <div class="iphone-screen">
+              <div class="statusbar"><span>9:41</span><span>5G · 82%</span></div>
+              <section class="screen splash active" id="screen-splash" data-od-id="screen-splash">
+                <div class="install-hero">
+                  <div class="app-logo"><img src="mpljyd5e-Logo-QuickJob.png" alt="Logo QuickJob Campus" /></div>
+                  <div>
+                    <h3 class="screen-title">QuickJob Campus</h3>
+                    <p class="screen-copy">Kerja Sampingan, Mudah & Dekat</p>
+                  </div>
+                  <div class="install-badge">Mencari job sekitar kampus...</div>
+                </div>
+              </section>
+
+              <section class="screen" id="screen-login" data-od-id="screen-login">
+                <div class="app-logo" style="width:72px;height:72px;border-radius:22px;margin-bottom:6px;"><img src="mpljyd5e-Logo-QuickJob.png" alt="Logo QuickJob Campus" /></div>
+                <h3 class="screen-title">Masuk ke QuickJob.</h3>
+                <p class="screen-copy">Gunakan nomor HP aktif untuk mencari kerja sampingan sekitar kampus tanpa upload CV.</p>
+                <div class="login-card" style="margin-top: var(--space-4);">
+                  <div class="input-field"><label>Nomor HP</label><input value="0812 3456 7890" aria-label="Nomor HP" /></div>
+                  <div class="input-field"><label>Kampus</label><input value="Universitas di Yogyakarta" aria-label="Kampus" /></div>
+                  <button class="btn-primary" type="button" data-go="role">Lanjutkan</button>
+                  <button class="btn-secondary" type="button" data-go="role">Daftar sebagai Mahasiswa</button>
+                </div>
+              </section>
+
+              <section class="screen" id="screen-role" data-od-id="screen-role">
+                <h3 class="screen-title">Pilih kebutuhanmu.</h3>
+                <p class="screen-copy">QuickJob punya jalur mahasiswa pencari kerja dan UMKM pemasang lowongan.</p>
+                <div class="role-grid" style="margin-top: var(--space-4);">
+                  <button class="role-card active" type="button" data-go="onboarding"><span class="role-icon">M</span><strong>Mahasiswa</strong><small class="screen-copy">Cari micro-job dekat kampus.</small></button>
+                  <button class="role-card" type="button"><span class="role-icon">U</span><strong>UMKM</strong><small class="screen-copy">Posting lowongan cepat.</small></button>
+                </div>
+                <div class="code-block" style="margin-top: var(--space-4); max-height:none;">profile.mode = "student";
+cv_required = false;
+portfolio.autoBuild = true;</div>
+                <button class="btn-primary" type="button" data-go="onboarding" style="margin-top:auto;">Mulai Setup Mahasiswa</button>
+              </section>
+
+              <section class="screen" id="screen-onboarding" data-od-id="screen-onboarding">
+                <div class="onboarding-visual" style="min-height:150px;">
+                  <div class="cv-card">
+                    <strong>Kerja Tanpa CV</strong>
+                    <div class="cv-line"></div><div class="cv-line"></div><div class="cv-line short"></div>
+                    <div class="slash">Auto Portfolio</div>
+                  </div>
+                </div>
+                <h3 class="screen-title">Atur preferensi kerja.</h3>
+                <p class="screen-copy">Pilih minat, radius, dan waktu kosong agar matching job lebih relevan.</p>
+                <div class="pref-grid">
+                  <button class="pref-pill active" type="button">Event</button><button class="pref-pill active" type="button">Barista</button>
+                  <button class="pref-pill" type="button">Admin toko</button><button class="pref-pill active" type="button">&le; 3 km</button>
+                </div>
+                <button class="btn-primary" type="button" data-go="dashboard" style="margin-top:auto;">Cari Job Terdekat</button>
+              </section>
+
+              <section class="screen scrollable" id="screen-dashboard" data-od-id="screen-dashboard">
+                <div class="app-header"><div><p class="screen-copy">Halo, Nick</p><h3 style="font-size:23px;">Kerja dekat kampus</h3></div><div class="avatar">N</div></div>
+                <div class="metric-strip"><div class="metric-mini"><strong>8</strong><small class="screen-copy">job cocok</small></div><div class="metric-mini"><strong>1.2km</strong><small class="screen-copy">terdekat</small></div><div class="metric-mini"><strong>2.450</strong><small class="screen-copy">poin</small></div></div>
+                <div class="search-box">&#128269; Cari kasir event, barista, admin toko</div>
+                <div class="quick-filter"><span class="active">Hari ini</span><span>&le; 3 km</span><span>Shift sore</span><span>Tanpa CV</span></div>
+                <div class="map-widget" aria-label="Simulasi peta lokasi"><span class="pin one"></span><span class="pin two"></span><span class="pin three"></span></div>
+                <div class="job-list">
+                  <button class="job-card" type="button" data-go="detail"><div class="job-card-top"><h4>Runner Event Kampus</h4><span class="chip">1.2 km</span></div><div class="job-meta"><span>Rp85k</span><span>3 jam</span><span>Mulai 16.00</span><span>+120 poin</span></div></button>
+                  <button class="job-card" type="button"><div class="job-card-top"><h4>Admin Packing UMKM</h4><span class="chip">2.4 km</span></div><div class="job-meta"><span>Rp70k</span><span>4 jam</span><span>Besok</span><span>+100 poin</span></div></button>
+                  <button class="job-card" type="button"><div class="job-card-top"><h4>Barista Shift Sore</h4><span class="chip">3.1 km</span></div><div class="job-meta"><span>Rp95k</span><span>5 jam</span><span>Weekend</span><span>+160 poin</span></div></button>
+                </div>
+                <div class="bottom-tabs"><button class="active" type="button">Home</button><button type="button" data-go="portfolio">Portfolio</button><button type="button" data-go="wallet">Wallet</button></div>
+              </section>
+
+              <section class="screen scrollable" id="screen-detail" data-od-id="screen-detail">
+                <button class="btn-secondary" type="button" data-go="dashboard" style="width:fit-content;min-height:38px;">&larr; Kembali</button>
+                <div class="detail-card" style="margin-top: var(--space-3);">
+                  <div class="detail-company"><span class="company-mark">EV</span><div><span class="chip">1.2 km · Hari ini</span><h3 class="screen-title" style="font-size:25px;margin:6px 0 0;">Runner Event Kampus</h3></div></div>
+                  <p class="screen-copy">Bantu registrasi peserta, arahkan tamu, dan rapikan booth setelah acara selesai.</p>
+                  <div class="task-list"><div class="task-item">Durasi 3 jam, mulai 16.00.</div><div class="task-item">Bayaran Rp85.000 + 120 poin.</div><div class="task-item">Tidak perlu CV; profil singkat dikirim otomatis.</div><div class="task-item">Lokasi: area kampus Yogyakarta.</div></div>
+                  <button class="btn-primary" type="button" id="applyBtn" data-success="apply">Apply Tanpa CV</button>
+                </div>
+                <div class="success-pop" id="successPop"><strong>Apply terkirim.</strong><br><span style="color: color-mix(in oklab, var(--accent-on), transparent 20%);">UMKM menerima profil singkat dan slot waktu kamu.</span></div>
+              </section>
+
+              <section class="screen scrollable" id="screen-portfolio" data-od-id="screen-portfolio">
+                <div class="app-header"><div><p class="screen-copy">Auto Portfolio</p><h3 style="font-size:24px;">Profil kerja kamu</h3></div><div class="avatar"><img src="mpljyd5e-Logo-QuickJob.png" alt="" /></div></div>
+                <div class="portfolio-summary"><div class="metric-mini"><strong>12</strong><small class="screen-copy">project selesai</small></div><div class="metric-mini"><strong>4.8</strong><small class="screen-copy">rating UMKM</small></div></div>
+                <div class="timeline">
+                  <div class="timeline-item"><span class="timeline-dot"></span><div class="timeline-card"><strong>Runner Event Kampus</strong><p class="muted">Terverifikasi · komunikasi + ketepatan waktu</p></div></div>
+                  <div class="timeline-item"><span class="timeline-dot"></span><div class="timeline-card"><strong>Admin Packing UMKM</strong><p class="muted">Terverifikasi · operasional toko</p></div></div>
+                  <div class="timeline-item"><span class="timeline-dot"></span><div class="timeline-card"><strong>Barista Shift Sore</strong><p class="muted">Terverifikasi · pelayanan pelanggan</p></div></div>
+                </div>
+                <div class="bottom-tabs"><button type="button" data-go="dashboard">Home</button><button class="active" type="button">Portfolio</button><button type="button" data-go="wallet">Wallet</button></div>
+              </section>
+
+              <section class="screen scrollable" id="screen-wallet" data-od-id="screen-wallet">
+                <div class="app-header"><div><p class="screen-copy">Dompet Poin</p><h3 style="font-size:24px;">Poin menjadi uang</h3></div><div class="avatar">Rp</div></div>
+                <div class="wallet-card"><span>Saldo poin bisa dicairkan</span><strong>2.450 pts</strong><p style="margin-top:var(--space-2);opacity:.86;">Estimasi Rp245.000</p></div>
+                <div class="cashout-row"><div><strong>Cairkan ke e-wallet</strong><p class="screen-copy">Minimal 1.000 poin</p></div><button class="btn-primary" type="button" style="min-height:40px;padding:0 14px;">Cairkan</button></div>
+                <div class="timeline" style="margin-top:12px;"><div class="timeline-card"><strong>+120 poin</strong><p class="muted">Apply Runner Event berhasil diverifikasi</p></div><div class="timeline-card"><strong>+300 poin</strong><p class="muted">Bonus 3 project selesai bulan ini</p></div></div>
+                <div class="bottom-tabs"><button type="button" data-go="dashboard">Home</button><button type="button" data-go="portfolio">Portfolio</button><button class="active" type="button">Wallet</button></div>
+              </section>
+              <div class="home-indicator"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SLIDE 15: Thank You & Closing -->
+      <section class="slide" data-od-id="slide-closing" data-screen-label="15 Penutup">
+        <div class="slide-inner grid-2">
+          <div class="title-hero-copy">
+            <p class="slide-kicker">Slide 15 · Penutup</p>
+            <div class="title-wordmark">
+              <img class="title-logo" src="mpljyd5e-Logo-QuickJob.png" alt="Logo QuickJob Campus" />
+              <span class="chip">Kerja Sampingan, Mudah & Dekat</span>
+            </div>
+            <h1 class="hero-title" style="font-size: clamp(38px, 6vw, var(--text-3xl));">Mari Berkoneksi & Berkolaborasi</h1>
+            <p class="title-tagline" style="margin-top: var(--space-4);">Membangun ekosistem kerja instan mahasiswa terbesar di Indonesia.</p>
+            <div class="panel" style="margin-top: var(--space-6); max-width: 520px;">
+              <h3 style="font-size: var(--text-base); font-weight: 800; color: var(--primary); margin-bottom: var(--space-2);">Hubungi Kami:</h3>
+              <p style="font-family: var(--font-mono); font-size: var(--text-sm); color: var(--fg-2); line-height: 1.55;">
+                Email: <b>quickjobcampus@gmail.com</b><br>
+                Lokasi: Yogyakarta, Indonesia
+              </p>
+            </div>
+            <p class="lead" style="margin-top: var(--space-5); font-style: italic; color: var(--muted);">"Terima Kasih atas Waktu & Kesempatan Anda."</p>
+          </div>
+          <div style="display: grid; place-items: center;">
+            <div class="brand-mark" style="width: 140px; height: 140px; border-radius: 42px; box-shadow: var(--elev-raised); border: 2px solid var(--border);">
+              <img src="mpljyd5e-Logo-QuickJob.png" alt="Logo QuickJob Campus" />
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <button class="prototype-jump" type="button" id="jumpPrototype">Buka Prototype</button>
+
+    <footer class="footer-note">
+      <span>QuickJob Campus · Deck HTML 7 slide + prototype aplikasi lengkap</span>
+      <span>Gunakan tombol panah atau keyboard Ã¢â€ Â → untuk presentasi</span>
+    </footer>
+  </div>
+
+  <script>
+    const slides = Array.from(document.querySelectorAll('.slide'));
+    const counter = document.getElementById('slideCounter');
+    let currentSlide = Number(localStorage.getItem('quickjob-slide') || 0);
+
+    function showSlide(index) {
+      currentSlide = Math.max(0, Math.min(index, slides.length - 1));
+      slides.forEach((slide, i) => slide.classList.toggle('active', i === currentSlide));
+      counter.textContent = `${String(currentSlide + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
+      localStorage.setItem('quickjob-slide', String(currentSlide));
+    }
+
+    document.getElementById('prevSlide').addEventListener('click', () => showSlide(currentSlide - 1));
+    document.getElementById('nextSlide').addEventListener('click', () => showSlide(currentSlide + 1));
+    window.addEventListener('keydown', (event) => {
+      if (event.target.closest && event.target.closest('.iphone-wrapper')) return;
+      if (event.key === 'ArrowRight' || event.key === 'PageDown' || event.key === ' ') { event.preventDefault(); showSlide(currentSlide + 1); }
+      if (event.key === 'ArrowLeft' || event.key === 'PageUp') { event.preventDefault(); showSlide(currentSlide - 1); }
+    });
+
+    const appScreens = Array.from(document.querySelectorAll('.iphone-screen .screen'));
+    const appSwitches = Array.from(document.querySelectorAll('.app-switch'));
+    function showAppScreen(name) {
+      appScreens.forEach((screen) => screen.classList.toggle('active', screen.id === `screen-${name}`));
+      appSwitches.forEach((button) => button.classList.toggle('active', button.dataset.target === name));
+    }
+    const phone = document.querySelector('.iphone-wrapper');
+    const phoneScreen = document.querySelector('.iphone-screen');
+    const successPop = document.getElementById('successPop');
+
+    function handlePhoneAction(event) {
+      const action = event.target.closest('[data-go], #applyBtn');
+      if (!action || !phoneScreen.contains(action)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      if (action.id === 'applyBtn') {
+        successPop.classList.add('show');
+        window.setTimeout(() => showAppScreen('portfolio'), 1200);
+        window.setTimeout(() => successPop.classList.remove('show'), 1500);
+        return;
+      }
+      showAppScreen(action.dataset.go);
+    }
+
+    phone.addEventListener('click', handlePhoneAction);
+    phone.addEventListener('pointerup', handlePhoneAction);
+    phone.addEventListener('touchend', handlePhoneAction, { passive: true });
+    appSwitches.forEach((button) => button.addEventListener('click', () => showAppScreen(button.dataset.target)));
+
+    window.setTimeout(() => {
+      if (document.getElementById('screen-splash').classList.contains('active')) showAppScreen('login');
+    }, 1600);
+
+    showSlide(currentSlide);
+  
+    // Final reliable deck + prototype navigation patch
+    const jumpPrototype = document.getElementById('jumpPrototype');
+    if (jumpPrototype) {
+      jumpPrototype.addEventListener('click', () => showSlide(slides.length - 2));
+    }
+
+    const prototypeRoot = document.querySelector('.slide[data-od-id="slide-prototype"] .iphone-wrapper');
+    function runPrototypeAction(event) {
+      const action = event.target.closest('[data-go], [data-target], [data-success]');
+      if (!action || !prototypeRoot || !prototypeRoot.contains(action)) return;
+      event.preventDefault();
+      event.stopPropagation();
+      const next = action.dataset.go || action.dataset.target;
+      if (next) showAppScreen(next);
+      if (action.dataset.success === 'apply') {
+        successPop.classList.add('show');
+        setTimeout(() => successPop.classList.remove('show'), 1800);
+      }
+    }
+    if (prototypeRoot) {
+      prototypeRoot.addEventListener('click', runPrototypeAction);
+      prototypeRoot.addEventListener('touchend', runPrototypeAction, { passive: false });
+    }
+  </script>
+<style>
+  /* Fit-to-viewport override so nothing overflows the laptop frame */
+  html, body { overflow: hidden; }
+  .deck-shell { height: 100vh; min-height: 0; }
+  .slides { overflow: hidden; }
+  .slide-inner { max-height: 100%; overflow: auto; padding-block: clamp(12px, 2vh, 28px) !important; }
+  .slide-inner::-webkit-scrollbar { width: 6px; }
+  .slide-inner::-webkit-scrollbar-thumb { background: rgba(138,95,65,.35); border-radius: 4px; }
+  .hero-title { font-size: clamp(40px, 5.2vw, 68px) !important; }
+  .section-title { font-size: clamp(30px, 3.8vw, 48px) !important; }
+</style>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
