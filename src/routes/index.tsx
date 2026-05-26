@@ -74,12 +74,10 @@ function QuickJobDeck() {
       <header className="qj-topbar">
         <div className="qj-brand">
           <div className="qj-logo">
-            <img src="/quickjob-logo.png" alt="" onError={(e) => ((e.target as HTMLImageElement).style.display = "none")} />
-            <span>QJ</span>
+            <img src="/quickjob-logo.png" alt="QuickJob Campus Logo" />
           </div>
           <div className="qj-brand-text">
             <strong>QuickJob Campus</strong>
-            <small>Pitch Deck · 2026</small>
           </div>
         </div>
         <div className="qj-counter">
@@ -152,8 +150,7 @@ function SlideTitle() {
         <Kicker>Slide 1 · Title & Hook</Kicker>
         <div className="hero-mark">
           <div className="hero-logo">
-            <img src="/quickjob-logo.png" alt="" onError={(e) => ((e.target as HTMLImageElement).style.display = "none")} />
-            <span>QJ</span>
+            <img src="/quickjob-logo.png" alt="QuickJob Campus Logo" />
           </div>
           <Chip>Kerja Sampingan, Mudah &amp; Dekat</Chip>
         </div>
@@ -183,32 +180,7 @@ function SlideTitle() {
 function MiniPhone({ variant }: { variant: "left" | "center" | "right" }) {
   return (
     <div className={`mini-phone mp-${variant}`} aria-hidden>
-      <div className="mp-screen">
-        <div className="mp-status"><span>9:41</span><span>5G</span></div>
-        {variant === "left" && (
-          <>
-            <div className="mp-search" />
-            <div className="mp-map">
-              <span className="mp-pin" style={{ left: "30%", top: "30%" }} />
-              <span className="mp-pin" style={{ right: "20%", top: "55%" }} />
-            </div>
-            <div className="mp-card"><i /><i className="sm" /><i className="ac" /></div>
-          </>
-        )}
-        {variant === "center" && (
-          <>
-            <div className="mp-card"><i /><i /><i className="sm" /></div>
-            <div className="mp-card"><i /><i /><i className="ac" /></div>
-            <div className="mp-card hi"><i /><i /><i className="ac" /></div>
-          </>
-        )}
-        {variant === "right" && (
-          <>
-            <div className="mp-wallet"><span>Poin siap cair</span><strong>Rp128.000</strong></div>
-            <div className="mp-timeline"><i /><i /><i /><i /></div>
-          </>
-        )}
-      </div>
+      <img src={`/phone-${variant}.png`} alt="" className="phone-image" />
     </div>
   );
 }
@@ -814,7 +786,7 @@ function SlideClosing() {
       <div>
         <Kicker>Slide 15 · Penutup</Kicker>
         <div className="hero-mark">
-          <div className="hero-logo"><img src="/quickjob-logo.png" alt="" onError={(e) => ((e.target as HTMLImageElement).style.display = "none")} /><span>QJ</span></div>
+          <div className="hero-logo"><img src="/quickjob-logo.png" alt="QuickJob Campus Logo" /></div>
           <Chip>Kerja Sampingan, Mudah &amp; Dekat</Chip>
         </div>
         <h1 className="hero-title">Mari <span className="grad">Berkoneksi</span> &amp; Berkolaborasi</h1>
@@ -830,8 +802,7 @@ function SlideClosing() {
       </div>
       <div className="closing-stage">
         <div className="big-mark">
-          <img src="/quickjob-logo.png" alt="" onError={(e) => ((e.target as HTMLImageElement).style.display = "none")} />
-          <span>QJ</span>
+          <img src="/quickjob-logo.png" alt="QuickJob Campus Logo" />
           <div className="ring r1" /><div className="ring r2" /><div className="ring r3" />
         </div>
       </div>
@@ -1064,35 +1035,24 @@ const CSS = `
 /* mini phones */
 .phones { display: flex; gap: -10px; align-items: center; justify-content: center; perspective: 900px; }
 .mini-phone {
-  width: 150px; height: 300px; border-radius: 28px;
+  width: 220px; height: 440px; border-radius: 32px;
   background: linear-gradient(180deg, #1a0e06, #2a1a10);
-  padding: 10px;
-  border: 2px solid rgba(243,228,201,.18);
+  padding: 6px;
+  border: 1px solid rgba(243,228,201,.18);
   box-shadow: 0 30px 50px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.04);
   flex-shrink: 0;
+  position: relative;
+  overflow: hidden;
+}
+.phone-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 26px;
 }
 .mp-left { transform: translateX(20px) rotate(-8deg); }
 .mp-center { z-index: 2; transform: translateY(-10px); }
 .mp-right { transform: translateX(-20px) rotate(8deg); }
-.mp-screen {
-  width: 100%; height: 100%; border-radius: 18px;
-  background: var(--cream-soft); color: var(--espresso);
-  padding: 12px 10px; display: flex; flex-direction: column; gap: 8px; overflow: hidden;
-}
-.mp-status { display: flex; justify-content: space-between; font-size: 9px; color: var(--coffee); font-weight: 700; }
-.mp-search { height: 22px; border-radius: 8px; background: #efe0c2; }
-.mp-map { flex: 1; border-radius: 12px; background: linear-gradient(135deg, #efe0c2, #d8be96); position: relative; min-height: 80px; }
-.mp-pin { position: absolute; width: 8px; height: 8px; border-radius: 50%; background: var(--accent-2); box-shadow: 0 0 0 6px rgba(201,98,44,.25); animation: pulse 1.6s infinite; }
-.mp-card { padding: 8px; border-radius: 10px; background: white; display: grid; gap: 4px; border: 1px solid #e8d6b2; }
-.mp-card.hi { border-color: var(--accent); }
-.mp-card i, .mp-card i { display: block; height: 6px; border-radius: 4px; background: #d8be96; }
-.mp-card .sm { width: 70%; }
-.mp-card .ac { width: 50%; background: var(--accent); }
-.mp-wallet { background: var(--espresso); color: var(--cream); padding: 14px; border-radius: 12px; display: flex; flex-direction: column; gap: 4px; }
-.mp-wallet span { font-size: 9px; opacity: .7; }
-.mp-wallet strong { font-size: 16px; }
-.mp-timeline { display: flex; flex-direction: column; gap: 6px; flex: 1; }
-.mp-timeline i { display: block; height: 24px; border-radius: 8px; background: white; border: 1px solid #e8d6b2; }
 
 /* team */
 .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
