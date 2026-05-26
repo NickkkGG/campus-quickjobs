@@ -1867,6 +1867,17 @@ portfolio.autoBuild = true;</div>
       prototypeRoot.addEventListener('touchend', runPrototypeAction, { passive: false });
     }
   </script>
+<style>
+  /* Fit-to-viewport override so nothing overflows the laptop frame */
+  html, body { overflow: hidden; }
+  .deck-shell { height: 100vh; min-height: 0; }
+  .slides { overflow: hidden; }
+  .slide-inner { max-height: 100%; overflow: auto; padding-block: clamp(12px, 2vh, 28px) !important; }
+  .slide-inner::-webkit-scrollbar { width: 6px; }
+  .slide-inner::-webkit-scrollbar-thumb { background: rgba(138,95,65,.35); border-radius: 4px; }
+  .hero-title { font-size: clamp(40px, 5.2vw, 68px) !important; }
+  .section-title { font-size: clamp(30px, 3.8vw, 48px) !important; }
+</style>
 </body>
 </html>
 
