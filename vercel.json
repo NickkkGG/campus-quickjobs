@@ -1,11 +1,11 @@
 {
-  "buildCommand": "bun run build",
+  "buildCommand": "bun run build && cp dist/client/quickjob.html dist/client/index.html",
   "outputDirectory": "dist/client",
   "framework": null,
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/quickjob.html"
+      "dest": "/index.html"
     }
   ]
 }
