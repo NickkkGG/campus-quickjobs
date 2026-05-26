@@ -13,7 +13,7 @@ export const Route = createFileRoute("/")({
 
 /* ---------------- Slide content ---------------- */
 
-type Slide = { id: string; label: string; render: () => JSX.Element };
+type Slide = { id: string; label: string; render: () => React.ReactElement };
 
 const SLIDES: Slide[] = [
   { id: "title", label: "Title & Hook", render: SlideTitle },
