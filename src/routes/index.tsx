@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+﻿import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useEffect, useState } from "react";
 
 export const Route = createFileRoute("/")({
@@ -87,8 +87,12 @@ function QuickJobDeck() {
           <span className="qj-label">· {SLIDES[i].label}</span>
         </div>
         <div className="qj-controls">
-          <button onClick={() => go(i - 1)} aria-label="Previous">←</button>
-          <button onClick={() => go(i + 1)} aria-label="Next">→</button>
+          <button onClick={() => go(i - 1)} aria-label="Previous">
+            ←
+          </button>
+          <button onClick={() => go(i + 1)} aria-label="Next">
+            →
+          </button>
         </div>
       </header>
 
@@ -114,7 +118,9 @@ function QuickJobDeck() {
             />
           ))}
         </div>
-        <div className="qj-bar"><div className="qj-bar-fill" style={{ width: `${((i + 1) / SLIDES.length) * 100}%` }} /></div>
+        <div className="qj-bar">
+          <div className="qj-bar-fill" style={{ width: `${((i + 1) / SLIDES.length) * 100}%` }} />
+        </div>
       </footer>
     </div>
   );
@@ -138,7 +144,11 @@ function Chip({ children }: { children: React.ReactNode }) {
   return <span className="qj-chip">{children}</span>;
 }
 function CodeChip({ children }: { children: React.ReactNode }) {
-  return <span className="qj-codechip"><i /> {children}</span>;
+  return (
+    <span className="qj-codechip">
+      <i /> {children}
+    </span>
+  );
 }
 
 /* ---------------- Slides ---------------- */
@@ -155,18 +165,15 @@ function SlideTitle() {
           <Chip>Kerja Sampingan, Mudah &amp; Dekat</Chip>
         </div>
         <h1 className="hero-title">
-          QuickJob<br /><span className="grad">Campus.</span>
+          QuickJob
+          <br />
+          <span className="grad">Campus.</span>
         </h1>
         <p className="hero-tag">Micro-job dekat kampus, tanpa CV.</p>
         <Lead>
-          Platform berbasis lokasi yang mempertemukan mahasiswa Yogyakarta dengan UMKM sekitar kampus untuk
-          kerja cepat, portofolio otomatis, dan poin yang bisa menjadi uang.
+          Platform berbasis lokasi yang mempertemukan mahasiswa Yogyakarta dengan UMKM sekitar
+          kampus untuk kerja cepat, portofolio otomatis, dan poin yang bisa menjadi uang.
         </Lead>
-        <div className="founders">
-          <Chip>Reynard</Chip>
-          <Chip>Nick</Chip>
-          <Chip>Raymondo</Chip>
-        </div>
       </div>
       <div className="phones">
         <MiniPhone variant="left" />
@@ -187,33 +194,28 @@ function MiniPhone({ variant }: { variant: "left" | "center" | "right" }) {
 
 function SlideTeam() {
   const members = [
-    { name: "Reynard", role: "Founder · Product & Market", chip: "campus demand" },
-    { name: "Nick", role: "Founder · Prototype & UX", chip: "mobile flow" },
-    { name: "Raymondo", role: "Founder · Business & Growth", chip: "UMKM supply" },
+    { name: "Reynard", photo: "reynard.jpeg", npm: "241712926" },
+    { name: "Raymondo", photo: "raymondo.jpeg", npm: "241712966" },
+    { name: "Nick", photo: "nick.jpeg", npm: "241712915" },
   ];
   return (
-    <div className="grid-2">
-      <div>
+    <div className="team-layout">
+      <div className="team-header">
         <Kicker>Slide 2 · Team</Kicker>
-        <Title>Tim kecil yang membangun jembatan kerja cepat di sekitar kampus.</Title>
-        <Lead>
-          Halaman ini disiapkan untuk tiga foto anggota kelompok. Nanti kirim fotonya, lalu saya pasang
-          langsung ke masing-masing frame tanpa mengubah layout.
-        </Lead>
-        <Panel>
-          <p className="muted">
-            Narasi singkat: QuickJob Campus dikerjakan oleh tim yang memahami dua sisi pasar — mahasiswa
-            yang butuh pengalaman dan UMKM yang butuh tenaga cepat.
-          </p>
-        </Panel>
+        <Title>Anggota Kelompok</Title>
       </div>
-      <div className="team-grid">
+      <div className="team-grid-center">
         {members.map((m, idx) => (
-          <article key={m.name} className="member-card" style={{ animationDelay: `${idx * 90}ms` }}>
-            <div className="photo-frame">FOTO 0{idx + 1}</div>
+          <article
+            key={m.name}
+            className="member-card-large"
+            style={{ animationDelay: `${idx * 90}ms` }}
+          >
+            <div className="photo-frame-large">
+              <img src={`/${m.photo}`} alt={m.name} className="team-photo" />
+            </div>
             <h3>{m.name}</h3>
-            <p className="member-role">{m.role}</p>
-            <Chip>{m.chip}</Chip>
+            <p className="member-npm">{m.npm}</p>
           </article>
         ))}
       </div>
@@ -226,10 +228,12 @@ function SlideProblem() {
     <div className="grid-2">
       <div>
         <Kicker>Slide 3 · Permasalahan</Kicker>
-        <Title>Kesenjangan antara kebutuhan finansial mahasiswa Yogyakarta &amp; operasional UMKM lokal.</Title>
+        <Title>
+          Kesenjangan antara kebutuhan finansial mahasiswa Yogyakarta &amp; operasional UMKM lokal.
+        </Title>
         <Lead>
-          Dengan lebih dari 350.000 mahasiswa aktif di DIY, terdapat potensi angkatan kerja yang sangat
-          besar namun belum teroptimalisasi dengan baik.
+          Dengan lebih dari 350.000 mahasiswa aktif di DIY, terdapat potensi angkatan kerja yang
+          sangat besar namun belum teroptimalisasi dengan baik.
         </Lead>
       </div>
       <div className="stack">
@@ -237,14 +241,18 @@ function SlideProblem() {
           <h3 className="panel-h accent">Bagi Mahasiswa</h3>
           <ul className="bullets">
             <li>Kesulitan mencari kerja sampingan yang cocok dengan jadwal kuliah yang dinamis.</li>
-            <li>Hambatan administratif yang tinggi (proses rekrutmen formal, CV, surat lamaran).</li>
+            <li>
+              Hambatan administratif yang tinggi (proses rekrutmen formal, CV, surat lamaran).
+            </li>
             <li>Sulitnya membangun portofolio awal untuk melamar kerja setelah lulus kuliah.</li>
           </ul>
         </Panel>
         <Panel>
           <h3 className="panel-h">Bagi UMKM (Kafe, Event, Toko)</h3>
           <ul className="bullets">
-            <li>Sering mengalami lonjakan pesanan mendadak atau kekurangan staf (staf utama absen).</li>
+            <li>
+              Sering mengalami lonjakan pesanan mendadak atau kekurangan staf (staf utama absen).
+            </li>
             <li>Proses rekrutmen pekerja harian/part-time memakan waktu lama dan tidak efisien.</li>
             <li>Risiko ketidakcocokan pekerja karena kurangnya verifikasi rekam jejak lokal.</li>
           </ul>
@@ -256,9 +264,18 @@ function SlideProblem() {
 
 function SlideSolution() {
   const cards = [
-    { t: "Kerja Tanpa CV", d: "Mahasiswa mendaftar cepat dengan data dasar, preferensi waktu, dan area kampus. Kredibilitas dibangun setelah tugas diselesaikan." },
-    { t: "Matching Real-Time", d: "Lowongan pekerjaan ditampilkan berdasarkan jarak radius dekat kampus, urgensi tugas, dan kecocokan jadwal kosong mahasiswa." },
-    { t: "Auto Portfolio Builder", d: "Setiap pekerjaan yang selesai secara otomatis terekam menjadi riwayat pengalaman terverifikasi untuk peluang berikutnya." },
+    {
+      t: "Kerja Tanpa CV",
+      d: "Mahasiswa mendaftar cepat dengan data dasar, preferensi waktu, dan area kampus. Kredibilitas dibangun setelah tugas diselesaikan.",
+    },
+    {
+      t: "Matching Real-Time",
+      d: "Lowongan pekerjaan ditampilkan berdasarkan jarak radius dekat kampus, urgensi tugas.",
+    },
+    {
+      t: "Auto Portfolio Builder",
+      d: "Setiap pekerjaan yang selesai secara otomatis terekam menjadi riwayat pengalaman terverifikasi untuk peluang berikutnya.",
+    },
   ];
   return (
     <div className="col">
@@ -278,9 +295,9 @@ function SlideSolution() {
       </div>
       <Panel>
         <Lead>
-          Naskah pitch: “QuickJob Campus bukan job portal biasa. Ini adalah lapisan kerja instan di sekitar
-          kampus: mahasiswa mendapat pengalaman nyata, UMKM mendapat bantuan cepat, dan rekam jejak tumbuh
-          otomatis dari pekerjaan yang sudah diselesaikan.”
+          QuickJob Campus bukan job portal biasa. Ini adalah lapisan kerja instan di sekitar kampus:
+          mahasiswa mendapat pengalaman nyata, UMKM mendapat bantuan cepat, dan rekam jejak tumbuh
+          otomatis dari pekerjaan yang sudah diselesaikan.
         </Lead>
       </Panel>
     </div>
@@ -289,9 +306,18 @@ function SlideSolution() {
 
 function SlideCompetitive() {
   const items = [
-    { t: "Matching Super Cepat", d: "Menghubungkan UMKM yang membutuhkan bantuan mendesak dengan mahasiswa terdekat dalam hitungan menit, bukan hari." },
-    { t: "Sistem Gamifikasi & Kepercayaan", d: "Pemberian insentif koin yang dapat ditukar uang dan rating dua arah terverifikasi menjamin kualitas kinerja kedua belah pihak." },
-    { t: "Hyperlocal Focus", d: "Fokus eksklusif pada radius operasional 0–5 km di sekitar kawasan kampus padat mahasiswa di Yogyakarta." },
+    {
+      t: "Matching Super Cepat",
+      d: "Menghubungkan UMKM yang membutuhkan bantuan mendesak dengan mahasiswa terdekat dalam hitungan menit, bukan hari.",
+    },
+    {
+      t: "Sistem Gamifikasi & Kepercayaan",
+      d: "Pemberian insentif koin yang dapat ditukar uang dan rating dua arah terverifikasi menjamin kualitas kinerja kedua belah pihak.",
+    },
+    {
+      t: "Hyperlocal Focus",
+      d: "Fokus eksklusif pada radius operasional 0–5 km di sekitar kawasan kampus padat mahasiswa di Yogyakarta.",
+    },
   ];
   return (
     <div className="grid-2">
@@ -299,8 +325,8 @@ function SlideCompetitive() {
         <Kicker>Slide 5 · Keunggulan Kompetitif</Kicker>
         <Title>Mengapa QuickJob Campus Berbeda &amp; Unggul?</Title>
         <Lead>
-          Kami mengeliminasi hambatan masuk bagi mahasiswa dan UMKM dengan menciptakan platform mikro-lokal
-          yang super-efisien.
+          Kami mengeliminasi hambatan masuk bagi mahasiswa dan UMKM dengan menciptakan platform
+          mikro-lokal yang super-efisien.
         </Lead>
       </div>
       <div className="stack">
@@ -322,20 +348,36 @@ function SlideMarket() {
         <Kicker>Slide 6 · Besaran Market</Kicker>
         <Title>Mulai dari Yogyakarta, lalu replikasi ke kota kampus nasional.</Title>
         <Lead>
-          Angka berikut diposisikan sebagai target TAM/SAM/SOM berdasarkan riset primer mahasiswa aktif dan
-          densitas UMKM sekitar kampus.
+          Angka berikut diposisikan sebagai target TAM/SAM/SOM berdasarkan riset primer mahasiswa
+          aktif dan densitas UMKM sekitar kampus.
         </Lead>
-        <div style={{ marginTop: 18 }}><CodeChip>market.scan Yogyakarta</CodeChip></div>
+        <div style={{ marginTop: 18 }}>
+          <CodeChip>market.scan Yogyakarta</CodeChip>
+        </div>
       </div>
       <Panel className="market-stack">
         {[
-          { k: "TAM Nasional", w: "92%", d: "8,3 Juta Mahasiswa aktif Indonesia + jutaan UMKM di kota-kota pendidikan." },
-          { k: "SAM DIY", w: "58%", d: "350.000+ Mahasiswa aktif di Yogyakarta (DIY) sebagai pasar layanan awal." },
-          { k: "SOM 12 Bulan", w: "22%", d: "Fokus 10.000 mahasiswa aktif di kampus prioritas (UGM, UNY, UMY) & 500 UMKM mitra." },
+          {
+            k: "TAM Nasional",
+            w: "92%",
+            d: "8,3 Juta Mahasiswa aktif Indonesia + jutaan UMKM di kota-kota pendidikan.",
+          },
+          {
+            k: "SAM DIY",
+            w: "58%",
+            d: "350.000+ Mahasiswa aktif di Yogyakarta (DIY) sebagai pasar layanan awal.",
+          },
+          {
+            k: "SOM 12 Bulan",
+            w: "22%",
+            d: "Fokus 10.000 mahasiswa aktif di kampus prioritas (UGM, UNY, UMY) & 500 UMKM mitra.",
+          },
         ].map((b) => (
           <div className="bar-row" key={b.k}>
             <strong>{b.k}</strong>
-            <div className="bar-track"><div className="bar-fill" style={{ width: b.w }} /></div>
+            <div className="bar-track">
+              <div className="bar-fill" style={{ width: b.w }} />
+            </div>
             <p className="muted">{b.d}</p>
           </div>
         ))}
@@ -350,23 +392,28 @@ function SlideProduct() {
       <div>
         <Kicker>Slide 7 · Produk &amp; Teknologi</Kicker>
         <Title>Aplikasi Mobile Berbasis Lokasi &amp; Onboarding Tanpa CV.</Title>
-        <Lead>QuickJob Campus dirancang khusus dengan UI/UX modern untuk perangkat seluler demi kecepatan akses:</Lead>
+        <Lead>
+          QuickJob Campus dirancang khusus dengan UI/UX modern untuk perangkat seluler demi
+          kecepatan akses:
+        </Lead>
         <ul className="bullets bullets-icon">
-          <li><b>Mini-Map Live:</b> Mahasiswa dapat mendeteksi lowongan langsung lewat peta interaktif di sekitar kampus mereka.</li>
-          <li><b>Profile Auto-Portofolio:</b> Pengalaman ter-update secara otomatis setelah pekerjaan diselesaikan, menggantikan CV konvensional.</li>
-          <li><b>Dompet Poin Terintegrasi:</b> Mahasiswa mengumpulkan koin bonus yang dapat dicairkan langsung ke E-Wallet (Gopay/OVO/Dana).</li>
+          <li>
+            <b>Mini-Map Live:</b> Mahasiswa dapat mendeteksi lowongan langsung lewat peta interaktif
+            di sekitar kampus mereka.
+          </li>
+          <li>
+            <b>Profile Auto-Portofolio:</b> Pengalaman ter-update secara otomatis setelah pekerjaan
+            diselesaikan, menggantikan CV konvensional.
+          </li>
+          <li>
+            <b>Dompet Poin Terintegrasi:</b> Mahasiswa mengumpulkan koin bonus yang dapat dicairkan
+            langsung ke E-Wallet (Gopay/OVO/Dana).
+          </li>
         </ul>
       </div>
       <div className="phones-single">
         <div className="big-phone">
-          <div className="bp-screen">
-            <div className="mp-status"><span>9:41</span><span>5G</span></div>
-            <div className="bp-header">Kerja dekat kampus</div>
-            <div className="bp-search">🔎 Cari kasir, barista, admin</div>
-            <div className="bp-map"><span /><span /><span /></div>
-            <div className="bp-job"><strong>Runner Event Kampus</strong><small>Rp85k · 1.2 km</small></div>
-            <div className="bp-job"><strong>Barista Shift Sore</strong><small>Rp95k · 3.1 km</small></div>
-          </div>
+          <img src="/phone-center.png" alt="" className="phone-image-large" />
         </div>
       </div>
     </div>
@@ -382,7 +429,7 @@ function SlideBiz() {
         <Panel>
           <h3 className="panel-h accent">Proyeksi Pendapatan 1 Tahun (Yogyakarta)</h3>
           <pre className="mono">
-{`Market Share × Income per Transaksi
+            {`Market Share × Income per Transaksi
 = (5% dari 350.000 mhs = 17.500 mhs)
   × 2 job/bln × 12 bln × komisi Rp5.000
 = 420.000 trx/tahun × Rp5.000 × 5%
@@ -393,18 +440,26 @@ function SlideBiz() {
       <Panel className="lanes">
         <div className="lane">
           <strong>Komisi Transaksi</strong>
-          <p className="muted">5% komisi dari nilai pekerjaan yang diselesaikan (Estimasi Rp2.500 – Rp7.500 per job).</p>
+          <p className="muted">
+            5% komisi dari nilai pekerjaan yang diselesaikan (Estimasi Rp2.500 – Rp7.500 per job).
+          </p>
           <Chip>5% Fee</Chip>
         </div>
         <div className="lane">
           <strong>Subscription Boost</strong>
-          <p className="muted">UMKM membayar untuk visibilitas lowongan di area kampus (Rp35.000/minggu atau Rp75.000/bulan).</p>
+          <p className="muted">
+            UMKM membayar untuk visibilitas lowongan di area kampus (Rp35.000/minggu atau
+            Rp75.000/bulan).
+          </p>
           <Chip>Boost Plan</Chip>
         </div>
         <div className="lane">
-          <strong>Freemium Boost</strong>
-          <p className="muted">Opsi boost instan sekali tayang seharga Rp1.000 per lowongan bagi UMKM mikro budget terbatas.</p>
-          <Chip>Rp1.000 / post</Chip>
+          <strong>Freemium Boost (Iklan)</strong>
+          <p className="muted">
+            UMKM dapat meningkatkan visibilitas lowongan secara gratis dengan menonton iklan.
+            Pendapatan dari advertiser menjadi sumber revenue alternatif yang ramah UMKM mikro.
+          </p>
+          <Chip>Watch Ads to Boost</Chip>
         </div>
       </Panel>
     </div>
@@ -413,12 +468,36 @@ function SlideBiz() {
 
 function SlideMarketing() {
   const steps = [
-    { n: "01 Awareness", t: "Menjangkau Target", b: ["Konten TikTok & IG harian", "Targeted Meta & TikTok Ads", "Booth & banner di kampus"] },
-    { n: "02 Interest", t: "Menarik Minat", b: ["Landing page interaktif", "Konten YouTube edukatif", "Testimoni mahasiswa"] },
-    { n: "03 Consideration", t: "Mempertimbangkan", b: ["Kemudahan Tanpa CV", "Rating tepercaya", "Kejelasan portofolio"] },
-    { n: "04 Conversion", t: "Mulai Transaksi", b: ["Daftar cepat gratis", "Match otomatis jarak", "Boost gratis 1 bln UMKM"] },
-    { n: "05 Retention", t: "Terus Menggunakan", b: ["Sistem Poin → Uang", "Notifikasi lowongan baru", "Rekomendasi personal"] },
-    { n: "06 Advocacy", t: "Merekomendasikan", b: ["Program referral viral", "Komunitas WhatsApp aktif", "Share portofolio"] },
+    {
+      n: "01 Awareness",
+      t: "Menjangkau Target",
+      b: ["Konten TikTok & IG harian", "Targeted Meta & TikTok Ads", "Booth & banner di kampus"],
+    },
+    {
+      n: "02 Interest",
+      t: "Menarik Minat",
+      b: ["Landing page interaktif", "Konten YouTube edukatif", "Testimoni mahasiswa"],
+    },
+    {
+      n: "03 Consideration",
+      t: "Mempertimbangkan",
+      b: ["Kemudahan Tanpa CV", "Rating tepercaya", "Kejelasan portofolio"],
+    },
+    {
+      n: "04 Conversion",
+      t: "Mulai Transaksi",
+      b: ["Daftar cepat gratis", "Match otomatis jarak", "Boost gratis 1 bln UMKM"],
+    },
+    {
+      n: "05 Retention",
+      t: "Terus Menggunakan",
+      b: ["Sistem Poin → Uang", "Notifikasi lowongan baru", "Rekomendasi personal"],
+    },
+    {
+      n: "06 Advocacy",
+      t: "Merekomendasikan",
+      b: ["Program referral viral", "Komunitas WhatsApp aktif", "Share portofolio"],
+    },
   ];
   return (
     <div className="col">
@@ -431,7 +510,11 @@ function SlideMarketing() {
           <div className="journey-step" key={s.n} style={{ animationDelay: `${idx * 70}ms` }}>
             <span className="j-num">{s.n}</span>
             <h4>{s.t}</h4>
-            <ul>{s.b.map((x) => <li key={x}>{x}</li>)}</ul>
+            <ul>
+              {s.b.map((x) => (
+                <li key={x}>{x}</li>
+              ))}
+            </ul>
           </div>
         ))}
       </div>
@@ -444,13 +527,18 @@ function SlideCompetitors() {
     <div className="grid-2">
       <div>
         <Kicker>Slide 10 · Analisis Kompetitor</Kicker>
-        <Title>QuickJob Campus menempati ceruk pasar mikro-job lokal mahasiswa yang belum tersentuh.</Title>
+        <Title>
+          QuickJob Campus menempati ceruk pasar mikro-job lokal mahasiswa yang belum tersentuh.
+        </Title>
         <Lead>
-          Platform lain fokus pada karir formal jangka panjang atau jasa freelance online profesional. Kami
-          fokus eksklusif pada mahasiswa dan UMKM terdekat.
+          Platform lain fokus pada karir formal jangka panjang atau jasa freelance online
+          profesional. Kami fokus eksklusif pada mahasiswa dan UMKM terdekat.
         </Lead>
         <Panel>
-          <p className="muted"><b>Moat kami:</b> Kecepatan rekrutmen, peniadaan CV, verifikasi berbasis lokasi dekat kampus, dan gamifikasi sistem poin.</p>
+          <p className="muted">
+            <b>Moat kami:</b> Kecepatan rekrutmen, peniadaan CV, verifikasi berbasis lokasi dekat
+            kampus, dan gamifikasi sistem poin.
+          </p>
         </Panel>
       </div>
       <div className="matrix">
@@ -458,10 +546,22 @@ function SlideCompetitors() {
         <span className="axis ay-bot">Fokus Lokasi (Rendah)</span>
         <span className="axis ax-right">Fleksibilitas (Tinggi)</span>
         <span className="axis ax-left">Fleksibilitas (Rendah)</span>
-        <div className="dot us" style={{ left: "78%", top: "22%" }}><span /><strong>QuickJob Campus</strong></div>
-        <div className="dot" style={{ left: "75%", top: "75%" }}><span /><strong>LinkedIn / Upwork</strong></div>
-        <div className="dot" style={{ left: "25%", top: "80%" }}><span /><strong>Glints / Kalibrr</strong></div>
-        <div className="dot" style={{ left: "30%", top: "35%" }}><span /><strong>Portal Lowongan Kampus</strong></div>
+        <div className="dot us" style={{ left: "78%", top: "22%" }}>
+          <span />
+          <strong>QuickJob Campus</strong>
+        </div>
+        <div className="dot" style={{ left: "75%", top: "75%" }}>
+          <span />
+          <strong>LinkedIn / Upwork</strong>
+        </div>
+        <div className="dot" style={{ left: "25%", top: "80%" }}>
+          <span />
+          <strong>Glints / Kalibrr</strong>
+        </div>
+        <div className="dot" style={{ left: "30%", top: "35%" }}>
+          <span />
+          <strong>Portal Lowongan Kampus</strong>
+        </div>
       </div>
     </div>
   );
@@ -488,8 +588,13 @@ function SlideFinancial() {
               { l: "Operasional & Legalitas", p: 20 },
             ].map((a) => (
               <div key={a.l}>
-                <div className="alloc-row"><span>{a.l}</span><span>{a.p}%</span></div>
-                <div className="alloc-bar"><div style={{ width: `${a.p}%` }} /></div>
+                <div className="alloc-row">
+                  <span>{a.l}</span>
+                  <span>{a.p}%</span>
+                </div>
+                <div className="alloc-bar">
+                  <div style={{ width: `${a.p}%` }} />
+                </div>
               </div>
             ))}
           </div>
@@ -497,7 +602,10 @@ function SlideFinancial() {
         <div className="card">
           <span className="card-num">★</span>
           <h3>Rencana Alokasi</h3>
-          <p>Dana dialokasikan secara efisien demi mencapai Break-Even Point (BEP) dalam 6–12 bulan pertama dengan operasional yang lean.</p>
+          <p>
+            Dana dialokasikan secara efisien demi mencapai Break-Even Point (BEP) dalam 6–12 bulan
+            pertama dengan operasional yang lean.
+          </p>
         </div>
       </div>
     </div>
@@ -510,7 +618,10 @@ function SlideTraction() {
     { k: "Activation", v: "85% signup rate & selesai setup profil tanpa CV setelah download." },
     { k: "Retention", v: "45% Monthly Active Users (MAU) bertransaksi berulang." },
     { k: "Revenue", v: "Fee komisi 5%, 80 boost subs aktif, BEP dalam 6-12 bulan." },
-    { k: "Referral", v: "30% akuisisi pengguna baru didapatkan dari program referral berhadiah koin." },
+    {
+      k: "Referral",
+      v: "30% akuisisi pengguna baru didapatkan dari program referral berhadiah koin.",
+    },
   ];
   return (
     <div className="col">
@@ -530,9 +641,9 @@ function SlideTraction() {
       </div>
       <Panel>
         <Lead>
-          Naskah pitch: “Loop pertumbuhan kami didasarkan pada retensi: semakin banyak mahasiswa
-          menyelesaikan pekerjaan, semakin kuat portofolio otomatis mereka; semakin cepat UMKM mendapat
-          staf, semakin sering mereka kembali memposting lowongan.”
+          Loop pertumbuhan kami didasarkan pada retensi: semakin banyak mahasiswa menyelesaikan
+          pekerjaan, semakin kuat portofolio otomatis mereka; semakin cepat UMKM mendapat staf,
+          semakin sering mereka kembali memposting lowongan.
         </Lead>
       </Panel>
     </div>
@@ -541,17 +652,32 @@ function SlideTraction() {
 
 function SlideMilestones() {
   const ms = [
-    { h: "Bulan 0–6", d: "Membangun MVP, validasi onboarding tanpa CV, menjaring 500 mahasiswa & 50 cafe pilot di Yogyakarta." },
-    { h: "Tahun 1", d: "Dominasi pasar Yogyakarta, aktivasi 5 kampus besar, BEP tercapai, integrasi sistem pembayaran otomatis." },
-    { h: "Tahun 2", d: "Ekspansi regional ke kota kampus tetangga (Surakarta, Semarang, Bandung), integrasi korporasi promotor event." },
-    { h: "Tahun 3", d: "Ekspansi nasional (Jakarta, Surabaya, Malang), peluncuran platform lowongan terintegrasi premium." },
+    {
+      h: "Bulan 0–6",
+      d: "Membangun MVP, validasi onboarding tanpa CV, menjaring 500 mahasiswa & 50 cafe pilot di Yogyakarta.",
+    },
+    {
+      h: "Tahun 1",
+      d: "Dominasi pasar Yogyakarta, aktivasi 5 kampus besar, BEP tercapai, integrasi sistem pembayaran otomatis.",
+    },
+    {
+      h: "Tahun 2",
+      d: "Ekspansi regional ke kota kampus tetangga (Surakarta, Semarang, Bandung), integrasi korporasi promotor event.",
+    },
+    {
+      h: "Tahun 3",
+      d: "Ekspansi nasional (Jakarta, Surabaya, Malang), peluncuran platform lowongan terintegrasi premium.",
+    },
   ];
   return (
     <div className="col">
       <div>
         <Kicker>Slide 13 · Milestone Perencanaan 3 Tahun</Kicker>
         <Title>Milestone pengembangan bisnis dari Yogyakarta ke tingkat nasional.</Title>
-        <Lead>Membangun pondasi lokal yang kokoh sebelum mereplikasi model bisnis ke kota-kota kampus padat di Indonesia.</Lead>
+        <Lead>
+          Membangun pondasi lokal yang kokoh sebelum mereplikasi model bisnis ke kota-kota kampus
+          padat di Indonesia.
+        </Lead>
       </div>
       <CodeChip>runway.forecast 3yr</CodeChip>
       <div className="runway">
@@ -569,17 +695,19 @@ function SlideMilestones() {
 
 /* ---------- Slide 14: Interactive prototype ---------- */
 
-type Screen = "splash" | "login" | "role" | "onboarding" | "dashboard" | "detail" | "portfolio" | "wallet";
+type Screen =
+  | "splash"
+  | "login"
+  | "role"
+  | "onboarding"
+  | "dashboard"
+  | "detail"
+  | "portfolio"
+  | "wallet";
 
 function SlidePrototype() {
   const [screen, setScreen] = useState<Screen>("splash");
   const [success, setSuccess] = useState(false);
-
-  useEffect(() => {
-    if (screen !== "splash") return;
-    const t = setTimeout(() => setScreen("login"), 1600);
-    return () => clearTimeout(t);
-  }, [screen]);
 
   const apply = () => {
     setSuccess(true);
@@ -605,22 +733,50 @@ function SlidePrototype() {
         <Title>Flow dari pertama install sampai mahasiswa apply kerja dan mencairkan poin.</Title>
         <Lead>
           Page ini sekarang mensimulasikan aplikasi QuickJob Campus yang lengkap: splash pembuka,
-          login/daftar, pilih peran mahasiswa, onboarding preferensi, dashboard lokasi, detail lowongan,
-          apply tanpa CV, portofolio otomatis, dan dompet poin.
+          login/daftar, pilih peran mahasiswa, onboarding preferensi, dashboard lokasi, detail
+          lowongan, apply tanpa CV, portofolio otomatis, dan dompet poin.
         </Lead>
         <div className="seg">
           {tabs.map((t) => (
-            <button key={t.id} className={screen === t.id ? "on" : ""} onClick={() => setScreen(t.id)}>{t.label}</button>
+            <button
+              key={t.id}
+              className={screen === t.id ? "on" : ""}
+              onClick={() => setScreen(t.id)}
+            >
+              {t.label}
+            </button>
           ))}
         </div>
         <div className="flow-list">
           {[
-            ["01", "Pertama install", "Brand muncul singkat, tagline jelas, lalu otomatis masuk ke login."],
-            ["02", "Masuk tanpa CV", "Login nomor HP kampus, pilih role mahasiswa, lalu set minat dan radius."],
-            ["03", "Matching lokasi", "Dashboard menampilkan peta mini, filter shift, dan job terdekat di Yogyakarta."],
-            ["04", "Apply → Portfolio → Wallet", "Apply Tanpa CV memicu sukses state, proyek masuk portofolio, poin bisa dicairkan."],
+            [
+              "01",
+              "Pertama install",
+              "Brand muncul singkat, tagline jelas, lalu otomatis masuk ke login.",
+            ],
+            [
+              "02",
+              "Masuk tanpa CV",
+              "Login nomor HP kampus, pilih role mahasiswa, lalu set minat dan radius.",
+            ],
+            [
+              "03",
+              "Matching lokasi",
+              "Dashboard menampilkan peta mini, filter shift, dan job terdekat di Yogyakarta.",
+            ],
+            [
+              "04",
+              "Apply → Portfolio → Wallet",
+              "Apply Tanpa CV memicu sukses state, proyek masuk portofolio, poin bisa dicairkan.",
+            ],
           ].map(([n, t, d]) => (
-            <div className="flow-step" key={n}><span>{n}</span><div><strong>{t}</strong><small>{d}</small></div></div>
+            <div className="flow-step" key={n}>
+              <span>{n}</span>
+              <div>
+                <strong>{t}</strong>
+                <small>{d}</small>
+              </div>
+            </div>
           ))}
         </div>
       </div>
@@ -629,11 +785,20 @@ function SlidePrototype() {
         <div className="phone-frame">
           <div className="notch" />
           <div className="phone-screen">
-            <div className="ph-status"><span>9:41</span><span>5G · 82%</span></div>
+            <div className="ph-status">
+              <span>9:41</span>
+              <span>5G · 82%</span>
+            </div>
             <div className="ph-content">
               {screen === "splash" && (
                 <div className="ph-splash">
-                  <div className="ph-logo"><span>QJ</span></div>
+                  <div className="ph-logo">
+                    <img
+                      src="/quickjob-logo.png"
+                      alt="QuickJob Campus Logo"
+                      className="ph-logo-img"
+                    />
+                  </div>
                   <h3>QuickJob Campus</h3>
                   <p>Kerja Sampingan, Mudah &amp; Dekat</p>
                   <div className="ph-badge">Mencari job sekitar kampus...</div>
@@ -641,13 +806,28 @@ function SlidePrototype() {
               )}
               {screen === "login" && (
                 <div className="ph-pad">
-                  <div className="ph-logo sm"><span>QJ</span></div>
+                  <div className="ph-logo sm">
+                    <span>QJ</span>
+                  </div>
                   <h3>Masuk ke QuickJob.</h3>
-                  <p>Gunakan nomor HP aktif untuk mencari kerja sampingan sekitar kampus tanpa upload CV.</p>
-                  <div className="ph-field"><label>Nomor HP</label><input defaultValue="0812 3456 7890" /></div>
-                  <div className="ph-field"><label>Kampus</label><input defaultValue="Universitas di Yogyakarta" /></div>
-                  <button className="ph-primary" onClick={() => setScreen("role")}>Lanjutkan</button>
-                  <button className="ph-secondary" onClick={() => setScreen("role")}>Daftar sebagai Mahasiswa</button>
+                  <p>
+                    Gunakan nomor HP aktif untuk mencari kerja sampingan sekitar kampus tanpa upload
+                    CV.
+                  </p>
+                  <div className="ph-field">
+                    <label>Nomor HP</label>
+                    <input defaultValue="0812 3456 7890" />
+                  </div>
+                  <div className="ph-field">
+                    <label>Kampus</label>
+                    <input defaultValue="Universitas di Yogyakarta" />
+                  </div>
+                  <button className="ph-primary" onClick={() => setScreen("role")}>
+                    Lanjutkan
+                  </button>
+                  <button className="ph-secondary" onClick={() => setScreen("role")}>
+                    Daftar sebagai Mahasiswa
+                  </button>
                 </div>
               )}
               {screen === "role" && (
@@ -656,23 +836,31 @@ function SlidePrototype() {
                   <p>QuickJob punya jalur mahasiswa pencari kerja dan UMKM pemasang lowongan.</p>
                   <div className="ph-roles">
                     <button className="ph-role on" onClick={() => setScreen("onboarding")}>
-                      <span>M</span><strong>Mahasiswa</strong><small>Cari micro-job dekat kampus.</small>
+                      <span>M</span>
+                      <strong>Mahasiswa</strong>
+                      <small>Cari micro-job dekat kampus.</small>
                     </button>
                     <button className="ph-role">
-                      <span>U</span><strong>UMKM</strong><small>Posting lowongan cepat.</small>
+                      <span>U</span>
+                      <strong>UMKM</strong>
+                      <small>Posting lowongan cepat.</small>
                     </button>
                   </div>
                   <pre className="ph-code">{`profile.mode = "student";
 cv_required = false;
 portfolio.autoBuild = true;`}</pre>
-                  <button className="ph-primary" onClick={() => setScreen("onboarding")}>Mulai Setup Mahasiswa</button>
+                  <button className="ph-primary" onClick={() => setScreen("onboarding")}>
+                    Mulai Setup Mahasiswa
+                  </button>
                 </div>
               )}
               {screen === "onboarding" && (
                 <div className="ph-pad">
                   <div className="cv-card">
                     <strong>Kerja Tanpa CV</strong>
-                    <div className="cv-line" /><div className="cv-line" /><div className="cv-line short" />
+                    <div className="cv-line" />
+                    <div className="cv-line" />
+                    <div className="cv-line short" />
                     <div className="cv-slash">Auto Portfolio</div>
                   </div>
                   <h3>Atur preferensi kerja.</h3>
@@ -683,49 +871,110 @@ portfolio.autoBuild = true;`}</pre>
                     <button>Admin toko</button>
                     <button className="on">≤ 3 km</button>
                   </div>
-                  <button className="ph-primary" onClick={() => setScreen("dashboard")}>Cari Job Terdekat</button>
+                  <button className="ph-primary" onClick={() => setScreen("dashboard")}>
+                    Cari Job Terdekat
+                  </button>
                 </div>
               )}
               {screen === "dashboard" && (
                 <div className="ph-pad scroll">
-                  <div className="ph-head"><div><small>Halo, Nick</small><h3>Kerja dekat kampus</h3></div><div className="av">N</div></div>
+                  <div className="ph-head">
+                    <div>
+                      <small>Halo, Nick</small>
+                      <h3>Kerja dekat kampus</h3>
+                    </div>
+                    <div className="av">N</div>
+                  </div>
                   <div className="metric-strip">
-                    <div><strong>8</strong><small>job cocok</small></div>
-                    <div><strong>1.2km</strong><small>terdekat</small></div>
-                    <div><strong>2.450</strong><small>poin</small></div>
+                    <div>
+                      <strong>8</strong>
+                      <small>job cocok</small>
+                    </div>
+                    <div>
+                      <strong>1.2km</strong>
+                      <small>terdekat</small>
+                    </div>
+                    <div>
+                      <strong>2.450</strong>
+                      <small>poin</small>
+                    </div>
                   </div>
                   <div className="ph-search">🔎 Cari kasir event, barista, admin toko</div>
                   <div className="ph-filter">
-                    <span className="on">Hari ini</span><span>≤ 3 km</span><span>Shift sore</span><span>Tanpa CV</span>
+                    <span className="on">Hari ini</span>
+                    <span>≤ 3 km</span>
+                    <span>Shift sore</span>
+                    <span>Tanpa CV</span>
                   </div>
-                  <div className="ph-map"><span className="pin a" /><span className="pin b" /><span className="pin c" /></div>
+                  <div className="ph-map">
+                    <span className="pin a" />
+                    <span className="pin b" />
+                    <span className="pin c" />
+                  </div>
                   <button className="job" onClick={() => setScreen("detail")}>
-                    <div className="job-t"><h4>Runner Event Kampus</h4><Chip>1.2 km</Chip></div>
-                    <div className="job-m"><span>Rp85k</span><span>3 jam</span><span>16.00</span><span>+120 pts</span></div>
+                    <div className="job-t">
+                      <h4>Runner Event Kampus</h4>
+                      <Chip>1.2 km</Chip>
+                    </div>
+                    <div className="job-m">
+                      <span>Rp85k</span>
+                      <span>3 jam</span>
+                      <span>16.00</span>
+                      <span>+120 pts</span>
+                    </div>
                   </button>
                   <button className="job">
-                    <div className="job-t"><h4>Admin Packing UMKM</h4><Chip>2.4 km</Chip></div>
-                    <div className="job-m"><span>Rp70k</span><span>4 jam</span><span>Besok</span><span>+100 pts</span></div>
+                    <div className="job-t">
+                      <h4>Admin Packing UMKM</h4>
+                      <Chip>2.4 km</Chip>
+                    </div>
+                    <div className="job-m">
+                      <span>Rp70k</span>
+                      <span>4 jam</span>
+                      <span>Besok</span>
+                      <span>+100 pts</span>
+                    </div>
                   </button>
                   <button className="job">
-                    <div className="job-t"><h4>Barista Shift Sore</h4><Chip>3.1 km</Chip></div>
-                    <div className="job-m"><span>Rp95k</span><span>5 jam</span><span>Weekend</span><span>+160 pts</span></div>
+                    <div className="job-t">
+                      <h4>Barista Shift Sore</h4>
+                      <Chip>3.1 km</Chip>
+                    </div>
+                    <div className="job-m">
+                      <span>Rp95k</span>
+                      <span>5 jam</span>
+                      <span>Weekend</span>
+                      <span>+160 pts</span>
+                    </div>
                   </button>
                 </div>
               )}
               {screen === "detail" && (
                 <div className="ph-pad scroll">
-                  <button className="ph-back" onClick={() => setScreen("dashboard")}>← Kembali</button>
+                  <button className="ph-back" onClick={() => setScreen("dashboard")}>
+                    ← Kembali
+                  </button>
                   <div className="detail">
-                    <div className="d-co"><span className="d-mark">EV</span><div><Chip>1.2 km · Hari ini</Chip><h3>Runner Event Kampus</h3></div></div>
-                    <p>Bantu registrasi peserta, arahkan tamu, dan rapikan booth setelah acara selesai.</p>
+                    <div className="d-co">
+                      <span className="d-mark">EV</span>
+                      <div>
+                        <Chip>1.2 km · Hari ini</Chip>
+                        <h3>Runner Event Kampus</h3>
+                      </div>
+                    </div>
+                    <p>
+                      Bantu registrasi peserta, arahkan tamu, dan rapikan booth setelah acara
+                      selesai.
+                    </p>
                     <div className="tasks">
                       <div>Durasi 3 jam, mulai 16.00.</div>
                       <div>Bayaran Rp85.000 + 120 poin.</div>
                       <div>Tidak perlu CV; profil singkat dikirim otomatis.</div>
                       <div>Lokasi: area kampus Yogyakarta.</div>
                     </div>
-                    <button className="ph-primary" onClick={apply}>Apply Tanpa CV</button>
+                    <button className="ph-primary" onClick={apply}>
+                      Apply Tanpa CV
+                    </button>
                   </div>
                   {success && (
                     <div className="success-pop">
@@ -737,41 +986,97 @@ portfolio.autoBuild = true;`}</pre>
               )}
               {screen === "portfolio" && (
                 <div className="ph-pad scroll">
-                  <div className="ph-head"><div><small>Auto Portfolio</small><h3>Profil kerja kamu</h3></div><div className="av">N</div></div>
+                  <div className="ph-head">
+                    <div>
+                      <small>Auto Portfolio</small>
+                      <h3>Profil kerja kamu</h3>
+                    </div>
+                    <div className="av">N</div>
+                  </div>
                   <div className="metric-strip">
-                    <div><strong>12</strong><small>project selesai</small></div>
-                    <div><strong>4.8</strong><small>rating UMKM</small></div>
+                    <div>
+                      <strong>12</strong>
+                      <small>project selesai</small>
+                    </div>
+                    <div>
+                      <strong>4.8</strong>
+                      <small>rating UMKM</small>
+                    </div>
                   </div>
                   <div className="tl">
-                    {["Runner Event Kampus", "Admin Packing UMKM", "Barista Shift Sore"].map((t) => (
-                      <div className="tl-item" key={t}><span className="tl-dot" /><div className="tl-card"><strong>{t}</strong><p>Terverifikasi · QuickJob</p></div></div>
-                    ))}
+                    {["Runner Event Kampus", "Admin Packing UMKM", "Barista Shift Sore"].map(
+                      (t) => (
+                        <div className="tl-item" key={t}>
+                          <span className="tl-dot" />
+                          <div className="tl-card">
+                            <strong>{t}</strong>
+                            <p>Terverifikasi · QuickJob</p>
+                          </div>
+                        </div>
+                      ),
+                    )}
                   </div>
                 </div>
               )}
               {screen === "wallet" && (
                 <div className="ph-pad scroll">
-                  <div className="ph-head"><div><small>Dompet Poin</small><h3>Poin menjadi uang</h3></div><div className="av">Rp</div></div>
+                  <div className="ph-head">
+                    <div>
+                      <small>Dompet Poin</small>
+                      <h3>Poin menjadi uang</h3>
+                    </div>
+                    <div className="av">Rp</div>
+                  </div>
                   <div className="wallet-card">
                     <span>Saldo poin bisa dicairkan</span>
                     <strong>2.450 pts</strong>
                     <p>Estimasi Rp245.000</p>
                   </div>
-                  <div className="cashout"><div><strong>Cairkan ke e-wallet</strong><small>Minimal 1.000 poin</small></div><button className="ph-primary sm">Cairkan</button></div>
+                  <div className="cashout">
+                    <div>
+                      <strong>Cairkan ke e-wallet</strong>
+                      <small>Minimal 1.000 poin</small>
+                    </div>
+                    <button className="ph-primary sm">Cairkan</button>
+                  </div>
                   <div className="tl">
-                    <div className="tl-card"><strong>+120 poin</strong><p>Apply Runner Event berhasil diverifikasi</p></div>
-                    <div className="tl-card"><strong>+300 poin</strong><p>Bonus 3 project selesai bulan ini</p></div>
+                    <div className="tl-card">
+                      <strong>+120 poin</strong>
+                      <p>Apply Runner Event berhasil diverifikasi</p>
+                    </div>
+                    <div className="tl-card">
+                      <strong>+300 poin</strong>
+                      <p>Bonus 3 project selesai bulan ini</p>
+                    </div>
                   </div>
                 </div>
               )}
             </div>
-            {screen !== "splash" && screen !== "login" && screen !== "role" && screen !== "onboarding" && (
-              <div className="ph-tabs">
-                <button className={screen === "dashboard" ? "on" : ""} onClick={() => setScreen("dashboard")}>Home</button>
-                <button className={screen === "portfolio" ? "on" : ""} onClick={() => setScreen("portfolio")}>Portfolio</button>
-                <button className={screen === "wallet" ? "on" : ""} onClick={() => setScreen("wallet")}>Wallet</button>
-              </div>
-            )}
+            {screen !== "splash" &&
+              screen !== "login" &&
+              screen !== "role" &&
+              screen !== "onboarding" && (
+                <div className="ph-tabs">
+                  <button
+                    className={screen === "dashboard" ? "on" : ""}
+                    onClick={() => setScreen("dashboard")}
+                  >
+                    Home
+                  </button>
+                  <button
+                    className={screen === "portfolio" ? "on" : ""}
+                    onClick={() => setScreen("portfolio")}
+                  >
+                    Portfolio
+                  </button>
+                  <button
+                    className={screen === "wallet" ? "on" : ""}
+                    onClick={() => setScreen("wallet")}
+                  >
+                    Wallet
+                  </button>
+                </div>
+              )}
             <div className="home-ind" />
           </div>
         </div>
@@ -786,24 +1091,25 @@ function SlideClosing() {
       <div>
         <Kicker>Slide 15 · Penutup</Kicker>
         <div className="hero-mark">
-          <div className="hero-logo"><img src="/quickjob-logo.png" alt="QuickJob Campus Logo" /></div>
+          <div className="hero-logo">
+            <img src="/quickjob-logo.png" alt="QuickJob Campus Logo" />
+          </div>
           <Chip>Kerja Sampingan, Mudah &amp; Dekat</Chip>
         </div>
-        <h1 className="hero-title">Mari <span className="grad">Berkoneksi</span> &amp; Berkolaborasi</h1>
-        <p className="hero-tag">Membangun ekosistem kerja instan mahasiswa terbesar di Indonesia.</p>
-        <Panel>
-          <h3 className="panel-h accent">Hubungi Kami</h3>
-          <p className="mono-sm">
-            Email: <b>quickjobcampus@gmail.com</b><br />
-            Lokasi: Yogyakarta, Indonesia
-          </p>
-        </Panel>
-        <p className="quote">“Terima Kasih atas Waktu &amp; Kesempatan Anda.”</p>
+        <h1 className="hero-title">
+          Mari <span className="grad">Berkoneksi</span> &amp; Berkolaborasi
+        </h1>
+        <p className="hero-tag">
+          Membangun ekosistem kerja instan mahasiswa terbesar di Indonesia.
+        </p>
+        <p className="quote">"Terima Kasih atas Waktu &amp; Kesempatan Anda."</p>
       </div>
       <div className="closing-stage">
         <div className="big-mark">
           <img src="/quickjob-logo.png" alt="QuickJob Campus Logo" />
-          <div className="ring r1" /><div className="ring r2" /><div className="ring r3" />
+          <div className="ring r1" />
+          <div className="ring r2" />
+          <div className="ring r3" />
         </div>
       </div>
     </div>
@@ -974,7 +1280,7 @@ const CSS = `
   background: var(--panel);
   border: 1px solid var(--border);
   border-radius: 16px;
-  padding: 16px 18px;
+  padding: 14px 18px;
   backdrop-filter: blur(12px);
   margin-top: 14px;
 }
@@ -1035,7 +1341,7 @@ const CSS = `
 /* mini phones */
 .phones { display: flex; gap: -10px; align-items: center; justify-content: center; perspective: 900px; }
 .mini-phone {
-  width: 220px; height: 440px; border-radius: 32px;
+  width: 210px; height: 440px; border-radius: 32px;
   background: linear-gradient(180deg, #1a0e06, #2a1a10);
   padding: 6px;
   border: 1px solid rgba(243,228,201,.18);
@@ -1047,14 +1353,85 @@ const CSS = `
 .phone-image {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 26px;
 }
-.mp-left { transform: translateX(20px) rotate(-8deg); }
-.mp-center { z-index: 2; transform: translateY(-10px); }
-.mp-right { transform: translateX(-20px) rotate(8deg); }
+.mp-left { transform: translateX(15px) rotate(-8deg); width: 200px; }
+.mp-center { z-index: 2; transform: translateY(-10px); width: 210px; }
+.mp-right { transform: translateX(-13px) rotate(8deg); width: 190px; }
 
 /* team */
+.team-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: 50px;
+}
+.team-header {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.team-grid-center {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 40px;
+  max-width: 1100px;
+  width: 100%;
+  padding: 0 40px;
+}
+.member-card-large {
+  padding: 28px 20px;
+  border-radius: 24px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  opacity: 0;
+  animation: cardIn .6s var(--ease) forwards;
+  transition: transform .25s var(--ease), border-color .25s;
+}
+.member-card-large:hover {
+  transform: translateY(-3px);
+  border-color: var(--accent);
+}
+.photo-frame-large {
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 20px;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.18);
+  overflow: hidden;
+  position: relative;
+}
+.team-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 20px;
+}
+.member-card-large h3 {
+  margin: 4px 0 0;
+  font-size: 22px;
+  font-family: 'Georgia', serif;
+  color: var(--cream-soft);
+}
+.member-npm {
+  margin: 0;
+  font-size: 14px;
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+}
+
+/* old team styles - keep for compatibility */
 .team-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
 .member-card {
   padding: 14px 12px; border-radius: 16px;
@@ -1070,9 +1447,10 @@ const CSS = `
   display: grid; place-items: center;
   color: var(--muted); font-size: 11px; font-family: monospace; letter-spacing: .1em;
   background: rgba(0,0,0,.18);
+  overflow: hidden;
+  position: relative;
 }
 .member-card h3 { margin: 4px 0 0; font-size: 14px; font-family: 'Georgia', serif; color: var(--cream-soft); }
-.member-role { font-size: 11px; color: var(--muted); margin: 0; }
 
 /* market bars */
 .market-stack { display: flex; flex-direction: column; gap: 16px; padding: 22px; }
@@ -1089,11 +1467,18 @@ const CSS = `
 /* phones single big */
 .phones-single { display: grid; place-items: center; height: 100%; }
 .big-phone {
-  width: 230px; height: 420px; border-radius: 38px;
+  width: 210px; height: 440px; border-radius: 32px;
   background: linear-gradient(180deg, #1a0e06, #2a1a10);
-  padding: 12px; border: 2px solid rgba(243,228,201,.18);
+  padding: 6px; border: 1px solid rgba(243,228,201,.18);
   box-shadow: 0 30px 60px rgba(0,0,0,.6);
   position: relative;
+  overflow: hidden;
+}
+.phone-image-large {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  border-radius: 26px;
 }
 .bp-screen { width: 100%; height: 100%; border-radius: 28px; background: var(--cream-soft); color: var(--espresso); padding: 14px; display: flex; flex-direction: column; gap: 10px; overflow: hidden; }
 .bp-header { font-family: 'Georgia', serif; font-size: 18px; font-weight: 700; }
@@ -1265,7 +1650,15 @@ const CSS = `
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   display: grid; place-items: center; color: white; font-weight: 900; font-size: 22px;
   box-shadow: 0 10px 30px var(--accent-glow);
-  animation: bounce 2s var(--ease) infinite;
+  overflow: hidden;
+  position: relative;
+}
+.ph-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  position: absolute;
+  inset: 0;
 }
 .ph-logo.sm { width: 56px; height: 56px; border-radius: 16px; font-size: 18px; animation: none; }
 @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
