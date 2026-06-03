@@ -992,16 +992,7 @@ function PBtn({
   disabled?: boolean;
 }) {
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      disabled={disabled}
-      className="w-full px-6 py-3.5 rounded-2xl font-semibold text-white transition-all active:scale-95"
-      style={{
-        backgroundColor: disabled ? "#9B8164" : "#8A5F41",
-        boxShadow: disabled ? "none" : "0 8px 24px rgba(138, 95, 65, 0.2)",
-      }}
-    >
+    <button type="button" onClick={onClick} disabled={disabled} className="qj-btn-primary ps-tap">
       {children}
     </button>
   );
@@ -1300,9 +1291,9 @@ function SlidePrototype() {
           (onboarding data usaha dulu, baru dashboard — bukan langsung masuk).
         </Lead>
         <p className="proto-hint">
-          <strong>Frame HP</strong> = mockup iPhone di kanan (bukan fullscreen). Dipresentasikan di laptop —
-          ukuran 320×660px, notch & home indicator. UMKM & mahasiswa punya tab bar terpisah. Transisi push/pop
-          + skeleton saat load job.
+          <strong>Frame HP</strong> = mockup iPhone 320×660px (bukan fullscreen). Layout app diisolasi di dalam
+          <code>.phone-screen</code> — sama prinsipnya dengan layar HP asli. Buka app lewat ikon QuickJob di home
+          screen mockup.
         </p>
       </div>
 
@@ -1487,12 +1478,12 @@ function ProtoHomescreen({ onOpen }: { onOpen: () => void }) {
       <div className="ps-home-grid">
         {apps.map((a) =>
           a.onClick ? (
-            <button key={a.name} type="button" onClick={a.onClick} className={`ps-app ${a.isQJ ? "ps-app-qj" : ""}`}>
+            <button key={a.name} type="button" onClick={a.onClick} className={`ps-home-app ${a.isQJ ? "ps-home-app-qj" : ""}`}>
               <span className="ps-app-icon" style={{ background: a.bg }}>{a.icon}</span>
               <span className="ps-app-name">{a.name}</span>
             </button>
           ) : (
-            <div key={a.name} className="ps-app">
+            <div key={a.name} className="ps-home-app">
               <span className="ps-app-icon" style={{ background: a.bg }}>{a.icon}</span>
               <span className="ps-app-name">{a.name}</span>
             </div>
@@ -1601,7 +1592,7 @@ function ProtoWelcome({ nav, slide, setSlide }: { nav: ProtoNav; slide: number; 
 function ProtoMasuk({ nav, phone, setPhone, campus, setCampus }: { nav: ProtoNav; phone: string; setPhone: (v: string) => void; campus: string; setCampus: (v: string) => void }) {
   const campuses = ["UGM", "UNY", "UMY", "UII", "Sanata Dharma", "UAD", "UPN Veteran Yogyakarta", "Atma Jaya Yogyakarta"];
   return (
-    <div className="ps-app qj-auth-shell">
+    <div className="ph-app qj-auth-shell">
       <div className="qj-auth-scroll">
         <ProtoBack onBack={nav.back} label="Onboarding" />
         <div className="qj-brand-lockup">
@@ -1654,7 +1645,7 @@ function ProtoOTP({ nav, otp, setOtp }: { nav: ProtoNav; otp: string[]; setOtp: 
   };
   const filled = otp.every((d) => d.length === 1);
   return (
-    <div className="ps-app qj-auth-shell">
+    <div className="ph-app qj-auth-shell">
       <div className="qj-auth-scroll">
         <ProtoBack onBack={nav.back} />
         <h2 className="qj-page-title" style={{ textAlign: "left" }}>
@@ -1711,7 +1702,7 @@ function ProtoPilihPeran({
     { id: "umkm" as const, icon: Store, title: "UMKM / Klien", desc: "Verifikasi usaha dulu, lalu pasang lowongan" },
   ];
   return (
-    <div className="ps-app qj-auth-shell">
+    <div className="ph-app qj-auth-shell">
       <div className="qj-auth-scroll">
         <ProtoBack onBack={nav.back} />
         <h2 className="qj-page-title">Pilih kebutuhanmu</h2>
@@ -1760,7 +1751,7 @@ function ProtoPreferensi({ nav, interests, setInterests, radius, setRadius, time
   const radii = ["≤1 km", "≤3 km", "≤5 km"];
   const allTimes = ["Pagi", "Siang", "Sore", "Malam", "Akhir pekan"];
   return (
-    <div className="ps-app qj-auth-shell">
+    <div className="ph-app qj-auth-shell">
       <div className="qj-auth-scroll">
         <ProtoBack onBack={nav.back} />
         <ProtoPageHero
@@ -1800,7 +1791,7 @@ function ProtoPreferensi({ nav, interests, setInterests, radius, setRadius, time
 function ProtoBeranda({ nav }: { nav: ProtoNav }) {
   const filters = ["Hari ini", "≤3 km", "Shift sore", "Akhir pekan"];
   return (
-    <div className="ps-app qj-home">
+    <div className="ph-app qj-home">
       <div className="ps-app-scroll has-tabs ps-app-scroll--pad">
         <header className="qj-home-header">
           <div className="qj-home-header-top">
@@ -1871,7 +1862,7 @@ function ProtoBeranda({ nav }: { nav: ProtoNav }) {
 
 function ProtoJelajah({ nav }: { nav: ProtoNav }) {
   return (
-    <div className="ps-app">
+    <div className="ph-app">
     <div className="ps-app-bar">
       <button type="button" className="ps-app-bar-back ps-tap" onClick={nav.back}>
         <ChevronLeft size={20} />
@@ -1919,7 +1910,7 @@ function ProtoDetail({ nav }: { nav: ProtoNav }) {
   const job = nav.job;
   if (!job) return null;
   return (
-    <div className="ps-app">
+    <div className="ph-app">
     <div className="ps-app-scroll ps-app-scroll--pad" style={{ paddingBottom: 72 }}>
         <div style={{ position: "relative", height: 120 }}>
           <img src={job.imageUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
@@ -1982,7 +1973,7 @@ function ProtoKonfirmasi({ nav }: { nav: ProtoNav }) {
   const job = nav.job;
   if (!job) return null;
   return (
-    <div className="ps-app ps-app--overlay">
+    <div className="ph-app ph-app--overlay">
       <div className="qj-sheet-backdrop" onClick={nav.back} role="presentation" />
       <div className="qj-sheet-panel">
         <h3 style={{ fontSize: 18, fontWeight: "bold", color: "#3D2A1C", textAlign: "center", marginBottom: 14 }}>Kirim lamaran?</h3>
@@ -2012,7 +2003,7 @@ function ProtoKonfirmasi({ nav }: { nav: ProtoNav }) {
 
 function ProtoLamaranBerhasil({ nav }: { nav: ProtoNav }) {
   return (
-    <div className="ps-app">
+    <div className="ph-app">
     <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
       <div style={{ width: 64, height: 64, borderRadius: "50%", backgroundColor: "#4E7C59", display: "grid", placeItems: "center", marginBottom: 16 }}>
         <CheckCircle2 size={36} color="white" />
@@ -2039,7 +2030,7 @@ function ProtoAktivitas({ nav, tab, setTab }: { nav: ProtoNav; tab: "berlangsung
   };
   const current = apps[tab];
   return (
-    <div className="ps-app">
+    <div className="ph-app">
     <div className="ps-app-scroll has-tabs ps-app-scroll--pad">
       <div style={{ padding: "4px 0 10px" }}>
         <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", marginBottom: 10 }}>Aktivitas</h2>
@@ -2082,7 +2073,7 @@ function ProtoChat({ nav, msg, setMsg }: { nav: ProtoNav; msg: string; setMsg: (
     { from: "user" as const, text: "Baik, noted. Sampai ketemu Sabtu!", time: "14:25" },
   ];
   return (
-    <div className="ps-app ps-app--chat">
+    <div className="ph-app ph-app--chat">
       <div style={{ padding: "8px 14px", display: "flex", alignItems: "center", gap: 8, borderBottom: "1px solid #E6D5B3", backgroundColor: "#fff", flexShrink: 0 }}>
         <button type="button" onClick={nav.back} style={{ background: "none", border: "none", cursor: "pointer" }}><ChevronLeft size={20} style={{ color: "#3D2A1C" }} /></button>
         <div style={{ flex: 1 }}><div style={{ fontSize: 13, fontWeight: "bold", color: "#3D2A1C" }}>Kopi Klotok Pogung</div><div style={{ fontSize: 10, color: "#4E7C59" }}>● Online</div></div>
@@ -2115,7 +2106,7 @@ function ProtoPortofolio({ nav }: { nav: ProtoNav }) {
     { title: "Barista Shift Sore", co: "Kopi Klotok", date: "Apr 2026", rating: 4.9 },
   ];
   return (
-    <div className="ps-app">
+    <div className="ph-app">
     <div className="ps-app-bar">
       <button type="button" className="ps-app-bar-back ps-tap" onClick={nav.back}>
         <ChevronLeft size={20} />
@@ -2188,7 +2179,7 @@ function ProtoDompet({ nav }: { nav: ProtoNav }) {
     { amount: "-1.000", desc: "Cair ke GoPay", date: "3 hari lalu", type: "withdrawn" as const },
   ];
   return (
-    <div className="ps-app">
+    <div className="ph-app">
     <div className="ps-app-scroll has-tabs ps-app-scroll--pad">
         <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", marginBottom: 12 }}>Dompet Poin</h2>
         <div style={{ borderRadius: 16, padding: 14, marginBottom: 10, background: "linear-gradient(135deg,#8A5F41,#6E4A30)", boxShadow: "0 12px 32px rgba(138,95,65,0.3)" }}>
@@ -2232,7 +2223,7 @@ function ProtoCairkan({ nav, points, setPoints, wallet, setWallet }: { nav: Prot
   ];
   const pts = parseInt(points) || 0;
   return (
-    <div className="ps-app ps-app--overlay">
+    <div className="ph-app ph-app--overlay">
       <div className="qj-sheet-backdrop" onClick={nav.back} role="presentation" />
       <div className="qj-sheet-panel">
         <h3 style={{ fontSize: 18, fontWeight: "bold", color: "#3D2A1C", marginBottom: 14 }}>Cairkan poin</h3>
@@ -2275,7 +2266,7 @@ function ProtoProfil({ nav }: { nav: ProtoNav }) {
     { label: "Tentang QuickJob", icon: Info, target: null },
   ];
   return (
-    <div className="ps-app">
+    <div className="ph-app">
     <div className="ps-app-scroll has-tabs ps-app-scroll--pad">
         <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", marginBottom: 12 }}>Profil</h2>
         <div style={{ backgroundColor: "#fff", borderRadius: 16, padding: 14, marginBottom: 10, boxShadow: "0 8px 24px rgba(138,95,65,0.12)" }}>
@@ -2322,7 +2313,7 @@ function ProtoNotifikasi({ nav }: { nav: ProtoNav }) {
     { icon: Star, iconColor: "#C9922C", iconBg: "#FFFBF2", title: "UMKM memberi kamu rating 5★", desc: "Kopi Klotok Pogung", time: "Kemarin" },
   ];
   return (
-    <div className="ps-app">
+    <div className="ph-app">
     <div className="ps-app-bar">
       <button type="button" className="ps-app-bar-back ps-tap" onClick={nav.back}>
         <ChevronLeft size={20} />
@@ -2995,22 +2986,29 @@ const CSS = `
   display: flex; flex-direction: column;
   overflow: hidden;
 }
-.ph-content .ps-app,
+.ph-content .ph-app,
 .ph-content .ps-splash,
 .ph-content .ps-home,
 .ph-content .qj-onboard {
   flex: 1; min-height: 0; width: 100%;
 }
 
-/* Flexible in-frame app shell */
-.ps-app {
+/* Root layar app di dalam frame (bukan ikon home screen) */
+.ph-app {
   flex: 1; min-height: 0; width: 100%;
   display: flex; flex-direction: column;
+  align-items: stretch;
   overflow: hidden;
   background: linear-gradient(180deg, #F3E4C9 0%, #EFE3D2 55%, #F8F0E4 100%);
 }
-.ps-app--plain { background: #F3E4C9; }
-.ps-app--chat { background: #F3E4C9; }
+.ph-app--plain { background: #F3E4C9; }
+.ph-app--chat { background: #F3E4C9; }
+.ph-app--overlay {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+}
 .ps-app-scroll {
   flex: 1; min-height: 0;
   overflow-x: hidden; overflow-y: auto;
@@ -3523,11 +3521,12 @@ const CSS = `
   align-content: start;
   padding-top: 4px;
 }
-.ps-app {
+.ps-home-grid .ps-home-app {
   display: flex; flex-direction: column; align-items: center; gap: 5px;
   background: transparent; border: 0; padding: 0;
   color: inherit; cursor: default;
   font-family: inherit;
+  flex: unset; min-height: unset; width: auto; overflow: visible;
 }
 .ps-app-icon {
   width: 48px; height: 48px; border-radius: 12px;
@@ -3543,13 +3542,13 @@ const CSS = `
   letter-spacing: .01em;
   white-space: nowrap;
 }
-.ps-app-qj { cursor: pointer; }
-.ps-app-qj .ps-app-icon {
+.ps-home-app-qj { cursor: pointer; }
+.ps-home-app-qj .ps-app-icon {
   box-shadow: 0 6px 16px rgba(232,154,76,.55), 0 0 0 1.5px rgba(255,221,180,.5);
   animation: qjPulse 2.6s ease-in-out infinite;
 }
-.ps-app-qj:hover .ps-app-icon { transform: scale(1.06); }
-.ps-app-qj:active .ps-app-icon { transform: scale(.95); }
+.ps-home-app-qj:hover .ps-app-icon { transform: scale(1.06); }
+.ps-home-app-qj:active .ps-app-icon { transform: scale(.95); }
 @keyframes qjPulse {
   0%, 100% { box-shadow: 0 6px 16px rgba(232,154,76,.55), 0 0 0 1.5px rgba(255,221,180,.5); }
   50% { box-shadow: 0 8px 22px rgba(232,154,76,.85), 0 0 0 2.5px rgba(255,221,180,.7); }
@@ -3782,8 +3781,38 @@ const CSS = `
 .umkm-chat-header { padding: 0 16px 8px; }
 .umkm-chat-header strong { display: block; font-size: 15px; color: #3D2A1C; }
 .umkm-chat-header span { font-size: 11px; color: #6E4A30; }
-.ps-app--chat .umkm-chat-thread { flex: 1; overflow-y: auto; padding: 8px 16px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
-.ps-app--chat .umkm-chat-compose { flex-shrink: 0; }
+.ph-app--chat .umkm-chat-thread { flex: 1; overflow-y: auto; padding: 8px 16px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.ph-app--chat .umkm-chat-compose { flex-shrink: 0; }
+
+/* Tombol di dalam frame: jangan pakai background cream global */
+.qj-phone .phone-screen button {
+  font-family: inherit;
+  -webkit-tap-highlight-color: transparent;
+}
+.qj-phone .phone-screen .qj-btn-primary,
+.qj-phone .phone-screen .qj-onboard-footer .qj-btn-primary {
+  background: linear-gradient(135deg, #8a5f41 0%, #6e4a30 100%);
+  color: #fff;
+  border: none;
+}
+.qj-phone .phone-screen .qj-btn-ghost {
+  background: #fff;
+  color: #8a5f41;
+  border: 2px solid #8a5f41;
+}
+.qj-phone .phone-screen .qj-chip {
+  background: #fff;
+}
+.qj-phone .phone-screen .qj-chip.on {
+  background: #8a5f41;
+  color: #fff;
+}
+.qj-phone .phone-screen .ps-tab {
+  background: transparent;
+}
+.qj-phone .phone-screen .ps-app-bar-back {
+  background: transparent;
+}
 .umkm-chat-bubble { max-width: 85%; padding: 10px 12px; border-radius: 14px; font-size: 12px; line-height: 1.4; }
 .umkm-chat-bubble.them { align-self: flex-start; background: #fff; border: 1px solid #E6D5B3; color: #3D2A1C; }
 .umkm-chat-bubble.me { align-self: flex-end; background: linear-gradient(135deg, #8A5F41, #6E4A30); color: #fff; }

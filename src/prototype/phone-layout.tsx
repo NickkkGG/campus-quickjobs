@@ -10,7 +10,7 @@ export function PhoneApp({
   className?: string;
   variant?: "cream" | "plain" | "chat";
 }) {
-  return <div className={`ps-app ps-app--${variant} ${className}`.trim()}>{children}</div>;
+  return <div className={`ph-app ph-app--${variant} ${className}`.trim()}>{children}</div>;
 }
 
 /** Area scroll — min-height 0 agar flex tidak jebol */

@@ -34,7 +34,12 @@
   50% { transform: scale(1.04); }
 }
 
-/* Flex chain: ScreenTransition → ps-app (tombol footer tidak terpotong) */
+/* Isolasi layout di dalam frame iPhone (bukan fullscreen browser) */
+.qj-phone .phone-screen {
+  isolation: isolate;
+}
+
+/* Flex chain: ScreenTransition → ph-app */
 .qj-phone .ph-content > .ph-screen-enter-fwd,
 .qj-phone .ph-content > .ph-screen-enter-back {
   flex: 1;
@@ -44,13 +49,14 @@
   flex-direction: column;
   overflow: hidden;
 }
-.qj-phone .ph-content .ps-app,
+.qj-phone .ph-content .ph-app,
 .qj-phone .ph-content .ps-splash,
 .qj-phone .ph-content .ps-home,
 .qj-phone .ph-content .qj-onboard {
   flex: 1;
   min-height: 0;
   width: 100%;
+  align-items: stretch;
 }
 
 /* Transisi antar layar (navigasi app) */
@@ -81,7 +87,7 @@
   text-align: center;
 }
 
-.ps-app--overlay {
+.ph-app--overlay {
   position: relative;
   flex: 1;
   min-height: 0;
@@ -204,7 +210,7 @@
 }
 
 /* ——— Buttons ——— */
-.qj-btn-primary {
+.qj-phone .qj-btn-primary {
   width: 100%;
   padding: 14px 18px;
   border-radius: 16px;
@@ -220,12 +226,13 @@
   box-shadow: 0 10px 28px rgba(138, 95, 65, 0.38);
   cursor: pointer;
 }
-.qj-btn-primary:disabled {
+.qj-phone .qj-btn-primary:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   box-shadow: none;
+  background: #9b8164;
 }
-.qj-btn-ghost {
+.qj-phone .qj-btn-ghost {
   width: 100%;
   padding: 12px 18px;
   border-radius: 16px;
