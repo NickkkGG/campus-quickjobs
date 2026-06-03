@@ -360,11 +360,7 @@ export function UmkmOnboardReview({
         <button
           type="button"
           className="ps-btn"
-          onClick={() => {
-            onActivate();
-            nav.showToast("Profil UMKM terverifikasi — dashboard terbuka");
-            nav.go("umkm-dashboard");
-          }}
+          onClick={onActivate}
         >
           Aktifkan dashboard UMKM
         </button>

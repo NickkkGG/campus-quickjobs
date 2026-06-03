@@ -1,0 +1,35 @@
+{
+  "session": "2026-06-03T16:42:04.148Z",
+  "baseUrl": "http://localhost:8081/",
+  "viewports": [
+    "1366x900",
+    "390x844"
+  ],
+  "captures": [
+    "V0-slide14-deck-1366.png",
+    "V1-homescreen-1366.png",
+    "V2-splash-1366.png",
+    "V3-welcome-1366.png",
+    "V4-masuk-1366.png",
+    "V5-preferensi-1366.png",
+    "V6-beranda-1366.png",
+    "V7-dompet-1366.png",
+    "V8-profil-1366.png",
+    "U1-umkm-onboard1-1366.png",
+    "U2-umkm-onboard2-1366.png",
+    "U3-umkm-onboard3-1366.png",
+    "U4-umkm-review-1366.png",
+    "U5-umkm-dashboard-1366.png",
+    "V5-preferensi-390.png",
+    "V6-beranda-390.png",
+    "V7-dompet-390.png",
+    "U5-umkm-dashboard-390.png"
+  ],
+  "checks": [
+    "V6: single Dompet balance in header; stats = job/jarak/lamaran",
+    "V5: inactive qj-chip readable on cream (#fffefb / #8a5f41 border)",
+    "V7: dompet detail matches header balance",
+    "U1–U5: UMKM onboarding before dashboard; pattern hero + chips",
+    "390: no horizontal clip inside .qj-phone"
+  ]
+}

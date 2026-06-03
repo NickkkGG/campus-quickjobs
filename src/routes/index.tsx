@@ -1170,13 +1170,6 @@ function SlidePrototype() {
     return () => clearTimeout(t);
   }, [toast]);
 
-  useEffect(() => {
-    if (umkmVerified) return;
-    if (!UMKM_PRODUCT_SCREENS.includes(screen)) return;
-    showToast("Lengkapi profil UMKM dulu");
-    setScreen("umkm-onboard-1");
-  }, [screen, umkmVerified]);
-
   const persistUmkm = (verified: boolean, profile: UmkmProfile) => {
     try {
       localStorage.setItem(UMKM_STORAGE_KEY, JSON.stringify({ verified, profile }));
@@ -1361,6 +1354,8 @@ function SlidePrototype() {
                   onActivate={() => {
                     setUmkmVerified(true);
                     persistUmkm(true, umkmProfile);
+                    showToast("Profil UMKM terverifikasi — dashboard terbuka");
+                    go("umkm-dashboard");
                   }}
                 />
               )}
@@ -1619,7 +1614,7 @@ function ProtoMasuk({ nav, phone, setPhone, campus, setCampus }: { nav: ProtoNav
             ))}
           </select>
         </div>
-        <p style={{ fontSize: 11, color: "#9B8164", textAlign: "center", marginBottom: 8 }}>
+        <p style={{ fontSize: 12, color: "#6E4A30", textAlign: "center", marginBottom: 8, lineHeight: 1.45 }}>
           Dengan lanjut, kamu setuju Syarat & Kebijakan Privasi
         </p>
         <div className="qj-divider">
@@ -3663,8 +3658,8 @@ const CSS = `
   background: #4E7C59; color: white;
   font-size: 12px; font-weight: 600;
   box-shadow: 0 4px 16px rgba(0,0,0,.2);
-  z-index: 30; white-space: nowrap; max-width: calc(100% - 32px);
-  text-overflow: ellipsis; overflow: hidden;
+  z-index: 30; max-width: calc(100% - 24px);
+  text-align: center; line-height: 1.35; white-space: normal;
   animation: psFade .3s var(--ease);
 }
 .ps-btn {
@@ -3673,7 +3668,7 @@ const CSS = `
   font-weight: 700; font-size: 15px;
   box-shadow: 0 8px 24px rgba(138,95,65,.25);
 }
-.ps-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+.ps-btn:disabled { opacity: 1; cursor: not-allowed; box-shadow: none; background: #d4c4a8; color: #5c4030; }
 
 /* UMKM flow — rich UI (not flat solid only) */
 .umkm-hero { position: relative; padding: 12px 16px 16px; margin: 0 0 12px; overflow: hidden; border-radius: 0 0 20px 20px; }
@@ -3687,7 +3682,7 @@ const CSS = `
   opacity: .9;
 }
 .umkm-step-dots { display: flex; gap: 6px; position: relative; z-index: 1; margin-bottom: 8px; }
-.umkm-step-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(138,95,65,.25); }
+.umkm-step-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(138,95,65,.45); border: 1px solid rgba(110,74,48,.35); }
 .umkm-step-dots span.on { background: #8A5F41; }
 .umkm-step-dots span.cur { width: 22px; border-radius: 99px; background: linear-gradient(90deg, #8A5F41, #C9922C); }
 .umkm-step-label { position: relative; z-index: 1; font-size: 10px; font-weight: 700; color: #6E4A30; text-transform: uppercase; letter-spacing: .06em; }
@@ -3699,7 +3694,8 @@ const CSS = `
 .umkm-field-hint { font-size: 10px; color: #9B8164; }
 .umkm-chip-grid, .umkm-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
 .umkm-chip {
-  padding: 8px 12px; border-radius: 99px; font-size: 11px; font-weight: 600;
+  min-height: 44px;
+  padding: 10px 14px; border-radius: 99px; font-size: 12px; font-weight: 600;
   border: 1.5px solid #E6D5B3; background: #fff; color: #6E4A30;
   display: inline-flex; align-items: center; gap: 4px;
 }

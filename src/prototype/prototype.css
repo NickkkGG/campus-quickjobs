@@ -237,10 +237,11 @@
   cursor: pointer;
 }
 .qj-phone .qj-btn-primary:disabled {
-  opacity: 0.5;
+  opacity: 1;
   cursor: not-allowed;
   box-shadow: none;
-  background: #9b8164;
+  background: #d4c4a8;
+  color: #5c4030;
 }
 .qj-phone .qj-btn-ghost {
   width: 100%;
@@ -252,6 +253,7 @@
   font-size: 14px;
   font-weight: 700;
   cursor: pointer;
+  box-shadow: 0 4px 14px rgba(62, 42, 28, 0.12);
 }
 .qj-back {
   display: inline-flex;
@@ -260,7 +262,8 @@
   background: #fff;
   border: 1px solid #e6d5b3;
   border-radius: 12px;
-  padding: 8px 12px;
+  padding: 10px 14px;
+  min-height: 44px;
   font-size: 13px;
   font-weight: 600;
   color: #6e4a30;
@@ -567,18 +570,18 @@
   margin-top: 14px;
 }
 .qj-phone .ph-dash-stat {
-  background: #fff;
+  background: linear-gradient(180deg, #ffffff 0%, #faf6ee 100%);
   border-radius: 16px;
-  padding: 10px 6px 9px;
+  padding: 11px 8px 10px;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 5px;
-  min-height: 78px;
-  justify-content: center;
-  box-shadow: 0 6px 18px rgba(42, 28, 18, 0.14);
-  border: 1px solid rgba(255, 255, 255, 0.65);
+  gap: 6px;
+  min-height: 82px;
+  justify-content: flex-start;
+  box-shadow: 0 8px 20px rgba(42, 28, 18, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.75);
   width: 100%;
   cursor: pointer;
   font-family: inherit;
@@ -588,29 +591,32 @@
   transform: scale(0.98);
 }
 .qj-phone .ph-dash-stat-icon {
-  width: 30px;
-  height: 30px;
-  border-radius: 10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 11px;
   display: grid;
   place-items: center;
-  background: linear-gradient(135deg, #f3e4c9, #e6d5b3);
-  color: #8a5f41;
+  background: linear-gradient(135deg, #f3e4c9, #dcc9a8);
+  color: #6e4a30;
+  flex-shrink: 0;
 }
 .qj-phone .ph-dash-stat strong {
   display: block;
-  font-size: 15px;
+  font-size: 17px;
   font-weight: 800;
-  color: #3d2a1c;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
+  color: #2f2116;
+  line-height: 1;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
 }
 .qj-phone .ph-dash-stat small {
-  font-size: 9px;
+  font-size: 8px;
   font-weight: 700;
   color: #6e4a30;
   text-transform: uppercase;
-  letter-spacing: 0.04em;
-  line-height: 1.2;
+  letter-spacing: 0.06em;
+  line-height: 1.25;
+  max-width: 72px;
 }
 .qj-phone .ph-dash-stat.gold .ph-dash-stat-icon {
   background: linear-gradient(135deg, #fff4d4, #ffe27a);
@@ -684,18 +690,26 @@
   display: none;
 }
 .qj-phone .qj-chip {
-  display: inline-block;
-  padding: 7px 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 10px 14px;
   border-radius: 99px;
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
-  border: 2px solid #8a5f41;
-  background: #fff;
+  border: 2px solid #7a5538;
+  background: #ffffff;
   color: #3d2a1c;
   white-space: nowrap;
   cursor: pointer;
   font-family: "Inter", system-ui, sans-serif;
-  box-shadow: 0 2px 8px rgba(138, 95, 65, 0.14);
+  box-shadow: 0 2px 6px rgba(62, 42, 28, 0.12);
+}
+.qj-phone .qj-chip:not(.on) {
+  background: #fffefb;
+  color: #4a3528;
+  border-color: #8a5f41;
 }
 .qj-phone .qj-chip.on {
   background: linear-gradient(135deg, #8a5f41 0%, #6e4a30 100%);
