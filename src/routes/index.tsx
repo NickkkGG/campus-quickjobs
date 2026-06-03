@@ -65,6 +65,11 @@ import {
   UmkmBottomNav,
 } from "../prototype/umkm-screens";
 import type { UmkmApplicant, UmkmJobPost } from "../prototype/types";
+import "../prototype/prototype.css";
+import { PhoneFrame, PhoneStatusBar } from "../prototype/components/PhoneFrame";
+import { ScreenTransition } from "../prototype/components/ScreenTransition";
+
+import { BerandaSkeleton } from "../prototype/components/BerandaSkeleton";
 
 export const Route = createFileRoute("/")({
   component: QuickJobDeck,
@@ -1081,6 +1086,8 @@ function ProtoJobCard({ job, nav }: { job: ProtoJob; nav: ProtoNav }) {
 function SlidePrototype() {
   const [screen, setScreen] = useState<ProtoScreen>("homescreen");
   const [history, setHistory] = useState<ProtoScreen[]>([]);
+  const [navDirection, setNavDirection] = useState<1 | -1>(1);
+  const [loadingBeranda, setLoadingBeranda] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState<string>("1");
   const [toast, setToast] = useState<string | null>(null);
   const [otp, setOtp] = useState(["", "", "", ""]);
@@ -1195,21 +1202,29 @@ function SlidePrototype() {
   };
 
   const go = (s: ProtoScreen) => {
+    setNavDirection(1);
     setHistory((h) => [...h, screen]);
     setScreen(s);
+    if (s === "beranda") {
+      setLoadingBeranda(true);
+      window.setTimeout(() => setLoadingBeranda(false), 420);
+    }
   };
 
   const back = () => {
     const prev = history[history.length - 1];
     if (prev) {
+      setNavDirection(-1);
       setHistory((h) => h.slice(0, -1));
       setScreen(prev);
     }
   };
 
   const reset = (s: ProtoScreen) => {
+    setNavDirection(1);
     setHistory([]);
     setScreen(s);
+    setLoadingBeranda(false);
   };
 
   const selectJob = (id: string) => setSelectedJobId(id);
@@ -1265,26 +1280,17 @@ function SlidePrototype() {
           (onboarding data usaha dulu, baru dashboard — bukan langsung masuk).
         </Lead>
         <p className="proto-hint">
-          UMKM: isi nama usaha, lokasi, PIC → review → kelola lowongan & pelamar. Mahasiswa: preferensi
-          → beranda & peta. Tip: home indicator = kembali ke layar iPhone.
+          <strong>Frame HP</strong> = mockup iPhone di kanan (bukan fullscreen). Dipresentasikan di laptop —
+          ukuran 320×660px, notch & home indicator. UMKM & mahasiswa punya tab bar terpisah. Transisi push/pop
+          + skeleton saat load job.
         </p>
       </div>
 
-      <div className="qj-phone">
-        <div className="phone-frame">
-          <div className="notch">
-            <span className="notch-speaker" />
-            <span className="notch-cam" />
-          </div>
-          <div className={`phone-screen ${isHome ? "phone-screen-ios" : ""}`}>
-            {screen !== "splash" && (
-              <div className={`ph-status ${isHome ? "on-dark" : ""}`}>
-                <span>9:41</span>
-                <span className="ph-status-r">5G · 82%</span>
-              </div>
-            )}
+      <PhoneFrame isIosHome={isHome}>
+            {screen !== "splash" && <PhoneStatusBar dark={isHome} />}
             <div className="ph-body">
-            <div className="ph-content" key={screen}>
+            <div className="ph-content">
+            <ScreenTransition screenKey={screen} direction={navDirection}>
               {screen === "homescreen" && <ProtoHomescreen onOpen={() => reset("splash")} />}
               {screen === "splash" && <ProtoSplash />}
               {screen === "welcome" && (
@@ -1375,7 +1381,7 @@ function SlidePrototype() {
                   setTimes={setSelectedTimes}
                 />
               )}
-              {screen === "beranda" && <ProtoBeranda nav={nav} />}
+              {screen === "beranda" && (loadingBeranda ? <BerandaSkeleton /> : <ProtoBeranda nav={nav} />)}
               {screen === "jelajah" && <ProtoJelajah nav={nav} />}
               {screen === "detail" && <ProtoDetail nav={nav} />}
               {screen === "konfirmasi" && <ProtoKonfirmasi nav={nav} />}
@@ -1397,6 +1403,7 @@ function SlidePrototype() {
               )}
               {screen === "profil" && <ProtoProfil nav={nav} />}
               {screen === "notifikasi" && <ProtoNotifikasi nav={nav} />}
+            </ScreenTransition>
             </div>
             {showUmkmTabs && (
               <nav className="ph-tabbar" aria-label="Navigasi UMKM">
@@ -1418,9 +1425,7 @@ function SlidePrototype() {
               />
             )}
             </div>
-          </div>
-        </div>
-      </div>
+      </PhoneFrame>
     </div>
   );
 }
@@ -1863,10 +1868,9 @@ function ProtoKonfirmasi({ nav }: { nav: ProtoNav }) {
   const job = nav.job;
   if (!job) return null;
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(0,0,0,0.5)" }}>
-      <div style={{ flex: 1 }} onClick={nav.back} />
-      <div style={{ backgroundColor: "#fff", borderRadius: "20px 20px 0 0", padding: 16, marginBottom: 20, boxShadow: "0 -8px 24px rgba(0,0,0,0.2)" }}>
-        <div style={{ width: 40, height: 3, borderRadius: 99, backgroundColor: "#E6D5B3", margin: "0 auto 12px" }} />
+    <div className="ps-app ps-app--overlay">
+      <div className="qj-sheet-backdrop" onClick={nav.back} role="presentation" />
+      <div className="qj-sheet-panel">
         <h3 style={{ fontSize: 18, fontWeight: "bold", color: "#3D2A1C", textAlign: "center", marginBottom: 14 }}>Kirim lamaran?</h3>
         <div style={{ padding: 12, borderRadius: 14, backgroundColor: "#FFFBF2", border: "2px solid #E6D5B3", marginBottom: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
@@ -1894,7 +1898,8 @@ function ProtoKonfirmasi({ nav }: { nav: ProtoNav }) {
 
 function ProtoLamaranBerhasil({ nav }: { nav: ProtoNav }) {
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "0 20px 30px" }}>
+    <div className="ps-app">
+    <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
       <div style={{ width: 64, height: 64, borderRadius: "50%", backgroundColor: "#4E7C59", display: "grid", placeItems: "center", marginBottom: 16 }}>
         <CheckCircle2 size={36} color="white" />
       </div>
@@ -1903,6 +1908,7 @@ function ProtoLamaranBerhasil({ nav }: { nav: ProtoNav }) {
       <PBtn onClick={() => nav.go("aktivitas")}>Lihat Status Lamaran</PBtn>
       <div style={{ height: 8 }} />
       <SBtn onClick={() => nav.go("beranda")}>Cari Job Lain</SBtn>
+    </div>
     </div>
   );
 }
@@ -1919,8 +1925,9 @@ function ProtoAktivitas({ nav, tab, setTab }: { nav: ProtoNav; tab: "berlangsung
   };
   const current = apps[tab];
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", paddingBottom: "70px" }}>
-      <div style={{ padding: "10px 14px", backgroundColor: "#F3E4C9" }}>
+    <div className="ps-app">
+    <div className="ps-app-scroll has-tabs ps-app-scroll--pad">
+      <div style={{ padding: "4px 0 10px" }}>
         <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", marginBottom: 10 }}>Aktivitas</h2>
         <div style={{ display: "flex", gap: 4, padding: 3, borderRadius: 14, backgroundColor: "#fff" }}>
           {(["berlangsung", "riwayat"] as const).map((t) => (
@@ -1949,6 +1956,7 @@ function ProtoAktivitas({ nav, tab, setTab }: { nav: ProtoNav; tab: "berlangsung
         </div>
       </div>
     </div>
+    </div>
   );
 }
 
@@ -1960,12 +1968,12 @@ function ProtoChat({ nav, msg, setMsg }: { nav: ProtoNav; msg: string; setMsg: (
     { from: "user" as const, text: "Baik, noted. Sampai ketemu Sabtu!", time: "14:25" },
   ];
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", paddingBottom: 20 }}>
-      <div style={{ padding: "8px 14px", display: "flex", alignItems: "center", gap: 8, borderBottom: "1px solid #E6D5B3", backgroundColor: "#fff" }}>
+    <div className="ps-app ps-app--chat">
+      <div style={{ padding: "8px 14px", display: "flex", alignItems: "center", gap: 8, borderBottom: "1px solid #E6D5B3", backgroundColor: "#fff", flexShrink: 0 }}>
         <button type="button" onClick={nav.back} style={{ background: "none", border: "none", cursor: "pointer" }}><ChevronLeft size={20} style={{ color: "#3D2A1C" }} /></button>
         <div style={{ flex: 1 }}><div style={{ fontSize: 13, fontWeight: "bold", color: "#3D2A1C" }}>Kopi Klotok Pogung</div><div style={{ fontSize: 10, color: "#4E7C59" }}>● Online</div></div>
       </div>
-      <div style={{ flex: 1, overflowY: "auto", padding: "10px 14px", backgroundColor: "#F3E4C9" }}>
+      <div className="ps-app-scroll" style={{ padding: "10px 14px", backgroundColor: "#F3E4C9" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
           {messages.map((m, i) => (
             <div key={i} style={{ display: "flex", justifyContent: m.from === "user" ? "flex-end" : "flex-start" }}>
@@ -1977,9 +1985,9 @@ function ProtoChat({ nav, msg, setMsg }: { nav: ProtoNav; msg: string; setMsg: (
           ))}
         </div>
       </div>
-      <div style={{ padding: "8px 14px", display: "flex", gap: 6, borderTop: "1px solid #E6D5B3", backgroundColor: "#fff" }}>
+      <div className="ps-app-footer" style={{ display: "flex", gap: 6, borderTop: "1px solid #E6D5B3", backgroundColor: "#fff" }}>
         <input value={msg} onChange={(e) => setMsg(e.target.value)} placeholder="Ketik pesan..." style={{ flex: 1, padding: "8px 10px", borderRadius: 10, fontSize: 12, backgroundColor: "#F3E4C9", color: "#3D2A1C", border: "1px solid #E6D5B3", boxSizing: "border-box" }} />
-        <button type="button" style={{ width: 36, height: 36, borderRadius: 10, display: "grid", placeItems: "center", backgroundColor: "#8A5F41", border: "none", cursor: "pointer" }}><Send size={16} color="white" /></button>
+        <button type="button" className="ps-tap" style={{ width: 36, height: 36, borderRadius: 10, display: "grid", placeItems: "center", backgroundColor: "#8A5F41", border: "none", cursor: "pointer" }}><Send size={16} color="white" /></button>
       </div>
     </div>
   );
@@ -2058,8 +2066,8 @@ function ProtoDompet({ nav }: { nav: ProtoNav }) {
     { amount: "-1.000", desc: "Cair ke GoPay", date: "3 hari lalu", type: "withdrawn" as const },
   ];
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", paddingBottom: "70px" }}>
-      <div style={{ padding: "10px 14px", backgroundColor: "#F3E4C9" }}>
+    <div className="ps-app">
+    <div className="ps-app-scroll has-tabs ps-app-scroll--pad">
         <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", marginBottom: 12 }}>Dompet Poin</h2>
         <div style={{ borderRadius: 16, padding: 14, marginBottom: 10, background: "linear-gradient(135deg,#8A5F41,#6E4A30)", boxShadow: "0 12px 32px rgba(138,95,65,0.3)" }}>
           <div style={{ fontSize: 12, color: "rgba(255,255,255,0.8)", marginBottom: 4 }}>Saldo Poin</div>
@@ -2073,9 +2081,7 @@ function ProtoDompet({ nav }: { nav: ProtoNav }) {
             <button type="button" style={{ padding: "7px 12px", borderRadius: 10, fontSize: 12, fontWeight: 600, backgroundColor: "rgba(255,255,255,0.2)", color: "#fff", border: "none", cursor: "pointer" }}>Riwayat</button>
           </div>
         </div>
-      </div>
-      <div style={{ flex: 1, overflowY: "auto", padding: "10px 14px" }}>
-        <h4 style={{ fontSize: 14, fontWeight: "bold", color: "#3D2A1C", marginBottom: 8 }}>Riwayat Poin</h4>
+        <h4 style={{ fontSize: 14, fontWeight: "bold", color: "#3D2A1C", margin: "12px 0 8px" }}>Riwayat Poin</h4>
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {history.map((h) => (
             <div key={h.desc} style={{ backgroundColor: "#fff", borderRadius: 12, padding: 10, display: "flex", alignItems: "center", gap: 8, boxShadow: "0 4px 12px rgba(138,95,65,0.08)" }}>
@@ -2090,7 +2096,7 @@ function ProtoDompet({ nav }: { nav: ProtoNav }) {
             </div>
           ))}
         </div>
-      </div>
+    </div>
     </div>
   );
 }
@@ -2104,10 +2110,9 @@ function ProtoCairkan({ nav, points, setPoints, wallet, setWallet }: { nav: Prot
   ];
   const pts = parseInt(points) || 0;
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", backgroundColor: "rgba(0,0,0,0.5)" }}>
-      <div style={{ flex: 1 }} onClick={nav.back} />
-      <div style={{ backgroundColor: "#fff", borderRadius: "20px 20px 0 0", padding: 16, marginBottom: 20, boxShadow: "0 -8px 24px rgba(0,0,0,0.2)" }}>
-        <div style={{ width: 40, height: 3, borderRadius: 99, backgroundColor: "#E6D5B3", margin: "0 auto 12px" }} />
+    <div className="ps-app ps-app--overlay">
+      <div className="qj-sheet-backdrop" onClick={nav.back} role="presentation" />
+      <div className="qj-sheet-panel">
         <h3 style={{ fontSize: 18, fontWeight: "bold", color: "#3D2A1C", marginBottom: 14 }}>Cairkan poin</h3>
         <div style={{ marginBottom: 14 }}>
           <label style={{ fontSize: 12, fontWeight: 600, color: "#3D2A1C", display: "block", marginBottom: 6 }}>Jumlah poin</label>
@@ -2148,8 +2153,8 @@ function ProtoProfil({ nav }: { nav: ProtoNav }) {
     { label: "Tentang QuickJob", icon: Info, target: null },
   ];
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", overflowY: "auto", paddingBottom: "70px" }}>
-      <div style={{ padding: "10px 14px", backgroundColor: "#F3E4C9" }}>
+    <div className="ps-app">
+    <div className="ps-app-scroll has-tabs ps-app-scroll--pad">
         <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", marginBottom: 12 }}>Profil</h2>
         <div style={{ backgroundColor: "#fff", borderRadius: 16, padding: 14, marginBottom: 10, boxShadow: "0 8px 24px rgba(138,95,65,0.12)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
@@ -2166,9 +2171,7 @@ function ProtoProfil({ nav }: { nav: ProtoNav }) {
             ))}
           </div>
         </div>
-      </div>
-      <div style={{ padding: "6px 14px" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 4, marginTop: 8 }}>
           {menuItems.map((m) => {
             const Icon = m.icon;
             return (
@@ -2184,7 +2187,7 @@ function ProtoProfil({ nav }: { nav: ProtoNav }) {
             <span style={{ flex: 1, fontSize: 13, fontWeight: 500, color: "#B5532B" }}>Keluar</span>
           </button>
         </div>
-      </div>
+    </div>
     </div>
   );
 }
