@@ -14,7 +14,7 @@ export function ScreenTransition({
     <div
       key={screenKey}
       className={direction === 1 ? "ph-screen-enter-fwd" : "ph-screen-enter-back"}
-      style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", width: "100%" }}
+      style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column", width: "100%", overflow: "hidden" }}
     >
       {children}
     </div>

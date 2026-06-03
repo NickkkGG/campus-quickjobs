@@ -70,6 +70,15 @@ import { PhoneFrame, PhoneStatusBar } from "../prototype/components/PhoneFrame";
 import { ScreenTransition } from "../prototype/components/ScreenTransition";
 
 import { BerandaSkeleton } from "../prototype/components/BerandaSkeleton";
+import {
+  APP_USER_NAME,
+  ProtoBack,
+  ProtoBtnPrimary,
+  ProtoBtnGhost,
+  ProtoChip,
+  ProtoPageHero,
+  ProtoSectionLabel,
+} from "../prototype/components/student-ui";
 
 export const Route = createFileRoute("/")({
   component: QuickJobDeck,
@@ -1021,62 +1030,44 @@ function ProtoJobCard({ job, nav }: { job: ProtoJob; nav: ProtoNav }) {
   return (
     <button
       type="button"
+      className="qj-job-card ps-tap"
       onClick={() => {
         nav.selectJob(job.id);
         nav.go("detail");
       }}
-      className="w-full bg-white rounded-[20px] p-4 flex gap-3 items-start text-left transition-all active:scale-95"
-      style={{ boxShadow: "0 8px 24px rgba(138, 95, 65, 0.12)" }}
     >
-      <div className="w-16 h-16 rounded-2xl overflow-hidden flex-shrink-0">
-        <img src={job.imageUrl} alt={job.title} className="w-full h-full object-cover" />
+      <div className="qj-job-thumb">
+        <img src={job.imageUrl} alt={job.title} />
+        {job.urgent && <span className="qj-job-urgent">URGENT</span>}
       </div>
-      <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-2">
-          <div className="flex-1 min-w-0">
-            <h3 className="font-bold text-[15px] mb-0.5" style={{ color: "#3D2A1C" }}>
-              {job.title}
-            </h3>
-            <p className="text-[13px] mb-1" style={{ color: "#6E4A30" }}>
-              {job.company}
-            </p>
-          </div>
-          {job.urgent && (
-            <span
-              className="px-2 py-0.5 text-[10px] font-bold text-white rounded-full"
-              style={{ backgroundColor: "#B5532B" }}
-            >
-              URGENT
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-3 mb-2">
-          <div className="flex items-center gap-1">
-            <MapPin size={12} style={{ color: "#9B8164" }} />
-            <span className="text-[12px]" style={{ color: "#9B8164" }}>
-              {job.distance}
-            </span>
-          </div>
-          <div className="flex items-center gap-1">
-            <Clock size={12} style={{ color: "#9B8164" }} />
-            <span className="text-[12px]" style={{ color: "#9B8164" }}>
-              {job.duration}
-            </span>
-          </div>
-        </div>
-        <div className="flex items-center justify-between">
-          <span className="font-bold text-[15px]" style={{ color: "#8A5F41" }}>
-            {job.rate}
+      <div className="qj-job-body">
+        <h3 style={{ fontSize: 14, fontWeight: 800, color: "#3D2A1C", margin: "0 0 2px" }}>{job.title}</h3>
+        <p style={{ fontSize: 12, color: "#6E4A30", margin: "0 0 6px" }}>{job.company}</p>
+        <div style={{ display: "flex", gap: 10, marginBottom: 6, fontSize: 11, color: "#9B8164" }}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+            <MapPin size={11} /> {job.distance}
           </span>
-          <div
-            className="flex items-center gap-1 px-2 py-1 rounded-full"
-            style={{ backgroundColor: "#FFFBF2" }}
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 3 }}>
+            <Clock size={11} /> {job.duration}
+          </span>
+        </div>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <strong style={{ fontSize: 14, color: "#8A5F41" }}>{job.rate}</strong>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 3,
+              padding: "3px 8px",
+              borderRadius: 99,
+              background: "#FFFBF2",
+              fontSize: 11,
+              fontWeight: 700,
+              color: "#C9922C",
+            }}
           >
-            <Coins size={12} style={{ color: "#C9922C" }} />
-            <span className="text-[12px] font-semibold" style={{ color: "#C9922C" }}>
-              +{job.points} poin
-            </span>
-          </div>
+            <Coins size={11} />+{job.points}
+          </span>
         </div>
       </div>
     </button>
@@ -1217,6 +1208,11 @@ function SlidePrototype() {
       setNavDirection(-1);
       setHistory((h) => h.slice(0, -1));
       setScreen(prev);
+      return;
+    }
+    if (screen === "masuk") {
+      setNavDirection(-1);
+      setScreen("welcome");
     }
   };
 
@@ -1266,8 +1262,32 @@ function SlidePrototype() {
     isUmkm &&
     ["umkm-dashboard", "umkm-post-job", "umkm-applicants", "umkm-boost", "umkm-dompet"].includes(screen);
   const showStudentTabs = !isUmkm && !noNav.includes(screen);
+  const hideHomeIndScreens: ProtoScreen[] = [
+    "welcome",
+    "masuk",
+    "otp",
+    "pilih-peran",
+    "preferensi",
+    "detail",
+    "konfirmasi",
+    "lamaran-berhasil",
+    "notifikasi",
+    "chat",
+    "portofolio",
+    "cairkan",
+    "umkm-onboard-1",
+    "umkm-onboard-2",
+    "umkm-onboard-3",
+    "umkm-onboard-review",
+    "umkm-notifikasi",
+    "umkm-chat",
+  ];
   const showHomeInd =
-    screen !== "homescreen" && screen !== "splash" && !showStudentTabs && !showUmkmTabs;
+    screen !== "homescreen" &&
+    screen !== "splash" &&
+    !showStudentTabs &&
+    !showUmkmTabs &&
+    !hideHomeIndScreens.includes(screen);
 
   return (
     <div className="proto-layout">
@@ -1290,7 +1310,10 @@ function SlidePrototype() {
             {screen !== "splash" && <PhoneStatusBar dark={isHome} />}
             <div className="ph-body">
             <div className="ph-content">
-            <ScreenTransition screenKey={screen} direction={navDirection}>
+            <ScreenTransition
+              screenKey={screen === "welcome" ? `welcome-${welcomeSlide}` : screen}
+              direction={navDirection}
+            >
               {screen === "homescreen" && <ProtoHomescreen onOpen={() => reset("splash")} />}
               {screen === "splash" && <ProtoSplash />}
               {screen === "welcome" && (
@@ -1514,38 +1537,62 @@ function ProtoSplash() {
 
 function ProtoWelcome({ nav, slide, setSlide }: { nav: ProtoNav; slide: number; setSlide: (n: number) => void }) {
   const slides = [
-    { title: "Kerja dekat kampus, tinggal pilih di peta", desc: "Temukan pekerjaan dalam radius 1-5 km dari kampusmu", color: "#8A5F41" },
-    { title: "Lamar tanpa CV, cukup sekali ketuk", desc: "Tidak perlu upload dokumen, profil otomatis terkirim", color: "#C9922C" },
-    { title: "Tiap job selesai jadi poin & portofolio", desc: "Kumpulkan poin untuk dicairkan ke e-wallet", color: "#4E7C59" },
+    {
+      title: "Kerja dekat kampus, tinggal pilih di peta",
+      desc: "Temukan pekerjaan dalam radius 1–5 km dari kampusmu",
+      color: "#8A5F41",
+      icon: MapPin,
+    },
+    {
+      title: "Lamar tanpa CV, cukup sekali ketuk",
+      desc: "Tidak perlu upload dokumen — profil otomatis terkirim",
+      color: "#C9922C",
+      icon: CheckCircle2,
+    },
+    {
+      title: "Tiap job selesai jadi poin & portofolio",
+      desc: "Kumpulkan poin untuk dicairkan ke e-wallet",
+      color: "#4E7C59",
+      icon: Coins,
+    },
   ];
   const s = slides[slide];
+  const Icon = s.icon;
+  const nextSlide = () => setSlide(Math.min(slide + 1, slides.length - 1));
+
   return (
-    <div className="ps-app">
-      <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column" }}>
-      <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
-        <button type="button" onClick={() => nav.go("masuk")} style={{ color: "#8A5F41", fontSize: 14, fontWeight: 600, padding: "6px 12px" }}>Lewati</button>
-      </div>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 0 }}>
-        <div style={{ width: 80, height: 80, borderRadius: "50%", backgroundColor: "#FFFBF2", display: "grid", placeItems: "center", marginBottom: 24, boxShadow: `0 12px 32px ${s.color}30` }}>
-          <MapPin size={40} style={{ color: s.color }} />
-        </div>
-        <h2 style={{ fontSize: 20, fontWeight: "bold", color: "#3D2A1C", textAlign: "center", marginBottom: 8, lineHeight: 1.3 }}>{s.title}</h2>
-        <p style={{ fontSize: 13, color: "#6E4A30", textAlign: "center", marginBottom: 24, lineHeight: 1.4 }}>{s.desc}</p>
-        <div style={{ display: "flex", gap: 6, marginBottom: 24 }}>
-          {slides.map((_, i) => (
-            <button key={i} type="button" onClick={() => setSlide(i)} style={{ width: i === slide ? 20 : 6, height: 6, borderRadius: 99, backgroundColor: i === slide ? "#8A5F41" : "#E6D5B3", border: "none", cursor: "pointer" }} />
-          ))}
-        </div>
-      </div>
-      </div>
-      <div className="ps-app-footer">
-      {slide < 2 ? (
-        <button type="button" onClick={() => setSlide(slide + 1)} style={{ width: "100%", padding: "12px 0", borderRadius: 16, backgroundColor: "#8A5F41", color: "white", fontWeight: 600, fontSize: 15, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
-          Lanjut <ChevronRight size={18} />
+    <div className="qj-onboard">
+      <div className="qj-onboard-skip">
+        <button type="button" className="ps-tap" onClick={() => nav.go("masuk")}>
+          Lewati
         </button>
-      ) : (
-        <PBtn onClick={() => nav.go("masuk")}>Mulai Sekarang</PBtn>
-      )}
+      </div>
+      <div className="qj-onboard-main">
+        <div key={slide} className="qj-slide-enter">
+          <div className="qj-icon-ring" style={{ boxShadow: `0 14px 36px ${s.color}40` }}>
+            <Icon size={38} style={{ color: s.color }} />
+          </div>
+          <h2 className="qj-title">{s.title}</h2>
+          <p className="qj-subtitle">{s.desc}</p>
+        </div>
+      </div>
+      <div className="qj-onboard-dots" aria-hidden>
+        {slides.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            className={`ps-tap ${i === slide ? "on" : ""}`}
+            onClick={() => setSlide(i)}
+            aria-label={`Slide ${i + 1}`}
+          />
+        ))}
+      </div>
+      <div className="qj-onboard-footer">
+        {slide < slides.length - 1 ? (
+          <ProtoBtnPrimary onClick={nextSlide}>Lanjut</ProtoBtnPrimary>
+        ) : (
+          <ProtoBtnPrimary onClick={() => nav.go("masuk")}>Mulai Sekarang</ProtoBtnPrimary>
+        )}
       </div>
     </div>
   );
@@ -1554,36 +1601,46 @@ function ProtoWelcome({ nav, slide, setSlide }: { nav: ProtoNav; slide: number; 
 function ProtoMasuk({ nav, phone, setPhone, campus, setCampus }: { nav: ProtoNav; phone: string; setPhone: (v: string) => void; campus: string; setCampus: (v: string) => void }) {
   const campuses = ["UGM", "UNY", "UMY", "UII", "Sanata Dharma", "UAD", "UPN Veteran Yogyakarta", "Atma Jaya Yogyakarta"];
   return (
-    <div className="ps-app">
-    <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column", gap: 11 }}>
-      <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
-        <div style={{ width: 42, height: 42, borderRadius: 14, background: "linear-gradient(135deg,#8A5F41,#6E4A30)", display: "grid", placeItems: "center" }}>
-          <Briefcase size={20} color="white" />
+    <div className="ps-app qj-auth-shell">
+      <div className="qj-auth-scroll">
+        <ProtoBack onBack={nav.back} label="Onboarding" />
+        <div className="qj-brand-lockup">
+          <Briefcase size={24} color="white" />
         </div>
+        <h2 className="qj-page-title">Masuk ke QuickJob</h2>
+        <p className="qj-page-lead">Cari kerja sampingan sekitar kampus tanpa upload CV</p>
+        <div className="qj-field">
+          <label>Nomor HP</label>
+          <input className="qj-input" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0812 3456 7890" />
+        </div>
+        <div className="qj-field">
+          <label>Kampus</label>
+          <select className="qj-select" value={campus} onChange={(e) => setCampus(e.target.value)}>
+            <option value="">Pilih kampus</option>
+            {campuses.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </select>
+        </div>
+        <p style={{ fontSize: 11, color: "#9B8164", textAlign: "center", marginBottom: 8 }}>
+          Dengan lanjut, kamu setuju Syarat & Kebijakan Privasi
+        </p>
+        <div className="qj-divider">
+          <span>atau</span>
+        </div>
+        <ProtoBtnGhost onClick={() => nav.go("otp")}>
+          <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+            <Chrome size={18} /> Masuk dengan Google
+          </span>
+        </ProtoBtnGhost>
       </div>
-      <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", textAlign: "center", marginBottom: 2 }}>Masuk ke QuickJob</h2>
-      <p style={{ fontSize: 12, color: "#6E4A30", textAlign: "center", marginBottom: 12 }}>Cari kerja sampingan sekitar kampus tanpa upload CV</p>
-      <div style={{ marginBottom: 8 }}>
-        <label style={{ fontSize: 12, fontWeight: 600, color: "#3D2A1C", display: "block", marginBottom: 4 }}>Nomor HP</label>
-        <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="0812 3456 7890" style={{ width: "100%", padding: "9px 11px", borderRadius: 10, border: "2px solid #E6D5B3", backgroundColor: "#fff", color: "#3D2A1C", fontSize: 14, boxSizing: "border-box" }} />
+      <div className="qj-auth-footer">
+        <ProtoBtnPrimary onClick={() => nav.go("otp")} disabled={!phone.trim() || !campus}>
+          Kirim Kode OTP
+        </ProtoBtnPrimary>
       </div>
-      <div style={{ marginBottom: 10 }}>
-        <label style={{ fontSize: 12, fontWeight: 600, color: "#3D2A1C", display: "block", marginBottom: 4 }}>Kampus</label>
-        <select value={campus} onChange={(e) => setCampus(e.target.value)} style={{ width: "100%", padding: "9px 11px", borderRadius: 10, border: "2px solid #E6D5B3", backgroundColor: "#fff", color: campus ? "#3D2A1C" : "#9B8164", fontSize: 14, boxSizing: "border-box" }}>
-          <option value="">Pilih kampus</option>
-          {campuses.map((c) => <option key={c} value={c}>{c}</option>)}
-        </select>
-      </div>
-      <PBtn onClick={() => nav.go("otp")}>Kirim Kode OTP</PBtn>
-      <p style={{ fontSize: 11, color: "#9B8164", textAlign: "center", marginTop: 8, marginBottom: 10 }}>Dengan lanjut, kamu setuju Syarat & Kebijakan Privasi</p>
-      <div style={{ position: "relative", margin: "2px 0" }}>
-        <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center" }}><div style={{ width: "100%", borderTop: "1px solid #E6D5B3" }} /></div>
-        <div style={{ position: "relative", display: "flex", justifyContent: "center" }}><span style={{ padding: "0 12px", fontSize: 12, backgroundColor: "#F3E4C9", color: "#9B8164" }}>atau</span></div>
-      </div>
-      <button type="button" style={{ width: "100%", padding: "11px 0", borderRadius: 14, border: "2px solid #E6D5B3", color: "#3D2A1C", backgroundColor: "#fff", fontWeight: 600, fontSize: 14, display: "flex", alignItems: "center", justifyContent: "center", gap: 8, marginTop: 4 }}>
-        <Chrome size={18} /> Masuk dengan Google
-      </button>
-    </div>
     </div>
   );
 }
@@ -1591,26 +1648,49 @@ function ProtoMasuk({ nav, phone, setPhone, campus, setCampus }: { nav: ProtoNav
 function ProtoOTP({ nav, otp, setOtp }: { nav: ProtoNav; otp: string[]; setOtp: (v: string[]) => void }) {
   const handleChange = (i: number, val: string) => {
     if (val.length > 1 || !/^\d*$/.test(val)) return;
-    const next = [...otp]; next[i] = val; setOtp(next);
+    const next = [...otp];
+    next[i] = val;
+    setOtp(next);
   };
+  const filled = otp.every((d) => d.length === 1);
   return (
-    <div className="ps-app">
-    <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column" }}>
-      <button type="button" onClick={nav.back} style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 16, background: "none", border: "none", cursor: "pointer" }}>
-        <ChevronLeft size={22} style={{ color: "#3D2A1C" }} />
-      </button>
-      <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", marginBottom: 4 }}>Masukkan kode OTP</h2>
-      <p style={{ fontSize: 12, color: "#6E4A30", marginBottom: 20 }}>Kode dikirim ke <span style={{ fontWeight: 600 }}>0812-3456-7890</span></p>
-      <div style={{ display: "flex", gap: 8, justifyContent: "center", marginBottom: 16 }}>
-        {otp.map((d, i) => (
-          <input key={i} maxLength={1} value={d} onChange={(e) => handleChange(i, e.target.value)} style={{ width: 48, height: 48, textAlign: "center", fontSize: 20, fontWeight: "bold", borderRadius: 12, border: `2px solid ${d ? "#8A5F41" : "#E6D5B3"}`, backgroundColor: "#fff", color: "#3D2A1C", boxSizing: "border-box" }} />
-        ))}
+    <div className="ps-app qj-auth-shell">
+      <div className="qj-auth-scroll">
+        <ProtoBack onBack={nav.back} />
+        <h2 className="qj-page-title" style={{ textAlign: "left" }}>
+          Masukkan kode OTP
+        </h2>
+        <p className="qj-page-lead" style={{ textAlign: "left" }}>
+          Kode dikirim ke <strong>0812-3456-7890</strong>
+        </p>
+        <div style={{ display: "flex", gap: 8, justifyContent: "center", margin: "20px 0 16px" }}>
+          {otp.map((d, i) => (
+            <input
+              key={i}
+              maxLength={1}
+              value={d}
+              onChange={(e) => handleChange(i, e.target.value)}
+              className="qj-input"
+              style={{
+                width: 48,
+                height: 52,
+                textAlign: "center",
+                fontSize: 20,
+                fontWeight: 800,
+                borderColor: d ? "#8A5F41" : undefined,
+              }}
+            />
+          ))}
+        </div>
+        <p style={{ fontSize: 12, color: "#9B8164", textAlign: "center" }}>
+          Kirim ulang dalam <span style={{ fontWeight: 700, color: "#8A5F41" }}>00:45</span>
+        </p>
       </div>
-      <p style={{ fontSize: 12, color: "#9B8164", textAlign: "center", marginBottom: 16 }}>Kirim ulang dalam <span style={{ fontWeight: 600, color: "#8A5F41" }}>00:45</span></p>
-    </div>
-    <div className="ps-app-footer">
-      <PBtn onClick={() => nav.go("pilih-peran")}>Verifikasi</PBtn>
-    </div>
+      <div className="qj-auth-footer">
+        <ProtoBtnPrimary onClick={() => nav.go("pilih-peran")} disabled={!filled}>
+          Verifikasi
+        </ProtoBtnPrimary>
+      </div>
     </div>
   );
 }
@@ -1631,37 +1711,43 @@ function ProtoPilihPeran({
     { id: "umkm" as const, icon: Store, title: "UMKM / Klien", desc: "Verifikasi usaha dulu, lalu pasang lowongan" },
   ];
   return (
-    <div className="ps-app">
-    <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column" }}>
-      <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", textAlign: "center", marginBottom: 4, marginTop: 16 }}>Pilih kebutuhanmu</h2>
-      <p style={{ fontSize: 12, color: "#6E4A30", textAlign: "center", marginBottom: 12 }}>Dua jalur berbeda — bukan satu dashboard yang sama</p>
-      {selected === "umkm" && (
-        <p style={{ fontSize: 11, color: "#8A5F41", textAlign: "center", marginBottom: 12, padding: "8px 12px", background: "#FFFBF2", borderRadius: 10, border: "1px solid #E6D5B3" }}>
-          UMKM: kamu akan isi data usaha (nama, lokasi, PIC) sebelum masuk dashboard.
-        </p>
-      )}
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
-        {roles.map((r) => {
-          const isSel = selected === r.id;
-          return (
-            <button key={r.id} type="button" onClick={() => setSelected(r.id)} style={{ width: "100%", padding: 16, borderRadius: 16, border: `2px solid ${isSel ? "#8A5F41" : "#E6D5B3"}`, backgroundColor: isSel ? "#FFFBF2" : "#fff", display: "flex", alignItems: "center", gap: 12, textAlign: "left", boxShadow: isSel ? "0 8px 24px rgba(138,95,65,0.12)" : "none" }}>
-              <div style={{ width: 42, height: 42, borderRadius: 12, backgroundColor: isSel ? "#8A5F41" : "#F3E4C9", display: "grid", placeItems: "center" }}>
-                <r.icon size={22} style={{ color: isSel ? "#fff" : "#8A5F41" }} />
-              </div>
-              <div>
-                <div style={{ fontSize: 16, fontWeight: "bold", color: "#3D2A1C" }}>{r.title}</div>
-                <div style={{ fontSize: 12, color: "#6E4A30" }}>{r.desc}</div>
-              </div>
-            </button>
-          );
-        })}
+    <div className="ps-app qj-auth-shell">
+      <div className="qj-auth-scroll">
+        <ProtoBack onBack={nav.back} />
+        <h2 className="qj-page-title">Pilih kebutuhanmu</h2>
+        <p className="qj-page-lead">Dua jalur berbeda — bukan satu dashboard yang sama</p>
+        {selected === "umkm" && (
+          <p className="qj-hint-banner">
+            UMKM: isi data usaha (nama, lokasi, PIC) sebelum masuk dashboard.
+          </p>
+        )}
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 8 }}>
+          {roles.map((r) => {
+            const isSel = selected === r.id;
+            return (
+              <button
+                key={r.id}
+                type="button"
+                className={`qj-role-card ps-tap ${isSel ? "on" : ""}`}
+                onClick={() => setSelected(r.id)}
+              >
+                <div className="qj-role-icon">
+                  <r.icon size={24} />
+                </div>
+                <div>
+                  <strong>{r.title}</strong>
+                  <span>{r.desc}</span>
+                </div>
+              </button>
+            );
+          })}
+        </div>
       </div>
-    </div>
-    <div className="ps-app-footer">
-      <PBtn onClick={onContinue}>
-        {selected === "mahasiswa" ? "Lanjut ke preferensi" : "Lanjut — isi data usaha"}
-      </PBtn>
-    </div>
+      <div className="qj-auth-footer">
+        <ProtoBtnPrimary onClick={onContinue}>
+          {selected === "mahasiswa" ? "Lanjut ke preferensi" : "Lanjut — isi data usaha"}
+        </ProtoBtnPrimary>
+      </div>
     </div>
   );
 }
@@ -1673,31 +1759,40 @@ function ProtoPreferensi({ nav, interests, setInterests, radius, setRadius, time
   const allInterests = ["Event", "Barista/F&B", "Admin Toko", "Packing/Gudang", "Kreatif (Foto/Desain)", "Marketing/SPG", "Kebersihan", "Antar-jemput"];
   const radii = ["≤1 km", "≤3 km", "≤5 km"];
   const allTimes = ["Pagi", "Siang", "Sore", "Malam", "Akhir pekan"];
-  const chip = (label: string, active: boolean, onClick: () => void) => (
-    <button key={label} type="button" onClick={onClick} style={{ padding: "6px 12px", borderRadius: 99, fontSize: 12, fontWeight: 500, border: `2px solid ${active ? "#8A5F41" : "#E6D5B3"}`, backgroundColor: active ? "#8A5F41" : "#fff", color: active ? "#fff" : "#6E4A30" }}>{label}</button>
-  );
   return (
-    <div className="ps-app">
-    <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column" }}>
-      <button type="button" onClick={nav.back} style={{ display: "flex", alignItems: "center", marginBottom: 12, background: "none", border: "none", cursor: "pointer" }}><ChevronLeft size={22} style={{ color: "#3D2A1C" }} /></button>
-      <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", marginBottom: 4 }}>Atur preferensi kerjamu</h2>
-      <p style={{ fontSize: 12, color: "#6E4A30", marginBottom: 16 }}>Bantu kami rekomendasikan job yang cocok</p>
-      <div style={{ marginBottom: 16 }}>
-        <h3 style={{ fontSize: 13, fontWeight: "bold", color: "#3D2A1C", marginBottom: 8 }}>Minat pekerjaan</h3>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>{allInterests.map((i) => chip(i, interests.includes(i), () => toggle(interests, i, setInterests)))}</div>
+    <div className="ps-app qj-auth-shell">
+      <div className="qj-auth-scroll">
+        <ProtoBack onBack={nav.back} />
+        <ProtoPageHero
+          icon={SlidersHorizontal}
+          color="#8A5F41"
+          title="Atur preferensi kerjamu"
+          subtitle="Bantu kami rekomendasikan job yang cocok"
+        />
+        <ProtoSectionLabel>Minat pekerjaan</ProtoSectionLabel>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
+          {allInterests.map((i) => (
+            <ProtoChip key={i} label={i} active={interests.includes(i)} onClick={() => toggle(interests, i, setInterests)} />
+          ))}
+        </div>
+        <ProtoSectionLabel>Radius dari kampus</ProtoSectionLabel>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
+          {radii.map((r) => (
+            <ProtoChip key={r} label={r} active={radius === r} onClick={() => setRadius(r)} />
+          ))}
+        </div>
+        <ProtoSectionLabel>Waktu kosong</ProtoSectionLabel>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 8 }}>
+          {allTimes.map((t) => (
+            <ProtoChip key={t} label={t} active={times.includes(t)} onClick={() => toggle(times, t, setTimes)} />
+          ))}
+        </div>
       </div>
-      <div style={{ marginBottom: 16 }}>
-        <h3 style={{ fontSize: 13, fontWeight: "bold", color: "#3D2A1C", marginBottom: 8 }}>Radius dari kampus</h3>
-        <div style={{ display: "flex", gap: 6 }}>{radii.map((r) => chip(r, radius === r, () => setRadius(r)))}</div>
+      <div className="qj-auth-footer">
+        <ProtoBtnPrimary onClick={() => nav.go("beranda")} disabled={interests.length === 0}>
+          Cari Job Terdekat
+        </ProtoBtnPrimary>
       </div>
-      <div style={{ marginBottom: 16 }}>
-        <h3 style={{ fontSize: 13, fontWeight: "bold", color: "#3D2A1C", marginBottom: 8 }}>Waktu kosong</h3>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>{allTimes.map((t) => chip(t, times.includes(t), () => toggle(times, t, setTimes)))}</div>
-      </div>
-    </div>
-    <div className="ps-app-footer">
-      <PBtn onClick={() => nav.go("beranda")}>Cari Job Terdekat</PBtn>
-    </div>
     </div>
   );
 }
@@ -1705,62 +1800,71 @@ function ProtoPreferensi({ nav, interests, setInterests, radius, setRadius, time
 function ProtoBeranda({ nav }: { nav: ProtoNav }) {
   const filters = ["Hari ini", "≤3 km", "Shift sore", "Akhir pekan"];
   return (
-    <div className="ps-app">
-    <div className="ps-app-scroll has-tabs ps-app-scroll--pad ps-pad">
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <div style={{ width: 32, height: 32, borderRadius: "50%", overflow: "hidden", border: "2px solid #8A5F41" }}>
-            <img src={AVATAR_URL} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+    <div className="ps-app qj-home">
+      <div className="ps-app-scroll has-tabs ps-app-scroll--pad">
+        <header className="qj-home-header">
+          <div className="qj-home-header-top">
+            <div className="qj-home-user">
+              <div className="qj-home-avatar">
+                <img src={AVATAR_URL} alt="" />
+              </div>
+              <div>
+                <strong>Halo, {APP_USER_NAME}</strong>
+                <small>Kampus · UGM</small>
+              </div>
+            </div>
+            <div className="qj-home-actions">
+              <span className="qj-pill-points">
+                <Coins size={12} /> 2.450
+              </span>
+              <button type="button" className="qj-bell-btn ps-tap" onClick={() => nav.go("notifikasi")}>
+                <Bell size={18} />
+                <span className="qj-bell-dot">3</span>
+              </button>
+            </div>
           </div>
-          <div>
-            <div style={{ fontSize: 14, fontWeight: "bold", color: "#3D2A1C" }}>Halo, Nick</div>
-            <div style={{ fontSize: 10, color: "#6E4A30" }}>Kampus: UGM</div>
+          <div className="qj-stat-row">
+            {[
+              { v: "8", l: "job cocok" },
+              { v: "1.2 km", l: "terdekat" },
+              { v: "2.450", l: "poin", gold: true },
+            ].map((m) => (
+              <div key={m.l} className={`qj-stat-card ${m.gold ? "gold" : ""}`}>
+                <strong>{m.v}</strong>
+                <small>{m.l}</small>
+              </div>
+            ))}
           </div>
+        </header>
+
+        <button type="button" className="qj-map-cta ps-tap" onClick={() => nav.go("jelajah")}>
+          <img src={MAP_URL} alt="" />
+          <div className="qj-map-cta-overlay" />
+          <div className="qj-map-cta-content">
+            <span style={{ display: "inline-flex", alignItems: "center", gap: 4 }}>
+              <MapPin size={14} /> Sekitarmu · Sleman
+            </span>
+            <span className="qj-map-badge">Lihat di peta</span>
+          </div>
+        </button>
+
+        <div className="qj-section-head">
+          <h4>Job terdekat untukmu</h4>
+          <Briefcase size={16} style={{ color: "#8A5F41" }} />
         </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 3, padding: "3px 7px", borderRadius: 99, backgroundColor: "#FFFBF2" }}>
-            <Coins size={11} style={{ color: "#C9922C" }} />
-            <span style={{ fontSize: 10, fontWeight: "bold", color: "#C9922C" }}>2.450</span>
-          </div>
-          <button type="button" onClick={() => nav.go("notifikasi")} style={{ position: "relative", background: "none", border: "none", cursor: "pointer" }}>
-            <Bell size={16} style={{ color: "#3D2A1C" }} />
-            <span style={{ position: "absolute", top: -3, right: -3, width: 13, height: 13, borderRadius: "50%", backgroundColor: "#B5532B", color: "#fff", fontSize: 7, fontWeight: "bold", display: "grid", placeItems: "center" }}>3</span>
-          </button>
+
+        <div className="qj-filter-row">
+          {filters.map((f, i) => (
+            <ProtoChip key={f} label={f} active={i === 0} onClick={() => {}} />
+          ))}
+        </div>
+
+        <div className="qj-job-list">
+          {PROTO_JOBS.map((j) => (
+            <ProtoJobCard key={j.id} job={j} nav={nav} />
+          ))}
         </div>
       </div>
-
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 5, marginBottom: 8 }}>
-        {[{ v: "8", l: "job cocok" }, { v: "1.2 km", l: "terdekat" }, { v: "2.450", l: "poin", gold: true }].map((m) => (
-          <div key={m.l} style={{ backgroundColor: "#fff", borderRadius: 10, padding: "6px 0", textAlign: "center", boxShadow: "0 3px 8px rgba(138,95,65,0.06)" }}>
-            <div style={{ fontSize: 15, fontWeight: 800, color: m.gold ? "#C9922C" : "#8A5F41" }}>{m.v}</div>
-            <div style={{ fontSize: 9, color: "#6E4A30" }}>{m.l}</div>
-          </div>
-        ))}
-      </div>
-
-      <button type="button" onClick={() => nav.go("jelajah")} style={{ width: "100%", height: 70, borderRadius: 14, marginBottom: 8, position: "relative", overflow: "hidden", backgroundImage: `url(${MAP_URL})`, backgroundSize: "cover", backgroundPosition: "center", border: "none", cursor: "pointer" }}>
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(138,95,65,0.7), transparent)" }} />
-        <div style={{ position: "absolute", bottom: 8, left: 12, right: 12, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 4 }}><MapPin size={12} color="white" /><span style={{ fontSize: 11, fontWeight: 600, color: "#fff" }}>Sekitarmu · Sleman</span></div>
-          <span style={{ padding: "3px 8px", borderRadius: 99, fontSize: 10, fontWeight: "bold", color: "#fff", backgroundColor: "#8A5F41" }}>Lihat di peta</span>
-        </div>
-      </button>
-
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 6 }}>
-        <h4 style={{ fontSize: 13, fontWeight: "bold", color: "#3D2A1C", margin: 0 }}>Job terdekat untukmu</h4>
-        <Briefcase size={14} style={{ color: "#8A5F41" }} />
-      </div>
-
-      <div style={{ display: "flex", gap: 5, marginBottom: 8, overflowX: "auto" }}>
-        {filters.map((f, i) => (
-          <button key={f} type="button" style={{ padding: "3px 8px", borderRadius: 99, fontSize: 10, fontWeight: 500, whiteSpace: "nowrap", border: `2px solid ${i === 0 ? "#8A5F41" : "#E6D5B3"}`, backgroundColor: i === 0 ? "#8A5F41" : "#fff", color: i === 0 ? "#fff" : "#6E4A30" }}>{f}</button>
-        ))}
-      </div>
-
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        {PROTO_JOBS.map((j) => <ProtoJobCard key={j.id} job={j} nav={nav} />)}
-      </div>
-    </div>
     </div>
   );
 }
@@ -1768,6 +1872,16 @@ function ProtoBeranda({ nav }: { nav: ProtoNav }) {
 function ProtoJelajah({ nav }: { nav: ProtoNav }) {
   return (
     <div className="ps-app">
+    <div className="ps-app-bar">
+      <button type="button" className="ps-app-bar-back ps-tap" onClick={nav.back}>
+        <ChevronLeft size={20} />
+        <span>Kembali</span>
+      </button>
+      <div className="ps-app-bar-titles">
+        <strong>Jelajah Peta</strong>
+        <span>Job di radius kampusmu</span>
+      </div>
+    </div>
     <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, position: "relative", backgroundColor: "#f5efe0", overflow: "hidden" }}>
         <img src="/maps.png" alt="Peta Yogyakarta" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
@@ -1875,7 +1989,7 @@ function ProtoKonfirmasi({ nav }: { nav: ProtoNav }) {
         <div style={{ padding: 12, borderRadius: 14, backgroundColor: "#FFFBF2", border: "2px solid #E6D5B3", marginBottom: 12 }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
             <div style={{ width: 40, height: 40, borderRadius: "50%", overflow: "hidden", border: "2px solid #8A5F41" }}><img src={AVATAR_URL} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /></div>
-            <div><div style={{ fontSize: 14, fontWeight: "bold", color: "#3D2A1C" }}>Nick</div><div style={{ fontSize: 11, color: "#6E4A30", display: "flex", alignItems: "center", gap: 3 }}><GraduationCap size={11} /> Mahasiswa UGM</div></div>
+            <div><div style={{ fontSize: 14, fontWeight: "bold", color: "#3D2A1C" }}>{APP_USER_NAME}</div><div style={{ fontSize: 11, color: "#6E4A30", display: "flex", alignItems: "center", gap: 3 }}><GraduationCap size={11} /> Mahasiswa UGM</div></div>
           </div>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
             {[{ v: "12", l: "project" }, { v: "★ 4.8", l: "rating" }, { v: "98%", l: "tepat waktu" }].map((m, i) => (
@@ -2001,20 +2115,27 @@ function ProtoPortofolio({ nav }: { nav: ProtoNav }) {
     { title: "Barista Shift Sore", co: "Kopi Klotok", date: "Apr 2026", rating: 4.9 },
   ];
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", overflowY: "auto", paddingBottom: 20 }}>
-      <div style={{ padding: "8px 14px", display: "flex", alignItems: "center", justifyContent: "space-between", borderBottom: "1px solid #E6D5B3", backgroundColor: "#F3E4C9" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-          <button type="button" onClick={nav.back} style={{ background: "none", border: "none", cursor: "pointer" }}><ChevronLeft size={20} style={{ color: "#3D2A1C" }} /></button>
-          <span style={{ fontSize: 15, fontWeight: "bold", color: "#3D2A1C" }}>Portofolio Saya</span>
-        </div>
-        <button type="button" style={{ background: "none", border: "none", cursor: "pointer" }}><Share2 size={16} style={{ color: "#8A5F41" }} /></button>
+    <div className="ps-app">
+    <div className="ps-app-bar">
+      <button type="button" className="ps-app-bar-back ps-tap" onClick={nav.back}>
+        <ChevronLeft size={20} />
+        <span>Kembali</span>
+      </button>
+      <div className="ps-app-bar-titles">
+        <strong>Portofolio Saya</strong>
+        <span>Menggantikan CV</span>
       </div>
-      <div style={{ padding: "12px 14px" }}>
+      <button type="button" className="ps-tap" style={{ background: "none", border: "none", cursor: "pointer" }}>
+        <Share2 size={18} style={{ color: "#8A5F41" }} />
+      </button>
+    </div>
+    <div className="ps-app-scroll ps-app-scroll--pad">
+      <div style={{ paddingBottom: 16 }}>
         <div style={{ backgroundColor: "#fff", borderRadius: 16, padding: 14, marginBottom: 14, boxShadow: "0 8px 24px rgba(138,95,65,0.12)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
             <div style={{ width: 48, height: 48, borderRadius: "50%", overflow: "hidden", border: "2px solid #8A5F41" }}><img src={AVATAR_URL} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /></div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 16, fontWeight: "bold", color: "#3D2A1C", marginBottom: 2 }}>Nick</div>
+              <div style={{ fontSize: 16, fontWeight: "bold", color: "#3D2A1C", marginBottom: 2 }}>{APP_USER_NAME}</div>
               <div style={{ fontSize: 12, color: "#6E4A30", marginBottom: 2 }}>Mahasiswa UGM</div>
               <span style={{ display: "inline-flex", alignItems: "center", gap: 3, padding: "1px 6px", borderRadius: 99, backgroundColor: "#F0F8F4", fontSize: 9, fontWeight: 600, color: "#4E7C59" }}><CheckCircle2 size={8} /> Terverifikasi</span>
             </div>
@@ -2054,6 +2175,7 @@ function ProtoPortofolio({ nav }: { nav: ProtoNav }) {
           <p style={{ fontSize: 11, color: "#6E4A30" }}>Portofolio ini menggantikan CV-mu</p>
         </div>
       </div>
+    </div>
     </div>
   );
 }
@@ -2160,7 +2282,7 @@ function ProtoProfil({ nav }: { nav: ProtoNav }) {
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 10 }}>
             <div style={{ width: 48, height: 48, borderRadius: "50%", overflow: "hidden", border: "2px solid #8A5F41" }}><img src={AVATAR_URL} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /></div>
             <div style={{ flex: 1 }}>
-              <div style={{ fontSize: 16, fontWeight: "bold", color: "#3D2A1C", marginBottom: 2 }}>Nick</div>
+              <div style={{ fontSize: 16, fontWeight: "bold", color: "#3D2A1C", marginBottom: 2 }}>{APP_USER_NAME}</div>
               <div style={{ fontSize: 12, color: "#6E4A30" }}>Mahasiswa UGM · Terverifikasi</div>
             </div>
             <button type="button" style={{ fontSize: 11, fontWeight: 600, padding: "4px 10px", borderRadius: 8, backgroundColor: "#FFFBF2", color: "#8A5F41", border: "none", cursor: "pointer" }}>Edit</button>
@@ -2200,12 +2322,19 @@ function ProtoNotifikasi({ nav }: { nav: ProtoNav }) {
     { icon: Star, iconColor: "#C9922C", iconBg: "#FFFBF2", title: "UMKM memberi kamu rating 5★", desc: "Kopi Klotok Pogung", time: "Kemarin" },
   ];
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column", overflowY: "auto", paddingBottom: 20 }}>
-      <div style={{ padding: "8px 14px", display: "flex", alignItems: "center", gap: 8, borderBottom: "1px solid #E6D5B3", backgroundColor: "#F3E4C9" }}>
-        <button type="button" onClick={nav.back} style={{ background: "none", border: "none", cursor: "pointer" }}><ChevronLeft size={20} style={{ color: "#3D2A1C" }} /></button>
-        <h3 style={{ flex: 1, fontSize: 18, fontWeight: "bold", color: "#3D2A1C" }}>Notifikasi</h3>
+    <div className="ps-app">
+    <div className="ps-app-bar">
+      <button type="button" className="ps-app-bar-back ps-tap" onClick={nav.back}>
+        <ChevronLeft size={20} />
+        <span>Kembali</span>
+      </button>
+      <div className="ps-app-bar-titles">
+        <strong>Notifikasi</strong>
+        <span>3 belum dibaca</span>
       </div>
-      <div style={{ padding: "10px 14px" }}>
+    </div>
+    <div className="ps-app-scroll ps-app-scroll--pad">
+      <div style={{ paddingBottom: 16 }}>
         <div style={{ display: "flex", flexDirection: "column", gap: 6 }}>
           {notifications.map((n) => {
             const Icon = n.icon;
@@ -2223,6 +2352,7 @@ function ProtoNotifikasi({ nav }: { nav: ProtoNav }) {
           })}
         </div>
       </div>
+    </div>
     </div>
   );
 }
@@ -2859,9 +2989,16 @@ const CSS = `
   flex: 1; overflow: hidden; position: relative; min-height: 0;
   display: flex; flex-direction: column;
 }
-.ph-content > .ps-app,
-.ph-content > .ps-splash,
-.ph-content > .ps-home {
+.ph-content > .ph-screen-enter-fwd,
+.ph-content > .ph-screen-enter-back {
+  flex: 1; min-height: 0; width: 100%;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+}
+.ph-content .ps-app,
+.ph-content .ps-splash,
+.ph-content .ps-home,
+.ph-content .qj-onboard {
   flex: 1; min-height: 0; width: 100%;
 }
 
@@ -3343,6 +3480,7 @@ const CSS = `
   position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
   width: 110px; height: 4px; border-radius: 2px;
   background: #D4B896; opacity: .5; z-index: 6;
+  pointer-events: none;
 }
 .ph-body:has(.ph-tabbar) .home-ind { display: none; }
 

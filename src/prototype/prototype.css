@@ -1,15 +1,15 @@
-/* Slide 14 — mockup iPhone di deck (presentasi laptop/PC) */
+/* Slide 14 — design system di dalam frame HP */
 
 @keyframes qj-slide-in-fwd {
-  from { opacity: 0; transform: translateX(18px); }
+  from { opacity: 0; transform: translateX(28px); }
   to { opacity: 1; transform: translateX(0); }
 }
 @keyframes qj-slide-in-back {
-  from { opacity: 0; transform: translateX(-18px); }
+  from { opacity: 0; transform: translateX(-28px); }
   to { opacity: 1; transform: translateX(0); }
 }
 @keyframes qj-fade-up {
-  from { opacity: 0; transform: translateY(10px); }
+  from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: translateY(0); }
 }
 @keyframes qj-sheet-up {
@@ -29,12 +29,56 @@
   50% { transform: scale(0.92); }
   100% { transform: scale(1); }
 }
+@keyframes qj-icon-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.04); }
+}
 
+/* Flex chain: ScreenTransition → ps-app (tombol footer tidak terpotong) */
+.qj-phone .ph-content > .ph-screen-enter-fwd,
+.qj-phone .ph-content > .ph-screen-enter-back {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.qj-phone .ph-content .ps-app,
+.qj-phone .ph-content .ps-splash,
+.qj-phone .ph-content .ps-home,
+.qj-phone .ph-content .qj-onboard {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+/* Transisi antar layar (navigasi app) */
 .qj-phone .ph-screen-enter-fwd {
-  animation: qj-slide-in-fwd 0.34s cubic-bezier(0.25, 1, 0.5, 1) both;
+  animation: qj-slide-in-fwd 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 .qj-phone .ph-screen-enter-back {
-  animation: qj-slide-in-back 0.34s cubic-bezier(0.25, 1, 0.5, 1) both;
+  animation: qj-slide-in-back 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Animasi slide onboarding internal */
+.qj-slide-enter {
+  animation: qj-fade-up 0.42s cubic-bezier(0.22, 1, 0.36, 1) both;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .ps-app--overlay {
@@ -47,8 +91,566 @@
 .qj-phone .ps-tap {
   transition: transform 0.12s cubic-bezier(0.25, 1, 0.5, 1), box-shadow 0.12s ease;
 }
-.qj-phone .ps-tap:active {
+.qj-phone .ps-tap:active:not(:disabled) {
   transform: scale(0.97);
+}
+
+/* ——— Onboarding welcome (fix tombol Lanjut) ——— */
+.qj-onboard {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  position: relative;
+  background: linear-gradient(165deg, #fffbf2 0%, #f3e4c9 42%, #e8dcc8 100%);
+}
+.qj-onboard::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 85% 8%, rgba(201, 146, 44, 0.18), transparent),
+    radial-gradient(ellipse 60% 45% at 5% 95%, rgba(138, 95, 65, 0.14), transparent);
+  pointer-events: none;
+}
+.qj-onboard-skip {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  justify-content: flex-end;
+  padding: 6px 14px 0;
+  flex-shrink: 0;
+}
+.qj-onboard-skip button {
+  background: none;
+  border: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #8a5f41;
+  cursor: pointer;
+  padding: 8px 10px;
+}
+.qj-onboard-main {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 20px 12px;
+  position: relative;
+  z-index: 1;
+}
+.qj-onboard-dots {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  padding: 8px 0 4px;
+  position: relative;
+  z-index: 2;
+  flex-shrink: 0;
+}
+.qj-onboard-dots button {
+  height: 6px;
+  border-radius: 99px;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background: #e6d5b3;
+  transition: width 0.25s ease, background 0.25s ease;
+}
+.qj-onboard-dots button.on {
+  width: 22px;
+  background: linear-gradient(90deg, #8a5f41, #c9922c);
+}
+.qj-onboard-dots button:not(.on) {
+  width: 6px;
+}
+.qj-onboard-footer {
+  flex-shrink: 0;
+  padding: 10px 16px 18px;
+  position: relative;
+  z-index: 3;
+  background: linear-gradient(180deg, transparent 0%, rgba(243, 228, 201, 0.92) 30%);
+  border-top: 1px solid rgba(230, 213, 179, 0.45);
+}
+
+.qj-icon-ring {
+  width: 88px;
+  height: 88px;
+  border-radius: 50%;
+  background: #fff;
+  display: grid;
+  place-items: center;
+  margin-bottom: 20px;
+  animation: qj-icon-pulse 3s ease-in-out infinite;
+}
+.qj-title {
+  font-size: 19px;
+  font-weight: 800;
+  color: #3d2a1c;
+  line-height: 1.35;
+  margin: 0 0 8px;
+  max-width: 280px;
+}
+.qj-subtitle {
+  font-size: 13px;
+  color: #6e4a30;
+  line-height: 1.45;
+  margin: 0;
+  max-width: 260px;
+}
+
+/* ——— Buttons ——— */
+.qj-btn-primary {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 16px;
+  border: none;
+  background: linear-gradient(135deg, #8a5f41 0%, #6e4a30 100%);
+  color: #fff;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 10px 28px rgba(138, 95, 65, 0.38);
+  cursor: pointer;
+}
+.qj-btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  box-shadow: none;
+}
+.qj-btn-ghost {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 16px;
+  border: 2px solid #8a5f41;
+  background: #fff;
+  color: #8a5f41;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.qj-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  border: 1px solid #e6d5b3;
+  border-radius: 12px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #6e4a30;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(138, 95, 65, 0.08);
+  margin-bottom: 10px;
+}
+
+/* ——— Auth & form pages ——— */
+.qj-auth-shell {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #fffbf2 0%, #f3e4c9 100%);
+}
+.qj-auth-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px 16px 12px;
+}
+.qj-auth-footer {
+  flex-shrink: 0;
+  padding: 10px 16px 16px;
+  border-top: 1px solid rgba(230, 213, 179, 0.5);
+  background: rgba(255, 251, 242, 0.9);
+}
+.qj-brand-lockup {
+  width: 52px;
+  height: 52px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #8a5f41, #6e4a30);
+  display: grid;
+  place-items: center;
+  margin: 0 auto 12px;
+  box-shadow: 0 12px 28px rgba(138, 95, 65, 0.25);
+}
+.qj-page-title {
+  font-size: 22px;
+  font-weight: 800;
+  color: #3d2a1c;
+  text-align: center;
+  margin: 0 0 4px;
+}
+.qj-page-lead {
+  font-size: 12px;
+  color: #6e4a30;
+  text-align: center;
+  margin: 0 0 16px;
+  line-height: 1.4;
+}
+.qj-field {
+  margin-bottom: 12px;
+}
+.qj-field label {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #3d2a1c;
+  margin-bottom: 5px;
+}
+.qj-input,
+.qj-select {
+  width: 100%;
+  padding: 11px 12px;
+  border-radius: 12px;
+  border: 1.5px solid #e6d5b3;
+  background: #fff;
+  font-size: 14px;
+  color: #3d2a1c;
+  box-sizing: border-box;
+  box-shadow: 0 2px 8px rgba(138, 95, 65, 0.06);
+}
+.qj-divider {
+  position: relative;
+  margin: 14px 0;
+  text-align: center;
+}
+.qj-divider::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 50%;
+  border-top: 1px solid #e6d5b3;
+}
+.qj-divider span {
+  position: relative;
+  padding: 0 12px;
+  font-size: 11px;
+  color: #9b8164;
+  background: #f3e4c9;
+}
+
+/* ——— Role cards ——— */
+.qj-role-card {
+  width: 100%;
+  padding: 16px;
+  border-radius: 18px;
+  border: 2px solid #e6d5b3;
+  background: #fff;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-align: left;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(138, 95, 65, 0.08);
+  transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+}
+.qj-role-card.on {
+  border-color: #8a5f41;
+  background: linear-gradient(135deg, #fffbf2, #fff);
+  box-shadow: 0 12px 32px rgba(138, 95, 65, 0.18);
+}
+.qj-role-card:active {
+  transform: scale(0.99);
+}
+.qj-role-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.qj-role-card.on .qj-role-icon {
+  background: #8a5f41;
+  color: #fff;
+}
+.qj-role-card:not(.on) .qj-role-icon {
+  background: #f3e4c9;
+  color: #8a5f41;
+}
+.qj-role-card strong {
+  display: block;
+  font-size: 16px;
+  color: #3d2a1c;
+}
+.qj-role-card span {
+  font-size: 12px;
+  color: #6e4a30;
+}
+.qj-hint-banner {
+  font-size: 11px;
+  color: #8a5f41;
+  text-align: center;
+  padding: 10px 12px;
+  background: #fffbf2;
+  border-radius: 12px;
+  border: 1px solid #e6d5b3;
+  margin-bottom: 12px;
+  line-height: 1.4;
+}
+
+/* ——— Student home ——— */
+.qj-home {
+  background: linear-gradient(180deg, #f3e4c9 0%, #efe3d2 40%, #f8f0e4 100%);
+}
+.qj-home-header {
+  background: linear-gradient(135deg, #8a5f41 0%, #6e4a30 100%);
+  margin: -4px -16px 12px;
+  padding: 14px 16px 16px;
+  border-radius: 0 0 22px 22px;
+  color: #fff;
+  box-shadow: 0 12px 32px rgba(138, 95, 65, 0.28);
+}
+.qj-home-header-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.qj-home-user {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+.qj-home-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.qj-home-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.qj-home-user strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 800;
+}
+.qj-home-user small {
+  font-size: 11px;
+  opacity: 0.88;
+}
+.qj-home-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.qj-pill-points {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 10px;
+  border-radius: 99px;
+  background: rgba(255, 255, 255, 0.2);
+  font-size: 11px;
+  font-weight: 800;
+  color: #ffe9b8;
+}
+.qj-bell-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  border: none;
+  background: rgba(255, 255, 255, 0.2);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+}
+.qj-bell-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #b5532b;
+  color: #fff;
+  font-size: 8px;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  border: 1.5px solid #8a5f41;
+}
+.qj-stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-top: 12px;
+}
+.qj-stat-card {
+  background: rgba(255, 255, 255, 0.16);
+  backdrop-filter: blur(8px);
+  border-radius: 14px;
+  padding: 10px 6px;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+.qj-stat-card strong {
+  display: block;
+  font-size: 16px;
+  font-weight: 800;
+}
+.qj-stat-card small {
+  font-size: 9px;
+  opacity: 0.9;
+}
+.qj-stat-card.gold strong {
+  color: #ffe27a;
+}
+.qj-map-cta {
+  width: 100%;
+  height: 88px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 12px;
+  box-shadow: 0 10px 28px rgba(138, 95, 65, 0.22);
+}
+.qj-map-cta img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.qj-map-cta-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(62, 42, 28, 0.75), transparent 55%);
+}
+.qj-map-cta-content {
+  position: absolute;
+  bottom: 10px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+}
+.qj-map-badge {
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: #8a5f41;
+  font-size: 10px;
+  font-weight: 700;
+}
+.qj-section-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+.qj-section-head h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 800;
+  color: #3d2a1c;
+}
+.qj-filter-row {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  margin-bottom: 10px;
+  padding-bottom: 2px;
+}
+.qj-filter-row::-webkit-scrollbar {
+  display: none;
+}
+.qj-chip {
+  padding: 6px 12px;
+  border-radius: 99px;
+  font-size: 11px;
+  font-weight: 600;
+  border: 1.5px solid #e6d5b3;
+  background: #fff;
+  color: #6e4a30;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.qj-chip.on {
+  background: #8a5f41;
+  color: #fff;
+  border-color: #8a5f41;
+}
+.qj-section-label {
+  font-size: 13px;
+  font-weight: 800;
+  color: #3d2a1c;
+  margin: 0 0 8px;
+}
+
+/* Job card premium */
+.qj-job-card {
+  width: 100%;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  display: flex;
+  gap: 0;
+  box-shadow: 0 8px 24px rgba(138, 95, 65, 0.14);
+  border: 1px solid rgba(230, 213, 179, 0.8);
+}
+.qj-job-card:active {
+  transform: scale(0.99);
+}
+.qj-job-thumb {
+  width: 96px;
+  min-height: 96px;
+  flex-shrink: 0;
+  position: relative;
+}
+.qj-job-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  min-height: 96px;
+}
+.qj-job-body {
+  flex: 1;
+  padding: 12px 12px 12px 10px;
+  min-width: 0;
+}
+.qj-job-urgent {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 7px;
+  border-radius: 99px;
+  background: #b5532b;
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+}
+.qj-job-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .qj-skeleton {
@@ -57,15 +659,22 @@
   background-size: 200% 100%;
   animation: qj-shimmer 1.2s ease-in-out infinite;
 }
-.qj-skeleton-card { height: 88px; margin-bottom: 8px; }
-.qj-skeleton-map { height: 70px; margin-bottom: 10px; border-radius: 14px; }
+.qj-skeleton-card {
+  height: 96px;
+  margin-bottom: 10px;
+}
+.qj-skeleton-map {
+  height: 88px;
+  margin-bottom: 12px;
+  border-radius: 18px;
+}
 
 .qj-sheet-backdrop {
   position: absolute;
   inset: 0;
-  background: rgba(44, 30, 20, 0.45);
+  background: rgba(44, 30, 20, 0.5);
   z-index: 12;
-  animation: qj-fade-up 0.2s ease both;
+  animation: qj-fade-up 0.22s ease both;
 }
 .qj-sheet-panel {
   position: absolute;
@@ -76,35 +685,19 @@
   background: #fff;
   border-radius: 20px 20px 0 0;
   padding: 12px 16px 20px;
-  box-shadow: 0 -12px 40px rgba(138, 95, 65, 0.2);
-  animation: qj-sheet-up 0.36s cubic-bezier(0.25, 1, 0.5, 1) both;
+  box-shadow: 0 -12px 40px rgba(138, 95, 65, 0.25);
+  animation: qj-sheet-up 0.38s cubic-bezier(0.22, 1, 0.36, 1) both;
   max-height: 88%;
   overflow-y: auto;
-}
-.qj-sheet-handle {
-  width: 40px;
-  height: 3px;
-  border-radius: 99px;
-  background: #e6d5b3;
-  margin: 0 auto 12px;
 }
 
 .qj-phone .ps-toast {
   animation: qj-toast-in 0.28s cubic-bezier(0.25, 1, 0.5, 1) both;
 }
-
 .qj-phone .ps-tab:active svg {
   animation: qj-tab-pop 0.2s ease;
 }
 
-/* Frame presentasi — tetap proporsi di layar laptop */
 .qj-phone {
   perspective: 1200px;
-}
-.phone-frame {
-  transform: translateZ(0);
-  box-shadow:
-    0 50px 100px rgba(0, 0, 0, 0.7),
-    0 0 0 1px rgba(255, 255, 255, 0.05),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
