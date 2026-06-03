@@ -1,6 +1,7 @@
 /**
  * Capture Slide 14 phone prototype states for visual QA.
  * Usage: node scripts/visual-qa-prototype.mjs [baseUrl]
+ * Requires: npx playwright install chromium (one-time, not in CI)
  */
 import { chromium } from "playwright";
 import { mkdir } from "node:fs/promises";

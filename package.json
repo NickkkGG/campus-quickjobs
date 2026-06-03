@@ -7,6 +7,7 @@
     "dev": "vite dev",
     "build": "vite build",
     "deploy": "npm run build && wrangler deploy",
+    "postbuild": "node --input-type=module -e \"import fs from 'node:fs'; if (!fs.existsSync('dist/server/index.mjs')) { console.error('Build incomplete: dist/server/index.mjs missing (nitro/cloudflare)'); process.exit(1); }\"",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
@@ -67,6 +68,9 @@
     "vite-tsconfig-paths": "^6.0.2",
     "zod": "^3.24.2"
   },
+  "engines": {
+    "node": ">=20"
+  },
   "devDependencies": {
     "@eslint/js": "^9.32.0",
     "@lovable.dev/vite-tanstack-config": "^1.7.0",
@@ -80,7 +84,7 @@
     "eslint-plugin-react-hooks": "^5.2.0",
     "eslint-plugin-react-refresh": "^0.4.20",
     "globals": "^15.15.0",
-    "nitro": "^3.0.260429-beta",
+    "nitro": "3.0.260429-beta",
     "playwright": "^1.60.0",
     "prettier": "^3.7.3",
     "typescript": "^5.8.3",
