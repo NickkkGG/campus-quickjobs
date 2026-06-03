@@ -46,7 +46,25 @@ import {
   User,
   Users,
   Wallet,
+  Plus,
 } from "lucide-react";
+import { EMPTY_UMKM_PROFILE, type UmkmProfile } from "../prototype/types";
+import {
+  UmkmOnboardStep1,
+  UmkmOnboardStep2,
+  UmkmOnboardStep3,
+  UmkmOnboardReview,
+  UmkmDashboard,
+  UmkmPostJob,
+  UmkmApplicants,
+  UmkmBoost,
+  UmkmDompet,
+  UmkmProfil,
+  UmkmNotifikasi,
+  UmkmChat,
+  UmkmBottomNav,
+} from "../prototype/umkm-screens";
+import type { UmkmApplicant, UmkmJobPost } from "../prototype/types";
 
 export const Route = createFileRoute("/")({
   component: QuickJobDeck,
@@ -761,7 +779,47 @@ type ProtoScreen =
   | "dompet"
   | "cairkan"
   | "profil"
-  | "notifikasi";
+  | "notifikasi"
+  | "umkm-onboard-1"
+  | "umkm-onboard-2"
+  | "umkm-onboard-3"
+  | "umkm-onboard-review"
+  | "umkm-dashboard"
+  | "umkm-post-job"
+  | "umkm-applicants"
+  | "umkm-boost"
+  | "umkm-dompet"
+  | "umkm-profil"
+  | "umkm-notifikasi"
+  | "umkm-chat";
+
+const UMKM_PRODUCT_SCREENS: ProtoScreen[] = [
+  "umkm-dashboard",
+  "umkm-post-job",
+  "umkm-applicants",
+  "umkm-boost",
+  "umkm-dompet",
+  "umkm-profil",
+  "umkm-notifikasi",
+  "umkm-chat",
+];
+
+const UMKM_STORAGE_KEY = "quickjob_umkm_v1";
+
+const UMKM_SCREENS: ProtoScreen[] = [
+  "umkm-onboard-1",
+  "umkm-onboard-2",
+  "umkm-onboard-3",
+  "umkm-onboard-review",
+  "umkm-dashboard",
+  "umkm-post-job",
+  "umkm-applicants",
+  "umkm-boost",
+  "umkm-dompet",
+  "umkm-profil",
+  "umkm-notifikasi",
+  "umkm-chat",
+];
 
 const AVATAR_URL =
   "https://images.unsplash.com/photo-1589386417686-0d34b5903d23?auto=format&fit=crop&w=200&q=80";
@@ -1037,6 +1095,77 @@ function SlidePrototype() {
   const [chatMsg, setChatMsg] = useState("");
   const [aktivitasTab, setAktivitasTab] = useState<"berlangsung" | "riwayat">("berlangsung");
   const [welcomeSlide, setWelcomeSlide] = useState(0);
+  const [umkmVerified, setUmkmVerified] = useState(() => {
+    try {
+      const raw = localStorage.getItem(UMKM_STORAGE_KEY);
+      if (!raw) return false;
+      const parsed = JSON.parse(raw) as { verified?: boolean };
+      return Boolean(parsed.verified);
+    } catch {
+      return false;
+    }
+  });
+  const [umkmProfile, setUmkmProfile] = useState<UmkmProfile>(() => {
+    try {
+      const raw = localStorage.getItem(UMKM_STORAGE_KEY);
+      if (!raw) return EMPTY_UMKM_PROFILE;
+      const parsed = JSON.parse(raw) as { profile?: UmkmProfile };
+      return parsed.profile ? { ...EMPTY_UMKM_PROFILE, ...parsed.profile } : EMPTY_UMKM_PROFILE;
+    } catch {
+      return EMPTY_UMKM_PROFILE;
+    }
+  });
+  const [umkmChatPeer, setUmkmChatPeer] = useState("Alya — UGM");
+  const [umkmJobs, setUmkmJobs] = useState<UmkmJobPost[]>([
+    {
+      id: "j1",
+      title: "Barista Shift Sore",
+      category: "F&B",
+      rate: "Rp95.000",
+      schedule: "Jumat–Minggu",
+      slots: 2,
+      applicants: 5,
+      status: "aktif",
+      boosted: true,
+      imageUrl:
+        "https://images.unsplash.com/photo-1572982270699-473dfa34d7e7?auto=format&fit=crop&w=400&q=80",
+    },
+    {
+      id: "j2",
+      title: "Runner Event Kampus",
+      category: "Event",
+      rate: "Rp85.000",
+      schedule: "16 Jun 2026",
+      slots: 4,
+      applicants: 12,
+      status: "aktif",
+      boosted: false,
+      imageUrl:
+        "https://images.unsplash.com/photo-1566409031818-9508be68fc74?auto=format&fit=crop&w=400&q=80",
+    },
+  ]);
+  const [umkmApplicants, setUmkmApplicants] = useState<UmkmApplicant[]>([
+    {
+      id: "a1",
+      name: "Alya — UGM",
+      campus: "FISIP UGM",
+      rating: 4.9,
+      jobTitle: "Barista Shift Sore",
+      status: "menunggu",
+      avatar:
+        "https://images.unsplash.com/photo-1589386417686-0d34b5903d23?auto=format&fit=crop&w=200&q=80",
+    },
+    {
+      id: "a2",
+      name: "Raka — UNY",
+      campus: "Teknik UNY",
+      rating: 4.7,
+      jobTitle: "Runner Event",
+      status: "menunggu",
+      avatar:
+        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
+    },
+  ]);
 
   useEffect(() => {
     if (screen !== "splash") return;
@@ -1049,6 +1178,21 @@ function SlidePrototype() {
     const t = setTimeout(() => setToast(null), 2000);
     return () => clearTimeout(t);
   }, [toast]);
+
+  useEffect(() => {
+    if (umkmVerified) return;
+    if (!UMKM_PRODUCT_SCREENS.includes(screen)) return;
+    showToast("Lengkapi profil UMKM dulu");
+    setScreen("umkm-onboard-1");
+  }, [screen, umkmVerified]);
+
+  const persistUmkm = (verified: boolean, profile: UmkmProfile) => {
+    try {
+      localStorage.setItem(UMKM_STORAGE_KEY, JSON.stringify({ verified, profile }));
+    } catch {
+      /* demo storage */
+    }
+  };
 
   const go = (s: ProtoScreen) => {
     setHistory((h) => [...h, screen]);
@@ -1074,7 +1218,34 @@ function SlidePrototype() {
   const nav: ProtoNav = { go, back, reset, selectJob, job: PROTO_JOBS.find((j) => j.id === selectedJobId), showToast };
 
   const isHome = screen === "homescreen";
-  const noNav = ["homescreen", "splash", "welcome", "masuk", "otp", "pilih-peran", "preferensi", "detail", "konfirmasi", "lamaran-berhasil", "notifikasi", "chat", "portofolio", "cairkan"];
+  const isUmkm = UMKM_SCREENS.includes(screen);
+  const umkmGo = (target: string) => {
+    const s = target as ProtoScreen;
+    if (!umkmVerified && UMKM_PRODUCT_SCREENS.includes(s)) {
+      showToast("Lengkapi profil UMKM dulu — belum bisa masuk dashboard");
+      go("umkm-onboard-1");
+      return;
+    }
+    go(s);
+  };
+  const umkmNav: import("../prototype/umkm-screens").UmkmNav = { go: umkmGo, back, showToast };
+  const noNav = [
+    "homescreen",
+    "splash",
+    "welcome",
+    "masuk",
+    "otp",
+    "pilih-peran",
+    "preferensi",
+    "detail",
+    "konfirmasi",
+    "lamaran-berhasil",
+    "notifikasi",
+    "chat",
+    "portofolio",
+    "cairkan",
+    ...UMKM_SCREENS.filter((s) => s !== "umkm-dashboard" && s !== "umkm-post-job" && s !== "umkm-applicants" && s !== "umkm-boost" && s !== "umkm-dompet"),
+  ];
 
   return (
     <div className="proto-layout">
@@ -1082,13 +1253,13 @@ function SlidePrototype() {
         <Kicker>Slide 14 · Prototipe Aplikasi</Kicker>
         <Title>Prototipe Aplikasi QuickJob Campus.</Title>
         <Lead>
-          Coba langsung di prototipe sebelah kanan. Ketuk ikon QuickJob di home screen untuk masuk,
-          lalu jalani full flow: login, pilih peran, atur preferensi, cari job di peta, lamar tanpa
-          CV, sampai cairkan poin ke e-wallet.
+          Prototipe dua sisi: <strong style={{ color: "var(--cream)" }}>Mahasiswa</strong> (cari job,
+          lamar tanpa CV, dompet poin) dan <strong style={{ color: "var(--cream)" }}>UMKM</strong>{" "}
+          (onboarding data usaha dulu, baru dashboard — bukan langsung masuk).
         </Lead>
         <p className="proto-hint">
-          Tip: ketuk garis home indicator di bawah layar untuk kembali ke home screen iPhone kapan
-          pun.
+          UMKM: isi nama usaha, lokasi, PIC → review → kelola lowongan & pelamar. Mahasiswa: preferensi
+          → beranda & peta. Tip: home indicator = kembali ke layar iPhone.
         </p>
       </div>
 
@@ -1122,7 +1293,68 @@ function SlidePrototype() {
               )}
               {screen === "otp" && <ProtoOTP nav={nav} otp={otp} setOtp={setOtp} />}
               {screen === "pilih-peran" && (
-                <ProtoPilihPeran nav={nav} selected={selectedRole} setSelected={setSelectedRole} />
+                <ProtoPilihPeran
+                  nav={nav}
+                  selected={selectedRole}
+                  setSelected={setSelectedRole}
+                  onContinue={() => {
+                    if (selectedRole === "umkm") {
+                      setUmkmVerified(false);
+                      persistUmkm(false, { ...EMPTY_UMKM_PROFILE, whatsapp: phone });
+                      setUmkmProfile({ ...EMPTY_UMKM_PROFILE, whatsapp: phone });
+                      go("umkm-onboard-1");
+                      showToast("UMKM: isi data usaha dulu — bukan langsung dashboard");
+                    } else {
+                      go("preferensi");
+                    }
+                  }}
+                />
+              )}
+              {screen === "umkm-onboard-1" && (
+                <UmkmOnboardStep1 nav={umkmNav} profile={umkmProfile} setProfile={setUmkmProfile} />
+              )}
+              {screen === "umkm-onboard-2" && (
+                <UmkmOnboardStep2 nav={umkmNav} profile={umkmProfile} setProfile={setUmkmProfile} />
+              )}
+              {screen === "umkm-onboard-3" && (
+                <UmkmOnboardStep3
+                  nav={umkmNav}
+                  profile={umkmProfile}
+                  setProfile={setUmkmProfile}
+                  phone={phone}
+                />
+              )}
+              {screen === "umkm-onboard-review" && (
+                <UmkmOnboardReview
+                  nav={umkmNav}
+                  profile={umkmProfile}
+                  onActivate={() => {
+                    setUmkmVerified(true);
+                    persistUmkm(true, umkmProfile);
+                  }}
+                />
+              )}
+              {screen === "umkm-dashboard" && (
+                <UmkmDashboard nav={umkmNav} profile={umkmProfile} jobs={umkmJobs} />
+              )}
+              {screen === "umkm-post-job" && <UmkmPostJob nav={umkmNav} />}
+              {screen === "umkm-applicants" && (
+                <UmkmApplicants
+                  nav={umkmNav}
+                  applicants={umkmApplicants}
+                  setApplicants={setUmkmApplicants}
+                  onOpenChat={(name) => {
+                    setUmkmChatPeer(name);
+                    umkmGo("umkm-chat");
+                  }}
+                />
+              )}
+              {screen === "umkm-boost" && <UmkmBoost nav={umkmNav} />}
+              {screen === "umkm-dompet" && <UmkmDompet nav={umkmNav} />}
+              {screen === "umkm-profil" && <UmkmProfil nav={umkmNav} profile={umkmProfile} />}
+              {screen === "umkm-notifikasi" && <UmkmNotifikasi nav={umkmNav} />}
+              {screen === "umkm-chat" && (
+                <UmkmChat nav={umkmNav} peerName={umkmChatPeer} businessName={umkmProfile.businessName} />
               )}
               {screen === "preferensi" && (
                 <ProtoPreferensi
@@ -1158,7 +1390,11 @@ function SlidePrototype() {
               {screen === "profil" && <ProtoProfil nav={nav} />}
               {screen === "notifikasi" && <ProtoNotifikasi nav={nav} />}
             </div>
-            {!noNav.includes(screen) && <ProtoBottomNav active={screen} nav={nav} />}
+            {isUmkm &&
+              ["umkm-dashboard", "umkm-post-job", "umkm-applicants", "umkm-boost", "umkm-dompet"].includes(
+                screen,
+              ) && <UmkmBottomNav active={screen} nav={umkmNav} />}
+            {!isUmkm && !noNav.includes(screen) && <ProtoBottomNav active={screen} nav={nav} />}
             {toast && <div className="ps-toast">{toast}</div>}
             {screen !== "homescreen" && screen !== "splash" && (
               <button
@@ -1351,15 +1587,30 @@ function ProtoOTP({ nav, otp, setOtp }: { nav: ProtoNav; otp: string[]; setOtp: 
   );
 }
 
-function ProtoPilihPeran({ nav, selected, setSelected }: { nav: ProtoNav; selected: "mahasiswa" | "umkm"; setSelected: (v: "mahasiswa" | "umkm") => void }) {
+function ProtoPilihPeran({
+  nav,
+  selected,
+  setSelected,
+  onContinue,
+}: {
+  nav: ProtoNav;
+  selected: "mahasiswa" | "umkm";
+  setSelected: (v: "mahasiswa" | "umkm") => void;
+  onContinue: () => void;
+}) {
   const roles = [
-    { id: "mahasiswa" as const, icon: GraduationCap, title: "Mahasiswa", desc: "Cari micro-job dekat kampus" },
-    { id: "umkm" as const, icon: Store, title: "UMKM", desc: "Pasang lowongan cepat" },
+    { id: "mahasiswa" as const, icon: GraduationCap, title: "Mahasiswa", desc: "Cari micro-job dekat kampus · tanpa CV" },
+    { id: "umkm" as const, icon: Store, title: "UMKM / Klien", desc: "Verifikasi usaha dulu, lalu pasang lowongan" },
   ];
   return (
     <div className="ps-pad" style={{ height: "100%", display: "flex", flexDirection: "column", paddingBottom: "30px" }}>
       <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", textAlign: "center", marginBottom: 4, marginTop: 16 }}>Pilih kebutuhanmu</h2>
-      <p style={{ fontSize: 12, color: "#6E4A30", textAlign: "center", marginBottom: 20 }}>QuickJob punya jalur mahasiswa & UMKM</p>
+      <p style={{ fontSize: 12, color: "#6E4A30", textAlign: "center", marginBottom: 12 }}>Dua jalur berbeda — bukan satu dashboard yang sama</p>
+      {selected === "umkm" && (
+        <p style={{ fontSize: 11, color: "#8A5F41", textAlign: "center", marginBottom: 12, padding: "8px 12px", background: "#FFFBF2", borderRadius: 10, border: "1px solid #E6D5B3" }}>
+          UMKM: kamu akan isi data usaha (nama, lokasi, PIC) sebelum masuk dashboard.
+        </p>
+      )}
       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 12 }}>
         {roles.map((r) => {
           const isSel = selected === r.id;
@@ -1376,7 +1627,9 @@ function ProtoPilihPeran({ nav, selected, setSelected }: { nav: ProtoNav; select
           );
         })}
       </div>
-      <PBtn onClick={() => nav.go("preferensi")}>Lanjut sebagai {selected === "mahasiswa" ? "Mahasiswa" : "UMKM"}</PBtn>
+      <PBtn onClick={onContinue}>
+        {selected === "mahasiswa" ? "Lanjut ke preferensi" : "Lanjut — isi data usaha"}
+      </PBtn>
     </div>
   );
 }
@@ -3125,6 +3378,175 @@ const CSS = `
   z-index: 50; white-space: nowrap;
   animation: psFade .3s var(--ease);
 }
+.ps-btn {
+  width: 100%; padding: 12px 0; border-radius: 16px; border: none; cursor: pointer;
+  background: linear-gradient(135deg, #8A5F41, #6E4A30); color: #fff;
+  font-weight: 700; font-size: 15px;
+  box-shadow: 0 8px 24px rgba(138,95,65,.25);
+}
+.ps-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
+
+/* UMKM flow — rich UI (not flat solid only) */
+.umkm-screen { height: 100%; display: flex; flex-direction: column; min-height: 0; background: linear-gradient(180deg, #F3E4C9 0%, #EFE3D2 55%, #F8F0E4 100%); }
+.umkm-scroll { overflow-y: auto; padding-bottom: 72px; -webkit-overflow-scrolling: touch; }
+.umkm-hero { position: relative; padding: 12px 16px 16px; margin: -8px -16px 12px; overflow: hidden; border-radius: 0 0 20px 20px; }
+.umkm-hero-pattern {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, rgba(201,146,44,.25), transparent 45%),
+    radial-gradient(circle at 80% 70%, rgba(138,95,65,.2), transparent 50%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30h60M30 0v60' stroke='%238A5F41' stroke-opacity='.08'/%3E%3C/svg%3E");
+  opacity: .9;
+}
+.umkm-step-dots { display: flex; gap: 6px; position: relative; z-index: 1; margin-bottom: 8px; }
+.umkm-step-dots span { width: 8px; height: 8px; border-radius: 50%; background: rgba(138,95,65,.25); }
+.umkm-step-dots span.on { background: #8A5F41; }
+.umkm-step-dots span.cur { width: 22px; border-radius: 99px; background: linear-gradient(90deg, #8A5F41, #C9922C); }
+.umkm-step-label { position: relative; z-index: 1; font-size: 10px; font-weight: 700; color: #6E4A30; text-transform: uppercase; letter-spacing: .06em; }
+.umkm-hero-title { position: relative; z-index: 1; font-size: 20px; font-weight: 800; color: #3D2A1C; margin: 6px 0 4px; }
+.umkm-hero-sub { position: relative; z-index: 1; font-size: 12px; color: #6E4A30; line-height: 1.45; margin: 0; }
+.umkm-form { flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 0 16px; min-height: 0; }
+.umkm-field { display: flex; flex-direction: column; gap: 4px; }
+.umkm-field-label { font-size: 12px; font-weight: 700; color: #3D2A1C; }
+.umkm-field-hint { font-size: 10px; color: #9B8164; }
+.umkm-chip-grid, .umkm-chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.umkm-chip {
+  padding: 8px 12px; border-radius: 99px; font-size: 11px; font-weight: 600;
+  border: 1.5px solid #E6D5B3; background: #fff; color: #6E4A30;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.umkm-chip.on { background: #8A5F41; color: #fff; border-color: #8A5F41; }
+.umkm-cover-preview {
+  position: relative; border-radius: 14px; overflow: hidden; height: 100px;
+  border: 1.5px solid #E6D5B3;
+}
+.umkm-cover-preview img { width: 100%; height: 100%; object-fit: cover; }
+.umkm-cover-preview span {
+  position: absolute; bottom: 8px; right: 8px; font-size: 10px; font-weight: 600;
+  background: rgba(255,255,255,.92); padding: 4px 8px; border-radius: 8px; color: #6E4A30;
+  display: flex; align-items: center; gap: 4px;
+}
+.umkm-footer { padding: 12px 16px 20px; }
+.umkm-back {
+  display: inline-flex; align-items: center; gap: 4px; margin: 8px 16px 0;
+  background: none; border: none; font-size: 13px; font-weight: 600; color: #6E4A30; cursor: pointer;
+}
+.umkm-review-card {
+  margin: 0 16px; border-radius: 16px; overflow: hidden;
+  background: #fff; border: 1.5px solid #E6D5B3; box-shadow: 0 8px 24px rgba(138,95,65,.12);
+}
+.umkm-review-cover { width: 100%; height: 90px; object-fit: cover; }
+.umkm-review-body { padding: 12px; }
+.umkm-review-row { display: flex; justify-content: space-between; gap: 8px; padding: 6px 0; border-bottom: 1px solid #F3E4C9; font-size: 12px; }
+.umkm-review-row span { color: #9B8164; }
+.umkm-review-row strong { color: #3D2A1C; text-align: right; max-width: 58%; }
+.umkm-legal { font-size: 10px; color: #9B8164; padding: 10px 16px; line-height: 1.4; }
+.umkm-dash-header { display: flex; justify-content: space-between; align-items: flex-start; padding: 12px 16px 8px; gap: 10px; }
+.umkm-dash-eyebrow { font-size: 10px; font-weight: 800; color: #C9922C; text-transform: uppercase; letter-spacing: .08em; }
+.umkm-dash-header h2 { font-size: 18px; font-weight: 800; color: #3D2A1C; margin: 2px 0; }
+.umkm-dash-header p { font-size: 11px; color: #6E4A30; display: flex; align-items: center; gap: 4px; margin: 0; }
+.umkm-icon-btn { position: relative; width: 36px; height: 36px; border-radius: 12px; background: #fff; border: 1px solid #E6D5B3; display: grid; place-items: center; }
+.umkm-badge { position: absolute; top: -4px; right: -4px; width: 16px; height: 16px; border-radius: 50%; background: #B5532B; color: #fff; font-size: 9px; font-weight: 800; display: grid; place-items: center; }
+.umkm-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; padding: 0 16px 12px; }
+.umkm-stat {
+  background: #fff; border-radius: 14px; padding: 10px 8px; text-align: center;
+  border: 1px solid #E6D5B3; box-shadow: 0 4px 12px rgba(138,95,65,.08);
+}
+.umkm-stat svg { color: #8A5F41; margin-bottom: 4px; }
+.umkm-stat strong { display: block; font-size: 16px; color: #3D2A1C; }
+.umkm-stat small { font-size: 9px; color: #6E4A30; }
+.umkm-stat.gold strong { color: #C9922C; }
+.umkm-promo {
+  margin: 0 16px 12px; padding: 12px; border-radius: 14px;
+  background: linear-gradient(135deg, #FFFBF2, #F3E4C9);
+  border: 1.5px solid #E6D5B3; display: flex; align-items: center; gap: 10px;
+}
+.umkm-promo svg { color: #C9922C; flex-shrink: 0; }
+.umkm-promo strong { display: block; font-size: 13px; color: #3D2A1C; }
+.umkm-promo p { font-size: 10px; color: #6E4A30; margin: 2px 0 0; }
+.umkm-promo-btn { margin-left: auto; padding: 6px 12px; border-radius: 99px; background: #8A5F41; color: #fff; font-size: 11px; font-weight: 700; border: none; cursor: pointer; }
+.umkm-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 16px 12px; }
+.umkm-action {
+  padding: 12px; border-radius: 14px; background: #fff; border: 1.5px solid #E6D5B3;
+  font-size: 12px; font-weight: 700; color: #3D2A1C; display: flex; align-items: center; justify-content: center; gap: 6px; cursor: pointer;
+}
+.umkm-action.primary { background: linear-gradient(135deg, #8A5F41, #6E4A30); color: #fff; border-color: transparent; }
+.umkm-section-title { font-size: 13px; font-weight: 800; color: #3D2A1C; padding: 0 16px 8px; margin: 0; }
+.umkm-job-row {
+  display: flex; align-items: center; gap: 10px; margin: 0 16px 8px; padding: 10px;
+  background: #fff; border-radius: 14px; border: 1px solid #E6D5B3; text-align: left; cursor: pointer; width: calc(100% - 32px);
+}
+.umkm-job-row img { width: 52px; height: 52px; border-radius: 10px; object-fit: cover; flex-shrink: 0; }
+.umkm-job-row strong { display: block; font-size: 13px; color: #3D2A1C; }
+.umkm-job-row span { font-size: 10px; color: #6E4A30; }
+.umkm-boost-tag { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; color: #C9922C; font-weight: 700; margin-top: 2px; }
+.umkm-page-title { font-size: 20px; font-weight: 800; color: #3D2A1C; margin: 0 16px 4px; }
+.umkm-page-sub { font-size: 12px; color: #6E4A30; margin: 0 16px 12px; }
+.umkm-upload-card { border-radius: 14px; overflow: hidden; height: 120px; position: relative; border: 1.5px dashed #C9922C; }
+.umkm-upload-card img { width: 100%; height: 100%; object-fit: cover; opacity: .85; }
+.umkm-upload-card span { position: absolute; inset: 0; display: grid; place-items: center; font-size: 12px; font-weight: 600; color: #3D2A1C; background: rgba(255,251,242,.75); gap: 4px; }
+.umkm-applicant {
+  display: flex; align-items: center; gap: 10px; margin: 0 16px 10px; padding: 10px;
+  background: #fff; border-radius: 14px; border: 1px solid #E6D5B3;
+}
+.umkm-applicant img { width: 44px; height: 44px; border-radius: 50%; object-fit: cover; }
+.umkm-applicant-info { flex: 1; min-width: 0; }
+.umkm-applicant-info strong { display: block; font-size: 13px; color: #3D2A1C; }
+.umkm-applicant-info span { font-size: 10px; color: #6E4A30; }
+.umkm-rating { display: inline-flex; align-items: center; gap: 2px; font-size: 10px; color: #C9922C; }
+.umkm-applicant-actions { display: flex; flex-direction: column; gap: 4px; }
+.umkm-applicant-actions button { font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 8px; border: none; cursor: pointer; }
+.umkm-applicant-actions .ok { background: #4E7C59; color: #fff; }
+.umkm-applicant-actions .no { background: #F3E4C9; color: #6E4A30; }
+.umkm-status-pill { font-size: 10px; font-weight: 700; padding: 4px 8px; border-radius: 8px; text-transform: capitalize; }
+.umkm-status-pill.diterima { background: #E8F5E9; color: #2E7D32; }
+.umkm-status-pill.ditolak { background: #FFEBEE; color: #C62828; }
+.umkm-plan {
+  display: flex; justify-content: space-between; align-items: center; margin: 0 16px 8px; padding: 12px;
+  background: #fff; border-radius: 14px; border: 1px solid #E6D5B3;
+}
+.umkm-plan strong { display: block; font-size: 14px; color: #3D2A1C; }
+.umkm-plan span { font-size: 11px; color: #6E4A30; }
+.umkm-plan-btn { padding: 8px 12px; border-radius: 10px; background: #8A5F41; color: #fff; font-size: 12px; font-weight: 700; border: none; cursor: pointer; }
+.umkm-wallet-card {
+  margin: 0 16px 12px; padding: 16px; border-radius: 16px;
+  background: linear-gradient(135deg, #8A5F41, #6E4A30); color: #fff;
+}
+.umkm-wallet-card small { font-size: 11px; opacity: .85; }
+.umkm-wallet-card strong { display: block; font-size: 26px; margin: 4px 0; }
+.umkm-tx { display: flex; justify-content: space-between; padding: 10px 16px; font-size: 12px; border-bottom: 1px solid #E6D5B3; background: #fff; margin: 0 16px; }
+.umkm-tx:first-of-type { border-radius: 12px 12px 0 0; }
+.umkm-tx:last-of-type { border-radius: 0 0 12px 12px; border-bottom: none; margin-bottom: 16px; }
+.umkm-tx .plus { color: #4E7C59; }
+.umkm-tx .minus { color: #B5532B; }
+.umkm-profile-hero { margin: 0 16px 12px; border-radius: 16px; overflow: hidden; background: #fff; border: 1px solid #E6D5B3; }
+.umkm-profile-hero img { width: 100%; height: 80px; object-fit: cover; }
+.umkm-profile-hero div { padding: 12px; }
+.umkm-menu-row {
+  display: block; width: calc(100% - 32px); margin: 0 16px 8px; padding: 14px; text-align: left;
+  background: #fff; border-radius: 12px; border: 1px solid #E6D5B3; font-size: 13px; font-weight: 600; color: #3D2A1C; cursor: pointer;
+}
+.umkm-notif { display: flex; gap: 10px; margin: 0 16px 8px; padding: 12px; background: #fff; border-radius: 12px; border: 1px solid #E6D5B3; }
+.umkm-notif p { font-size: 12px; color: #3D2A1C; margin: 0; }
+.umkm-tabs { background: rgba(255,255,255,.96); }
+.umkm-applicant-done { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.umkm-chat-btn {
+  display: inline-flex; align-items: center; gap: 4px; font-size: 10px; font-weight: 700;
+  padding: 4px 8px; border-radius: 8px; background: #8A5F41; color: #fff; border: none; cursor: pointer;
+}
+.umkm-chat-header { padding: 0 16px 8px; }
+.umkm-chat-header strong { display: block; font-size: 15px; color: #3D2A1C; }
+.umkm-chat-header span { font-size: 11px; color: #6E4A30; }
+.umkm-chat-thread { flex: 1; overflow-y: auto; padding: 8px 16px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.umkm-chat-bubble { max-width: 85%; padding: 10px 12px; border-radius: 14px; font-size: 12px; line-height: 1.4; }
+.umkm-chat-bubble.them { align-self: flex-start; background: #fff; border: 1px solid #E6D5B3; color: #3D2A1C; }
+.umkm-chat-bubble.me { align-self: flex-end; background: linear-gradient(135deg, #8A5F41, #6E4A30); color: #fff; }
+.umkm-chat-compose { display: flex; gap: 8px; padding: 10px 16px 16px; border-top: 1px solid #E6D5B3; background: #FFFBF2; }
+.umkm-chat-send {
+  width: 44px; height: 44px; border-radius: 12px; border: none; background: #8A5F41; color: #fff;
+  display: grid; place-items: center; cursor: pointer; flex-shrink: 0;
+}
+
 @keyframes popIn {
   from { opacity: 0; transform: scale(.85); }
   to { opacity: 1; transform: scale(1); }
