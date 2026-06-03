@@ -834,6 +834,9 @@ const UMKM_SCREENS: ProtoScreen[] = [
   "umkm-chat",
 ];
 
+/** Saldo poin mahasiswa — tampil sekali di beranda (chip Dompet), bukan duplikat di stat row */
+const STUDENT_POINT_BALANCE = "2.450";
+
 const AVATAR_URL =
   "https://images.unsplash.com/photo-1589386417686-0d34b5903d23?auto=format&fit=crop&w=200&q=80";
 const MAP_URL =
@@ -1809,9 +1812,18 @@ function ProtoBeranda({ nav }: { nav: ProtoNav }) {
               </div>
             </div>
             <div className="qj-home-actions">
-              <span className="qj-pill-points">
-                <Coins size={12} /> 2.450
-              </span>
+              <button
+                type="button"
+                className="ph-wallet-entry ps-tap"
+                onClick={() => nav.go("dompet")}
+                aria-label={`Dompet poin ${STUDENT_POINT_BALANCE}`}
+              >
+                <Wallet size={15} />
+                <span className="ph-wallet-entry-text">
+                  <small>Dompet</small>
+                  <strong>{STUDENT_POINT_BALANCE}</strong>
+                </span>
+              </button>
               <button type="button" className="qj-bell-btn ps-tap" onClick={() => nav.go("notifikasi")}>
                 <Bell size={18} />
                 <span className="qj-bell-dot">3</span>
@@ -1822,17 +1834,22 @@ function ProtoBeranda({ nav }: { nav: ProtoNav }) {
             {[
               { v: "8", l: "Job cocok", icon: Briefcase },
               { v: "1.2 km", l: "Terdekat", icon: MapPin },
-              { v: "2.450", l: "Poin", icon: Coins, gold: true },
+              { v: "2", l: "Lamaran aktif", icon: ListTodo },
             ].map((m) => {
               const Icon = m.icon;
               return (
-                <div key={m.l} className={`ph-dash-stat ${m.gold ? "gold" : ""}`}>
+                <button
+                  key={m.l}
+                  type="button"
+                  className="ph-dash-stat ps-tap"
+                  onClick={() => nav.go(m.l.includes("Lamaran") ? "aktivitas" : "jelajah")}
+                >
                   <span className="ph-dash-stat-icon" aria-hidden>
                     <Icon size={14} />
                   </span>
                   <strong>{m.v}</strong>
                   <small>{m.l}</small>
-                </div>
+                </button>
               );
             })}
           </div>

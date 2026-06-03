@@ -500,14 +500,35 @@
   align-items: center;
   gap: 8px;
 }
-.qj-pill-points {
+/* Satu-satunya tempat saldo poin di beranda → tap buka Dompet */
+.qj-phone .ph-wallet-entry {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-  padding: 5px 10px;
-  border-radius: 99px;
-  background: rgba(255, 255, 255, 0.2);
-  font-size: 11px;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  cursor: pointer;
+  font-family: inherit;
+}
+.qj-phone .ph-wallet-entry-text {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.1;
+  gap: 1px;
+}
+.qj-phone .ph-wallet-entry-text small {
+  font-size: 8px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.9;
+}
+.qj-phone .ph-wallet-entry-text strong {
+  font-size: 13px;
   font-weight: 800;
   color: #ffe9b8;
 }
@@ -558,6 +579,13 @@
   justify-content: center;
   box-shadow: 0 6px 18px rgba(42, 28, 18, 0.14);
   border: 1px solid rgba(255, 255, 255, 0.65);
+  width: 100%;
+  cursor: pointer;
+  font-family: inherit;
+  color: inherit;
+}
+.qj-phone .ph-dash-stat:active {
+  transform: scale(0.98);
 }
 .qj-phone .ph-dash-stat-icon {
   width: 30px;
