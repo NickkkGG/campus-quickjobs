@@ -22,6 +22,7 @@ import {
   Wallet,
 } from "lucide-react";
 import type { UmkmApplicant, UmkmJobPost, UmkmProfile } from "./types";
+import { PhoneApp, PhoneFooter, PhoneScroll, PhoneTopBar } from "./phone-layout";
 
 export type UmkmNav = {
   go: (s: string) => void;
@@ -88,14 +89,15 @@ export function UmkmOnboardStep1({
   const types = ["Kafe / F&B", "Event / Panitia", "Retail / Toko", "Gudang / Logistik", "Kreatif / Digital"];
   const valid = profile.businessName.trim().length >= 3 && profile.businessType && profile.description.trim().length >= 10;
   return (
-    <div className="umkm-screen">
-      <PatternHeader
-        step={0}
-        total={4}
-        title="Ceritakan bisnismu"
-        subtitle="Data ini membuktikan kamu UMKM resmi di QuickJob — bukan akun mahasiswa yang salah jalur."
-      />
-      <div className="umkm-form">
+    <PhoneApp>
+      <PhoneScroll>
+        <PatternHeader
+          step={0}
+          total={4}
+          title="Ceritakan bisnismu"
+          subtitle="Data ini membuktikan kamu UMKM resmi di QuickJob — bukan akun mahasiswa yang salah jalur."
+        />
+        <div className="umkm-form">
         <Field label="Nama usaha / brand" hint="Contoh: Kopi Klotok Pogung">
           <input
             style={inputStyle}
@@ -132,13 +134,14 @@ export function UmkmOnboardStep1({
             <Upload size={14} /> Foto etalase (contoh)
           </span>
         </div>
-      </div>
-      <div className="umkm-footer">
+        </div>
+      </PhoneScroll>
+      <PhoneFooter>
         <button type="button" className="ps-btn" disabled={!valid} onClick={() => nav.go("umkm-onboard-2")}>
           Lanjut ke lokasi
         </button>
-      </div>
-    </div>
+      </PhoneFooter>
+    </PhoneApp>
   );
 }
 
@@ -155,17 +158,16 @@ export function UmkmOnboardStep2({
   const radii = ["≤1 km", "≤3 km", "≤5 km"];
   const valid = profile.address.trim().length >= 8 && profile.campusArea && profile.openHours.trim().length >= 5;
   return (
-    <div className="umkm-screen">
-      <button type="button" className="umkm-back" onClick={nav.back}>
-        <ChevronLeft size={20} /> Kembali
-      </button>
-      <PatternHeader
-        step={1}
-        total={4}
-        title="Lokasi & jangkauan"
-        subtitle="Matching mahasiswa mengandalkan radius kampus — ini wajib akurat."
-      />
-      <div className="umkm-form">
+    <PhoneApp>
+      <PhoneScroll>
+        <PhoneTopBar onBack={nav.back} />
+        <PatternHeader
+          step={1}
+          total={4}
+          title="Lokasi & jangkauan"
+          subtitle="Matching mahasiswa mengandalkan radius kampus — ini wajib akurat."
+        />
+        <div className="umkm-form">
         <Field label="Alamat lengkap">
           <input
             style={inputStyle}
@@ -210,13 +212,14 @@ export function UmkmOnboardStep2({
             placeholder="08.00 – 22.00"
           />
         </Field>
-      </div>
-      <div className="umkm-footer">
+        </div>
+      </PhoneScroll>
+      <PhoneFooter>
         <button type="button" className="ps-btn" disabled={!valid} onClick={() => nav.go("umkm-onboard-3")}>
           Lanjut ke kontak PIC
         </button>
-      </div>
-    </div>
+      </PhoneFooter>
+    </PhoneApp>
   );
 }
 
@@ -238,17 +241,16 @@ export function UmkmOnboardStep3({
     (profile.whatsapp.trim().length >= 10 || phone.length >= 10) &&
     profile.hiringNeeds.length > 0;
   return (
-    <div className="umkm-screen">
-      <button type="button" className="umkm-back" onClick={nav.back}>
-        <ChevronLeft size={20} /> Kembali
-      </button>
-      <PatternHeader
-        step={2}
-        total={4}
-        title="PIC & kebutuhan rekrut"
-        subtitle="Siapa yang dihubungi mahasiswa setelah melamar?"
-      />
-      <div className="umkm-form">
+    <PhoneApp>
+      <PhoneScroll>
+        <PhoneTopBar onBack={nav.back} />
+        <PatternHeader
+          step={2}
+          total={4}
+          title="PIC & kebutuhan rekrut"
+          subtitle="Siapa yang dihubungi mahasiswa setelah melamar?"
+        />
+        <div className="umkm-form">
         <Field label="Nama penanggung jawab (PIC)">
           <input
             style={inputStyle}
@@ -301,13 +303,14 @@ export function UmkmOnboardStep3({
             })}
           </div>
         </Field>
-      </div>
-      <div className="umkm-footer">
+        </div>
+      </PhoneScroll>
+      <PhoneFooter>
         <button type="button" className="ps-btn" disabled={!valid} onClick={() => nav.go("umkm-onboard-review")}>
           Review data UMKM
         </button>
-      </div>
-    </div>
+      </PhoneFooter>
+    </PhoneApp>
   );
 }
 
@@ -329,17 +332,16 @@ export function UmkmOnboardReview({
     ["Kebutuhan", profile.hiringNeeds.join(", ")],
   ];
   return (
-    <div className="umkm-screen">
-      <button type="button" className="umkm-back" onClick={nav.back}>
-        <ChevronLeft size={20} /> Kembali
-      </button>
-      <PatternHeader
-        step={3}
-        total={4}
-        title="Cek ulang profil UMKM"
-        subtitle="Setelah ini baru dashboard — bukan langsung saat pilih peran."
-      />
-      <div className="umkm-review-card">
+    <PhoneApp>
+      <PhoneScroll>
+        <PhoneTopBar onBack={nav.back} />
+        <PatternHeader
+          step={3}
+          total={4}
+          title="Cek ulang profil UMKM"
+          subtitle="Setelah ini baru dashboard — bukan langsung saat pilih peran."
+        />
+        <div className="umkm-review-card">
         <img src={profile.coverImage} alt="" className="umkm-review-cover" />
         <div className="umkm-review-body">
           {rows.map(([k, v]) => (
@@ -350,10 +352,11 @@ export function UmkmOnboardReview({
           ))}
         </div>
       </div>
-      <p className="umkm-legal">
-        Dengan melanjutkan, kamu menyatakan data usaha benar dan siap menerima pelamar mahasiswa kampus.
-      </p>
-      <div className="umkm-footer">
+        <p className="umkm-legal">
+          Dengan melanjutkan, kamu menyatakan data usaha benar dan siap menerima pelamar mahasiswa kampus.
+        </p>
+      </PhoneScroll>
+      <PhoneFooter>
         <button
           type="button"
           className="ps-btn"
@@ -365,8 +368,8 @@ export function UmkmOnboardReview({
         >
           Aktifkan dashboard UMKM
         </button>
-      </div>
-    </div>
+      </PhoneFooter>
+    </PhoneApp>
   );
 }
 
@@ -428,7 +431,8 @@ export function UmkmDashboard({
   jobs: UmkmJobPost[];
 }) {
   return (
-    <div className="umkm-screen umkm-scroll">
+    <PhoneApp>
+      <PhoneScroll tabBar>
       <div className="umkm-dash-header">
         <div>
           <span className="umkm-dash-eyebrow">Mode UMKM</span>
@@ -505,18 +509,17 @@ export function UmkmDashboard({
           <ChevronRight size={16} />
         </button>
       ))}
-    </div>
+      </PhoneScroll>
+    </PhoneApp>
   );
 }
 
 export function UmkmPostJob({ nav }: { nav: UmkmNav }) {
   return (
-    <div className="umkm-screen umkm-scroll">
-      <button type="button" className="umkm-back" onClick={nav.back}>
-        <ChevronLeft size={20} /> Kembali
-      </button>
-      <h2 className="umkm-page-title">Pasang lowongan baru</h2>
-      <p className="umkm-page-sub">Mahasiswa di radius kampus akan melihat dalam hitungan menit.</p>
+    <PhoneApp>
+      <PhoneScroll tabBar>
+      <PhoneTopBar onBack={nav.back} title="Pasang lowongan baru" subtitle="Tampil ke mahasiswa di radius kampus" />
+      <h2 className="umkm-page-title umkm-page-title--inset">Detail lowongan</h2>
       <div className="umkm-form">
         <Field label="Judul pekerjaan">
           <input style={inputStyle} placeholder="Contoh: Admin Packing Shift Pagi" />
@@ -546,17 +549,20 @@ export function UmkmPostJob({ nav }: { nav: UmkmNav }) {
           <input style={inputStyle} placeholder="Besok 09.00 · 3 orang" />
         </Field>
       </div>
-      <button
-        type="button"
-        className="ps-btn"
-        onClick={() => {
-          nav.showToast("Lowongan dipublikasikan!");
-          nav.go("umkm-dashboard");
-        }}
-      >
-        Publikasikan lowongan
-      </button>
-    </div>
+      </PhoneScroll>
+      <PhoneFooter>
+        <button
+          type="button"
+          className="ps-btn"
+          onClick={() => {
+            nav.showToast("Lowongan dipublikasikan!");
+            nav.go("umkm-dashboard");
+          }}
+        >
+          Publikasikan lowongan
+        </button>
+      </PhoneFooter>
+    </PhoneApp>
   );
 }
 
@@ -582,11 +588,9 @@ export function UmkmApplicants({
     }
   };
   return (
-    <div className="umkm-screen umkm-scroll">
-      <button type="button" className="umkm-back" onClick={nav.back}>
-        <ChevronLeft size={20} /> Kembali
-      </button>
-      <h2 className="umkm-page-title">Kelola pelamar</h2>
+    <PhoneApp>
+      <PhoneScroll tabBar>
+      <PhoneTopBar onBack={nav.back} title="Kelola pelamar" />
       {applicants.map((a) => (
         <div key={a.id} className="umkm-applicant">
           <img src={a.avatar} alt="" />
@@ -618,7 +622,8 @@ export function UmkmApplicants({
           )}
         </div>
       ))}
-    </div>
+      </PhoneScroll>
+    </PhoneApp>
   );
 }
 
@@ -638,14 +643,8 @@ export function UmkmChat({
     { from: "them", text: "Siap, bisa hadir 15 menit lebih awal." },
   ];
   return (
-    <div className="umkm-screen" style={{ paddingBottom: 0 }}>
-      <button type="button" className="umkm-back" onClick={nav.back}>
-        <ChevronLeft size={20} /> Kembali
-      </button>
-      <div className="umkm-chat-header">
-        <strong>{peerName}</strong>
-        <span>Koordinasi shift · QuickJob</span>
-      </div>
+    <PhoneApp variant="chat">
+      <PhoneTopBar onBack={nav.back} title={peerName} subtitle="Koordinasi shift · QuickJob" />
       <div className="umkm-chat-thread">
         {thread.map((m, i) => (
           <div key={i} className={`umkm-chat-bubble ${m.from}`}>
@@ -672,7 +671,7 @@ export function UmkmChat({
           <Send size={16} />
         </button>
       </div>
-    </div>
+    </PhoneApp>
   );
 }
 
@@ -683,37 +682,37 @@ export function UmkmBoost({ nav }: { nav: UmkmNav }) {
     { name: "Freemium", price: "Tonton iklan", desc: "Boost 24 jam · Rp0" },
   ];
   return (
-    <div className="umkm-screen umkm-scroll">
-      <button type="button" className="umkm-back" onClick={nav.back}>
-        <ChevronLeft size={20} /> Kembali
-      </button>
-      <h2 className="umkm-page-title">Boost visibilitas</h2>
-      <div className="umkm-promo" style={{ marginBottom: 14 }}>
-        <BadgeCheck size={20} />
-        <div>
-          <strong>Gratis 1 bulan (aktivasi)</strong>
-          <p>Sesuai strategi conversion di dokumen tim.</p>
-        </div>
-      </div>
-      {plans.map((p) => (
-        <div key={p.name} className="umkm-plan">
+    <PhoneApp>
+      <PhoneScroll tabBar>
+        <PhoneTopBar onBack={nav.back} title="Boost visibilitas" />
+        <div className="umkm-promo" style={{ margin: "0 16px 14px" }}>
+          <BadgeCheck size={20} />
           <div>
-            <strong>{p.name}</strong>
-            <span>{p.desc}</span>
+            <strong>Gratis 1 bulan (aktivasi)</strong>
+            <p>Sesuai strategi conversion di dokumen tim.</p>
           </div>
-          <button type="button" className="umkm-plan-btn" onClick={() => nav.showToast(`Paket ${p.name} dipilih`)}>
-            {p.price}
-          </button>
         </div>
-      ))}
-    </div>
+        {plans.map((p) => (
+          <div key={p.name} className="umkm-plan">
+            <div>
+              <strong>{p.name}</strong>
+              <span>{p.desc}</span>
+            </div>
+            <button type="button" className="umkm-plan-btn" onClick={() => nav.showToast(`Paket ${p.name} dipilih`)}>
+              {p.price}
+            </button>
+          </div>
+        ))}
+      </PhoneScroll>
+    </PhoneApp>
   );
 }
 
 export function UmkmDompet({ nav }: { nav: UmkmNav }) {
   return (
-    <div className="umkm-screen umkm-scroll">
-      <h2 className="umkm-page-title">Dompet bisnis</h2>
+    <PhoneApp>
+      <PhoneScroll tabBar>
+      <h2 className="umkm-page-title umkm-page-title--inset">Dompet bisnis</h2>
       <div className="umkm-wallet-card">
         <small>Pendapatan bulan ini (setelah fee 5%)</small>
         <strong>Rp4.280.000</strong>
@@ -733,13 +732,15 @@ export function UmkmDompet({ nav }: { nav: UmkmNav }) {
           </div>
         ))}
       </div>
-    </div>
+      </PhoneScroll>
+    </PhoneApp>
   );
 }
 
 export function UmkmProfil({ nav, profile }: { nav: UmkmNav; profile: UmkmProfile }) {
   return (
-    <div className="umkm-screen umkm-scroll">
+    <PhoneApp>
+      <PhoneScroll>
       <div className="umkm-profile-hero">
         <img src={profile.coverImage} alt="" />
         <div>
@@ -756,7 +757,8 @@ export function UmkmProfil({ nav, profile }: { nav: UmkmNav; profile: UmkmProfil
       <button type="button" className="umkm-menu-row" onClick={() => nav.showToast("Mode mahasiswa — ganti peran di login")}>
         Ganti ke akun mahasiswa
       </button>
-    </div>
+      </PhoneScroll>
+    </PhoneApp>
   );
 }
 
@@ -767,18 +769,17 @@ export function UmkmNotifikasi({ nav }: { nav: UmkmNav }) {
     "Rating 5★ dari Alya (UGM)",
   ];
   return (
-    <div className="umkm-screen umkm-scroll">
-      <button type="button" className="umkm-back" onClick={nav.back}>
-        <ChevronLeft size={20} /> Kembali
-      </button>
-      <h2 className="umkm-page-title">Notifikasi</h2>
-      {items.map((t) => (
-        <div key={t} className="umkm-notif">
-          <Bell size={16} />
-          <p>{t}</p>
-        </div>
-      ))}
-    </div>
+    <PhoneApp>
+      <PhoneScroll>
+        <PhoneTopBar onBack={nav.back} title="Notifikasi" />
+        {items.map((t) => (
+          <div key={t} className="umkm-notif">
+            <Bell size={16} />
+            <p>{t}</p>
+          </div>
+        ))}
+      </PhoneScroll>
+    </PhoneApp>
   );
 }
 
@@ -791,7 +792,7 @@ export function UmkmBottomNav({ active, nav }: { active: string; nav: UmkmNav })
     { id: "umkm-dompet", label: "Dompet", Icon: Wallet },
   ];
   return (
-    <div className="ps-tabs umkm-tabs">
+    <div className="ps-tabs umkm-tabs ph-tabbar-inner">
       {tabs.map((t) => {
         const on = active === t.id || (t.id === "umkm-dashboard" && active.startsWith("umkm-onboard"));
         return (

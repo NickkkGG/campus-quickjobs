@@ -1247,6 +1247,13 @@ function SlidePrototype() {
     ...UMKM_SCREENS.filter((s) => s !== "umkm-dashboard" && s !== "umkm-post-job" && s !== "umkm-applicants" && s !== "umkm-boost" && s !== "umkm-dompet"),
   ];
 
+  const showUmkmTabs =
+    isUmkm &&
+    ["umkm-dashboard", "umkm-post-job", "umkm-applicants", "umkm-boost", "umkm-dompet"].includes(screen);
+  const showStudentTabs = !isUmkm && !noNav.includes(screen);
+  const showHomeInd =
+    screen !== "homescreen" && screen !== "splash" && !showStudentTabs && !showUmkmTabs;
+
   return (
     <div className="proto-layout">
       <div className="proto-info">
@@ -1276,6 +1283,7 @@ function SlidePrototype() {
                 <span className="ph-status-r">5G · 82%</span>
               </div>
             )}
+            <div className="ph-body">
             <div className="ph-content" key={screen}>
               {screen === "homescreen" && <ProtoHomescreen onOpen={() => reset("splash")} />}
               {screen === "splash" && <ProtoSplash />}
@@ -1390,13 +1398,18 @@ function SlidePrototype() {
               {screen === "profil" && <ProtoProfil nav={nav} />}
               {screen === "notifikasi" && <ProtoNotifikasi nav={nav} />}
             </div>
-            {isUmkm &&
-              ["umkm-dashboard", "umkm-post-job", "umkm-applicants", "umkm-boost", "umkm-dompet"].includes(
-                screen,
-              ) && <UmkmBottomNav active={screen} nav={umkmNav} />}
-            {!isUmkm && !noNav.includes(screen) && <ProtoBottomNav active={screen} nav={nav} />}
+            {showUmkmTabs && (
+              <nav className="ph-tabbar" aria-label="Navigasi UMKM">
+                <UmkmBottomNav active={screen} nav={umkmNav} />
+              </nav>
+            )}
+            {showStudentTabs && (
+              <nav className="ph-tabbar" aria-label="Navigasi mahasiswa">
+                <ProtoBottomNav active={screen} nav={nav} />
+              </nav>
+            )}
             {toast && <div className="ps-toast">{toast}</div>}
-            {screen !== "homescreen" && screen !== "splash" && (
+            {showHomeInd && (
               <button
                 type="button"
                 className="home-ind"
@@ -1404,6 +1417,7 @@ function SlidePrototype() {
                 aria-label="Kembali ke home screen"
               />
             )}
+            </div>
           </div>
         </div>
       </div>
@@ -1501,11 +1515,12 @@ function ProtoWelcome({ nav, slide, setSlide }: { nav: ProtoNav; slide: number; 
   ];
   const s = slides[slide];
   return (
-    <div className="ps-pad" style={{ height: "100%", display: "flex", flexDirection: "column", paddingBottom: "30px" }}>
+    <div className="ps-app">
+      <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column" }}>
       <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 8 }}>
         <button type="button" onClick={() => nav.go("masuk")} style={{ color: "#8A5F41", fontSize: 14, fontWeight: 600, padding: "6px 12px" }}>Lewati</button>
       </div>
-      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", minHeight: 0 }}>
         <div style={{ width: 80, height: 80, borderRadius: "50%", backgroundColor: "#FFFBF2", display: "grid", placeItems: "center", marginBottom: 24, boxShadow: `0 12px 32px ${s.color}30` }}>
           <MapPin size={40} style={{ color: s.color }} />
         </div>
@@ -1517,6 +1532,8 @@ function ProtoWelcome({ nav, slide, setSlide }: { nav: ProtoNav; slide: number; 
           ))}
         </div>
       </div>
+      </div>
+      <div className="ps-app-footer">
       {slide < 2 ? (
         <button type="button" onClick={() => setSlide(slide + 1)} style={{ width: "100%", padding: "12px 0", borderRadius: 16, backgroundColor: "#8A5F41", color: "white", fontWeight: 600, fontSize: 15, display: "flex", alignItems: "center", justifyContent: "center", gap: 8 }}>
           Lanjut <ChevronRight size={18} />
@@ -1524,6 +1541,7 @@ function ProtoWelcome({ nav, slide, setSlide }: { nav: ProtoNav; slide: number; 
       ) : (
         <PBtn onClick={() => nav.go("masuk")}>Mulai Sekarang</PBtn>
       )}
+      </div>
     </div>
   );
 }
@@ -1531,7 +1549,8 @@ function ProtoWelcome({ nav, slide, setSlide }: { nav: ProtoNav; slide: number; 
 function ProtoMasuk({ nav, phone, setPhone, campus, setCampus }: { nav: ProtoNav; phone: string; setPhone: (v: string) => void; campus: string; setCampus: (v: string) => void }) {
   const campuses = ["UGM", "UNY", "UMY", "UII", "Sanata Dharma", "UAD", "UPN Veteran Yogyakarta", "Atma Jaya Yogyakarta"];
   return (
-    <div className="ps-pad" style={{ height: "100%", display: "flex", flexDirection: "column", overflowY: "auto", paddingBottom: "20px" }}>
+    <div className="ps-app">
+    <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column", gap: 11 }}>
       <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
         <div style={{ width: 42, height: 42, borderRadius: 14, background: "linear-gradient(135deg,#8A5F41,#6E4A30)", display: "grid", placeItems: "center" }}>
           <Briefcase size={20} color="white" />
@@ -1560,6 +1579,7 @@ function ProtoMasuk({ nav, phone, setPhone, campus, setCampus }: { nav: ProtoNav
         <Chrome size={18} /> Masuk dengan Google
       </button>
     </div>
+    </div>
   );
 }
 
@@ -1569,7 +1589,8 @@ function ProtoOTP({ nav, otp, setOtp }: { nav: ProtoNav; otp: string[]; setOtp: 
     const next = [...otp]; next[i] = val; setOtp(next);
   };
   return (
-    <div className="ps-pad" style={{ height: "100%", display: "flex", flexDirection: "column", paddingBottom: "30px" }}>
+    <div className="ps-app">
+    <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column" }}>
       <button type="button" onClick={nav.back} style={{ display: "flex", alignItems: "center", gap: 4, marginBottom: 16, background: "none", border: "none", cursor: "pointer" }}>
         <ChevronLeft size={22} style={{ color: "#3D2A1C" }} />
       </button>
@@ -1581,8 +1602,10 @@ function ProtoOTP({ nav, otp, setOtp }: { nav: ProtoNav; otp: string[]; setOtp: 
         ))}
       </div>
       <p style={{ fontSize: 12, color: "#9B8164", textAlign: "center", marginBottom: 16 }}>Kirim ulang dalam <span style={{ fontWeight: 600, color: "#8A5F41" }}>00:45</span></p>
-      <div style={{ flex: 1 }} />
+    </div>
+    <div className="ps-app-footer">
       <PBtn onClick={() => nav.go("pilih-peran")}>Verifikasi</PBtn>
+    </div>
     </div>
   );
 }
@@ -1603,7 +1626,8 @@ function ProtoPilihPeran({
     { id: "umkm" as const, icon: Store, title: "UMKM / Klien", desc: "Verifikasi usaha dulu, lalu pasang lowongan" },
   ];
   return (
-    <div className="ps-pad" style={{ height: "100%", display: "flex", flexDirection: "column", paddingBottom: "30px" }}>
+    <div className="ps-app">
+    <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column" }}>
       <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", textAlign: "center", marginBottom: 4, marginTop: 16 }}>Pilih kebutuhanmu</h2>
       <p style={{ fontSize: 12, color: "#6E4A30", textAlign: "center", marginBottom: 12 }}>Dua jalur berbeda — bukan satu dashboard yang sama</p>
       {selected === "umkm" && (
@@ -1627,9 +1651,12 @@ function ProtoPilihPeran({
           );
         })}
       </div>
+    </div>
+    <div className="ps-app-footer">
       <PBtn onClick={onContinue}>
         {selected === "mahasiswa" ? "Lanjut ke preferensi" : "Lanjut — isi data usaha"}
       </PBtn>
+    </div>
     </div>
   );
 }
@@ -1645,7 +1672,8 @@ function ProtoPreferensi({ nav, interests, setInterests, radius, setRadius, time
     <button key={label} type="button" onClick={onClick} style={{ padding: "6px 12px", borderRadius: 99, fontSize: 12, fontWeight: 500, border: `2px solid ${active ? "#8A5F41" : "#E6D5B3"}`, backgroundColor: active ? "#8A5F41" : "#fff", color: active ? "#fff" : "#6E4A30" }}>{label}</button>
   );
   return (
-    <div className="ps-pad" style={{ height: "100%", display: "flex", flexDirection: "column", overflowY: "auto", paddingBottom: "30px" }}>
+    <div className="ps-app">
+    <div className="ps-app-scroll ps-app-scroll--pad" style={{ display: "flex", flexDirection: "column" }}>
       <button type="button" onClick={nav.back} style={{ display: "flex", alignItems: "center", marginBottom: 12, background: "none", border: "none", cursor: "pointer" }}><ChevronLeft size={22} style={{ color: "#3D2A1C" }} /></button>
       <h2 style={{ fontSize: 22, fontWeight: "bold", color: "#3D2A1C", marginBottom: 4 }}>Atur preferensi kerjamu</h2>
       <p style={{ fontSize: 12, color: "#6E4A30", marginBottom: 16 }}>Bantu kami rekomendasikan job yang cocok</p>
@@ -1661,7 +1689,10 @@ function ProtoPreferensi({ nav, interests, setInterests, radius, setRadius, time
         <h3 style={{ fontSize: 13, fontWeight: "bold", color: "#3D2A1C", marginBottom: 8 }}>Waktu kosong</h3>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>{allTimes.map((t) => chip(t, times.includes(t), () => toggle(times, t, setTimes)))}</div>
       </div>
-      <div style={{ marginTop: "auto", paddingTop: 12 }}><PBtn onClick={() => nav.go("beranda")}>Cari Job Terdekat</PBtn></div>
+    </div>
+    <div className="ps-app-footer">
+      <PBtn onClick={() => nav.go("beranda")}>Cari Job Terdekat</PBtn>
+    </div>
     </div>
   );
 }
@@ -1669,7 +1700,8 @@ function ProtoPreferensi({ nav, interests, setInterests, radius, setRadius, time
 function ProtoBeranda({ nav }: { nav: ProtoNav }) {
   const filters = ["Hari ini", "≤3 km", "Shift sore", "Akhir pekan"];
   return (
-    <div className="ps-pad ps-scroll" style={{ paddingBottom: "70px" }}>
+    <div className="ps-app">
+    <div className="ps-app-scroll has-tabs ps-app-scroll--pad ps-pad">
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <div style={{ width: 32, height: 32, borderRadius: "50%", overflow: "hidden", border: "2px solid #8A5F41" }}>
@@ -1724,12 +1756,14 @@ function ProtoBeranda({ nav }: { nav: ProtoNav }) {
         {PROTO_JOBS.map((j) => <ProtoJobCard key={j.id} job={j} nav={nav} />)}
       </div>
     </div>
+    </div>
   );
 }
 
 function ProtoJelajah({ nav }: { nav: ProtoNav }) {
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
+    <div className="ps-app">
+    <div style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
       <div style={{ flex: 1, position: "relative", backgroundColor: "#f5efe0", overflow: "hidden" }}>
         <img src="/maps.png" alt="Peta Yogyakarta" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }} />
         {/* Floating job price pins */}
@@ -1758,6 +1792,7 @@ function ProtoJelajah({ nav }: { nav: ProtoNav }) {
         </div>
       </div>
     </div>
+    </div>
   );
 }
 
@@ -1765,8 +1800,8 @@ function ProtoDetail({ nav }: { nav: ProtoNav }) {
   const job = nav.job;
   if (!job) return null;
   return (
-    <div style={{ height: "100%", display: "flex", flexDirection: "column" }}>
-      <div style={{ flex: 1, overflowY: "auto", paddingBottom: 60 }}>
+    <div className="ps-app">
+    <div className="ps-app-scroll ps-app-scroll--pad" style={{ paddingBottom: 72 }}>
         <div style={{ position: "relative", height: 120 }}>
           <img src={job.imageUrl} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
           <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to top, rgba(0,0,0,0.5), transparent)" }} />
@@ -1816,10 +1851,10 @@ function ProtoDetail({ nav }: { nav: ProtoNav }) {
             <div><div style={{ fontSize: 12, fontWeight: "bold", color: "#3D2A1C" }}>Tanpa CV</div><div style={{ fontSize: 11, color: "#6E4A30" }}>Profil singkatmu dikirim otomatis</div></div>
           </div>
         </div>
-      </div>
-      <div style={{ position: "absolute", left: 0, right: 0, padding: "10px 14px", backgroundColor: "#F3E4C9", boxShadow: "0 -4px 16px rgba(138,95,65,0.08)", bottom: 20 }}>
+    </div>
+    <div className="ps-app-footer">
         <PBtn onClick={() => nav.go("konfirmasi")}>Lamar Tanpa CV</PBtn>
-      </div>
+    </div>
     </div>
   );
 }
@@ -2728,10 +2763,18 @@ const CSS = `
 /* ===== Slide 14 prototype (auto-cycling) ===== */
 .proto-layout {
   display: grid;
-  grid-template-columns: 1fr 340px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 340px);
   gap: clamp(28px, 4vw, 56px);
   height: 100%;
   align-items: center;
+}
+@media (max-width: 960px) {
+  .proto-layout {
+    grid-template-columns: 1fr;
+    align-items: start;
+    padding-bottom: 24px;
+  }
+  .qj-phone { justify-self: center; }
 }
 .proto-info { max-width: 560px; }
 .proto-info .qj-kicker { margin-bottom: 6px; }
@@ -2761,14 +2804,18 @@ const CSS = `
 .proto-dot-label { font-weight: 600; letter-spacing: .01em; }
 
 /* Phone frame */
-.qj-phone { display: grid; place-items: center; }
+.qj-phone { display: grid; place-items: center; width: 100%; }
 .phone-frame {
-  width: 320px; height: 660px; border-radius: 46px;
+  width: min(320px, 100%);
+  height: min(660px, calc(100dvh - 140px));
+  max-height: 660px;
+  border-radius: 46px;
   background: linear-gradient(180deg, #14090a, #2a1810);
   padding: 11px;
   border: 2px solid rgba(243,228,201,.22);
   box-shadow: 0 50px 100px rgba(0,0,0,.7), inset 0 0 0 1px rgba(255,255,255,.05);
   position: relative;
+  box-sizing: border-box;
 }
 .notch {
   position: absolute; top: 14px; left: 50%; transform: translateX(-50%);
@@ -2784,6 +2831,13 @@ const CSS = `
   overflow: hidden; position: relative;
   display: flex; flex-direction: column;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  --phone-tab-h: 56px;
+  --phone-pad-x: 16px;
+  box-sizing: border-box;
+}
+.ph-body {
+  flex: 1; min-height: 0; display: flex; flex-direction: column;
+  position: relative;
 }
 .phone-screen * { scroll-behavior: smooth; }
 .phone-screen ::-webkit-scrollbar { width: 2px; }
@@ -2800,24 +2854,79 @@ const CSS = `
 
 .ph-content {
   flex: 1; overflow: hidden; position: relative; min-height: 0;
+  display: flex; flex-direction: column;
 }
-.ph-content [style*="overflow-y: auto"],
-.ph-content [style*="overflow-y:auto"],
-.ph-content [style*="overflow-y: scroll"],
-.ps-pad.ps-scroll {
-  transform: translateZ(0);
-  will-change: scroll-position;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
+.ph-content > .ps-app,
+.ph-content > .ps-splash,
+.ph-content > .ps-home {
+  flex: 1; min-height: 0; width: 100%;
 }
 
+/* Flexible in-frame app shell */
+.ps-app {
+  flex: 1; min-height: 0; width: 100%;
+  display: flex; flex-direction: column;
+  overflow: hidden;
+  background: linear-gradient(180deg, #F3E4C9 0%, #EFE3D2 55%, #F8F0E4 100%);
+}
+.ps-app--plain { background: #F3E4C9; }
+.ps-app--chat { background: #F3E4C9; }
+.ps-app-scroll {
+  flex: 1; min-height: 0;
+  overflow-x: hidden; overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  transform: translateZ(0);
+}
+.ps-app-scroll--pad { padding: 4px var(--phone-pad-x) 12px; }
+.ps-app-scroll.has-tabs { padding-bottom: calc(var(--phone-tab-h) + 12px); }
+.ps-app-scroll::-webkit-scrollbar { width: 2px; }
+.ps-app-scroll::-webkit-scrollbar-thumb { background: #D4B896; border-radius: 99px; }
+.ps-app-footer {
+  flex-shrink: 0;
+  padding: 8px var(--phone-pad-x) 14px;
+  background: linear-gradient(180deg, rgba(243,228,201,0), #F3E4C9 35%);
+  border-top: 1px solid rgba(230,213,179,.5);
+}
+.ps-app-bar {
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px var(--phone-pad-x) 8px;
+  flex-shrink: 0;
+}
+.ps-app-bar-back {
+  display: inline-flex; align-items: center; gap: 2px;
+  background: none; border: none; cursor: pointer;
+  font-size: 13px; font-weight: 600; color: #6E4A30; padding: 4px 0;
+}
+.ps-app-bar-titles { flex: 1; min-width: 0; }
+.ps-app-bar-titles strong { display: block; font-size: 15px; color: #3D2A1C; line-height: 1.2; }
+.ps-app-bar-titles span { font-size: 11px; color: #6E4A30; }
+
+.ph-tabbar {
+  flex-shrink: 0;
+  z-index: 5;
+  background: rgba(255,255,255,.97);
+  border-top: 1px solid #E6D5B3;
+  box-shadow: 0 -4px 16px rgba(138,95,65,.08);
+}
+.ph-tabbar .ps-tabs,
+.ph-tabbar-inner {
+  position: static;
+  border-radius: 0;
+  padding: 6px 2px 10px;
+  box-shadow: none;
+  border: none;
+  background: transparent;
+}
+.umkm-tabs .ps-tab span { font-size: 8.5px; }
+.umkm-tabs .ps-tab svg { width: 15px; height: 15px; }
+
 .ps-pad { padding: 8px 16px 16px; display: flex; flex-direction: column; gap: 11px; }
-.ps-pad.ps-scroll { height: 100%; overflow-y: auto; padding-bottom: 80px; }
-.ps-pad.ps-scroll::-webkit-scrollbar { display: none; }
+.ps-pad.ps-scroll { padding-bottom: 80px; }
 
 /* Splash */
 .ps-splash {
-  height: 100%; display: flex; flex-direction: column;
+  flex: 1; min-height: 0; display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 10px; padding: 30px 24px;
   background: linear-gradient(180deg, #F3E4C9 0%, #EFE3D2 100%);
 }
@@ -2829,6 +2938,7 @@ const CSS = `
   overflow: hidden;
   position: relative;
 }
+.ps-logo {
   width: 100%; height: 100%;
   display: grid; place-items: center;
 }
@@ -3206,17 +3316,10 @@ const CSS = `
 .ps-his-body small { font-size: 10px; color: #9B8164; }
 .ps-his-item > strong { font-size: 13px; font-weight: 800; }
 
-/* Bottom nav (visual only) */
+/* Bottom nav */
 .ps-tabs {
-  position: absolute; left: 0; right: 0; bottom: 0;
   display: grid; grid-template-columns: repeat(5, 1fr);
-  background: rgba(255,255,255,.95);
-  backdrop-filter: blur(20px);
-  border-top: 1px solid #E6D5B3;
-  border-radius: 22px 22px 0 0;
-  padding: 8px 4px 16px;
-  box-shadow: 0 -4px 16px rgba(138,95,65,.08);
-  z-index: 4;
+  width: 100%;
 }
 .ps-tab {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
@@ -3234,10 +3337,11 @@ const CSS = `
 
 /* Home indicator inside the phone */
 .home-ind {
-  position: absolute; bottom: 6px; left: 50%; transform: translateX(-50%);
+  position: absolute; bottom: 8px; left: 50%; transform: translateX(-50%);
   width: 110px; height: 4px; border-radius: 2px;
   background: #D4B896; opacity: .5; z-index: 6;
 }
+.ph-body:has(.ph-tabbar) .home-ind { display: none; }
 
 
 /* ===== Slide 14 additions: hint, homescreen, success, interactivity ===== */
@@ -3263,7 +3367,7 @@ const CSS = `
 .ph-status.on-dark .ph-status-r { color: rgba(255,255,255,.92); }
 
 .ps-home {
-  height: 100%;
+  flex: 1; min-height: 0;
   display: flex; flex-direction: column;
   padding: 16px 18px 12px;
   color: #ffffff;
@@ -3370,12 +3474,13 @@ const CSS = `
 .ps-success-card strong { font-size: 14px; font-weight: 800; }
 .ps-success-card small { font-size: 11.5px; color: #6E4A30; }
 .ps-toast {
-  position: absolute; top: 60px; left: 50%; transform: translateX(-50%);
+  position: absolute; top: 52px; left: 50%; transform: translateX(-50%);
   padding: 8px 16px; border-radius: 12px;
   background: #4E7C59; color: white;
   font-size: 12px; font-weight: 600;
   box-shadow: 0 4px 16px rgba(0,0,0,.2);
-  z-index: 50; white-space: nowrap;
+  z-index: 30; white-space: nowrap; max-width: calc(100% - 32px);
+  text-overflow: ellipsis; overflow: hidden;
   animation: psFade .3s var(--ease);
 }
 .ps-btn {
@@ -3387,9 +3492,8 @@ const CSS = `
 .ps-btn:disabled { opacity: .45; cursor: not-allowed; box-shadow: none; }
 
 /* UMKM flow — rich UI (not flat solid only) */
-.umkm-screen { height: 100%; display: flex; flex-direction: column; min-height: 0; background: linear-gradient(180deg, #F3E4C9 0%, #EFE3D2 55%, #F8F0E4 100%); }
-.umkm-scroll { overflow-y: auto; padding-bottom: 72px; -webkit-overflow-scrolling: touch; }
-.umkm-hero { position: relative; padding: 12px 16px 16px; margin: -8px -16px 12px; overflow: hidden; border-radius: 0 0 20px 20px; }
+.umkm-hero { position: relative; padding: 12px 16px 16px; margin: 0 0 12px; overflow: hidden; border-radius: 0 0 20px 20px; }
+.umkm-page-title--inset { margin-top: 0; }
 .umkm-hero-pattern {
   position: absolute; inset: 0;
   background:
@@ -3405,7 +3509,7 @@ const CSS = `
 .umkm-step-label { position: relative; z-index: 1; font-size: 10px; font-weight: 700; color: #6E4A30; text-transform: uppercase; letter-spacing: .06em; }
 .umkm-hero-title { position: relative; z-index: 1; font-size: 20px; font-weight: 800; color: #3D2A1C; margin: 6px 0 4px; }
 .umkm-hero-sub { position: relative; z-index: 1; font-size: 12px; color: #6E4A30; line-height: 1.45; margin: 0; }
-.umkm-form { flex: 1; display: flex; flex-direction: column; gap: 12px; padding: 0 16px; min-height: 0; }
+.umkm-form { display: flex; flex-direction: column; gap: 12px; padding: 0 16px 16px; }
 .umkm-field { display: flex; flex-direction: column; gap: 4px; }
 .umkm-field-label { font-size: 12px; font-weight: 700; color: #3D2A1C; }
 .umkm-field-hint { font-size: 10px; color: #9B8164; }
@@ -3537,7 +3641,8 @@ const CSS = `
 .umkm-chat-header { padding: 0 16px 8px; }
 .umkm-chat-header strong { display: block; font-size: 15px; color: #3D2A1C; }
 .umkm-chat-header span { font-size: 11px; color: #6E4A30; }
-.umkm-chat-thread { flex: 1; overflow-y: auto; padding: 8px 16px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.ps-app--chat .umkm-chat-thread { flex: 1; overflow-y: auto; padding: 8px 16px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.ps-app--chat .umkm-chat-compose { flex-shrink: 0; }
 .umkm-chat-bubble { max-width: 85%; padding: 10px 12px; border-radius: 14px; font-size: 12px; line-height: 1.4; }
 .umkm-chat-bubble.them { align-self: flex-start; background: #fff; border: 1px solid #E6D5B3; color: #3D2A1C; }
 .umkm-chat-bubble.me { align-self: flex-end; background: linear-gradient(135deg, #8A5F41, #6E4A30); color: #fff; }
