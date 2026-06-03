@@ -76,7 +76,6 @@ import {
   ProtoBtnPrimary,
   ProtoBtnGhost,
   ProtoChip,
-  ProtoPageHero,
   ProtoSectionLabel,
 } from "../prototype/components/student-ui";
 
@@ -1513,15 +1512,17 @@ function ProtoHomescreen({ onOpen }: { onOpen: () => void }) {
 function ProtoSplash() {
   return (
     <div className="ps-splash">
-      <div className="ps-logo-ring">
-        <div className="ps-logo">
-          <img src="/quickjob-logo.png" alt="QuickJob" />
+      <div className="ps-splash-center">
+        <div className="ps-logo-ring">
+          <div className="ps-logo">
+            <img src="/quickjob-logo.png" alt="QuickJob" />
+          </div>
         </div>
+        <h2 className="ps-brand">QuickJob Campus</h2>
+        <p className="ps-tag">Kerja Sampingan, Mudah & Dekat</p>
+        <div className="ps-loading"><span /><span /><span /></div>
+        <p className="ps-note">Mencari job di sekitar kampus...</p>
       </div>
-      <h2 className="ps-brand">QuickJob Campus</h2>
-      <p className="ps-tag">Kerja Sampingan, Mudah & Dekat</p>
-      <div className="ps-loading"><span /><span /><span /></div>
-      <p className="ps-note">Mencari job di sekitar kampus...</p>
     </div>
   );
 }
@@ -1752,14 +1753,17 @@ function ProtoPreferensi({ nav, interests, setInterests, radius, setRadius, time
   const allTimes = ["Pagi", "Siang", "Sore", "Malam", "Akhir pekan"];
   return (
     <div className="ph-app qj-auth-shell">
-      <div className="qj-auth-scroll">
+      <div className="qj-auth-scroll qj-prefs-scroll">
         <ProtoBack onBack={nav.back} />
-        <ProtoPageHero
-          icon={SlidersHorizontal}
-          color="#8A5F41"
-          title="Atur preferensi kerjamu"
-          subtitle="Bantu kami rekomendasikan job yang cocok"
-        />
+        <div className="qj-prefs-head">
+          <div className="qj-prefs-head-icon">
+            <SlidersHorizontal size={18} />
+          </div>
+          <div>
+            <h2 className="qj-page-title qj-page-title--left">Atur preferensi kerjamu</h2>
+            <p className="qj-page-lead qj-page-lead--left">Bantu kami rekomendasikan job yang cocok</p>
+          </div>
+        </div>
         <ProtoSectionLabel>Minat pekerjaan</ProtoSectionLabel>
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6, marginBottom: 16 }}>
           {allInterests.map((i) => (
@@ -1814,17 +1818,23 @@ function ProtoBeranda({ nav }: { nav: ProtoNav }) {
               </button>
             </div>
           </div>
-          <div className="qj-stat-row">
+          <div className="ph-dash-stats">
             {[
-              { v: "8", l: "job cocok" },
-              { v: "1.2 km", l: "terdekat" },
-              { v: "2.450", l: "poin", gold: true },
-            ].map((m) => (
-              <div key={m.l} className={`qj-stat-card ${m.gold ? "gold" : ""}`}>
-                <strong>{m.v}</strong>
-                <small>{m.l}</small>
-              </div>
-            ))}
+              { v: "8", l: "Job cocok", icon: Briefcase },
+              { v: "1.2 km", l: "Terdekat", icon: MapPin },
+              { v: "2.450", l: "Poin", icon: Coins, gold: true },
+            ].map((m) => {
+              const Icon = m.icon;
+              return (
+                <div key={m.l} className={`ph-dash-stat ${m.gold ? "gold" : ""}`}>
+                  <span className="ph-dash-stat-icon" aria-hidden>
+                    <Icon size={14} />
+                  </span>
+                  <strong>{m.v}</strong>
+                  <small>{m.l}</small>
+                </div>
+              );
+            })}
           </div>
         </header>
 
@@ -3065,32 +3075,46 @@ const CSS = `
 .ps-pad { padding: 8px 16px 16px; display: flex; flex-direction: column; gap: 11px; }
 .ps-pad.ps-scroll { padding-bottom: 80px; }
 
-/* Splash */
+/* Splash — logo & teks di tengah layar */
 .ps-splash {
-  flex: 1; min-height: 0; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 10px; padding: 30px 24px;
+  flex: 1; min-height: 0; width: 100%;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  padding: 24px 20px;
   background: linear-gradient(180deg, #F3E4C9 0%, #EFE3D2 100%);
 }
+.ps-splash-center {
+  width: 100%;
+  max-width: 260px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 8px;
+}
 .ps-logo-ring {
-  width: 96px; height: 96px; border-radius: 28px;
+  width: 88px; height: 88px; border-radius: 24px;
   background: #FFFFFF;
   display: grid; place-items: center;
   box-shadow: 0 18px 38px rgba(138,95,65,.20);
   overflow: hidden;
   position: relative;
+  margin: 0 auto 4px;
+  flex-shrink: 0;
 }
 .ps-logo {
   width: 100%; height: 100%;
   display: grid; place-items: center;
 }
-.ps-logo img { width: 100%; height: 100%; object-fit: cover; }
+.ps-logo img { width: 72%; height: 72%; object-fit: contain; }
 @keyframes psBounce {
   0%, 100% { transform: translateY(0); }
   50% { transform: translateY(-6px); }
 }
-.ps-brand { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; font-size: 22px; font-weight: 800; margin: 8px 0 0; color: #3D2A1C; letter-spacing: -.01em; }
-.ps-tag { font-size: 12px; color: #6E4A30; margin: 0; }
-.ps-loading { display: flex; gap: 6px; margin-top: 10px; }
+.ps-brand { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; font-size: 22px; font-weight: 800; margin: 4px 0 0; color: #3D2A1C; letter-spacing: -.01em; width: 100%; }
+.ps-tag { font-size: 12px; color: #6E4A30; margin: 0; width: 100%; }
+.ps-loading { display: flex; gap: 6px; margin-top: 8px; justify-content: center; }
 .ps-loading span {
   width: 7px; height: 7px; border-radius: 50%;
   background: #8A5F41; opacity: .35;
