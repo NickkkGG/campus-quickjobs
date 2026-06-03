@@ -37,6 +37,10 @@
 /* Isolasi layout di dalam frame iPhone (bukan fullscreen browser) */
 .qj-phone .phone-screen {
   isolation: isolate;
+  font-size: 14px;
+  line-height: 1.45;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 /* Flex chain: ScreenTransition → ph-app */
@@ -193,20 +197,26 @@
   margin-bottom: 20px;
   animation: qj-icon-pulse 3s ease-in-out infinite;
 }
-.qj-title {
+/* Tipografi app di dalam frame — class terpisah dari .qj-title deck */
+.qj-phone .ph-onboard-title {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
   font-size: 19px;
   font-weight: 800;
   color: #3d2a1c;
   line-height: 1.35;
   margin: 0 0 8px;
   max-width: 280px;
+  text-align: center;
+  letter-spacing: normal;
 }
-.qj-subtitle {
+.qj-phone .ph-onboard-desc {
+  font-family: "Inter", system-ui, -apple-system, sans-serif;
   font-size: 13px;
   color: #6e4a30;
   line-height: 1.45;
   margin: 0;
   max-width: 260px;
+  text-align: center;
 }
 
 /* ——— Buttons ——— */
@@ -289,14 +299,17 @@
   margin: 0 auto 12px;
   box-shadow: 0 12px 28px rgba(138, 95, 65, 0.25);
 }
-.qj-page-title {
+.qj-phone .qj-page-title {
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 22px;
   font-weight: 800;
   color: #3d2a1c;
   text-align: center;
   margin: 0 0 4px;
+  letter-spacing: normal;
 }
-.qj-page-lead {
+.qj-phone .qj-page-lead {
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 12px;
   color: #6e4a30;
   text-align: center;
@@ -585,7 +598,8 @@
 .qj-filter-row::-webkit-scrollbar {
   display: none;
 }
-.qj-chip {
+.qj-phone .qj-chip {
+  display: inline-block;
   padding: 6px 12px;
   border-radius: 99px;
   font-size: 11px;
@@ -595,8 +609,9 @@
   color: #6e4a30;
   white-space: nowrap;
   cursor: pointer;
+  font-family: "Inter", system-ui, sans-serif;
 }
-.qj-chip.on {
+.qj-phone .qj-chip.on {
   background: #8a5f41;
   color: #fff;
   border-color: #8a5f41;

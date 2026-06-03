@@ -1563,8 +1563,8 @@ function ProtoWelcome({ nav, slide, setSlide }: { nav: ProtoNav; slide: number; 
           <div className="qj-icon-ring" style={{ boxShadow: `0 14px 36px ${s.color}40` }}>
             <Icon size={38} style={{ color: s.color }} />
           </div>
-          <h2 className="qj-title">{s.title}</h2>
-          <p className="qj-subtitle">{s.desc}</p>
+          <h2 className="ph-onboard-title">{s.title}</h2>
+          <p className="ph-onboard-desc">{s.desc}</p>
         </div>
       </div>
       <div className="qj-onboard-dots" aria-hidden>
@@ -2524,8 +2524,9 @@ const CSS = `
 .col { display: flex; flex-direction: column; gap: 22px; height: 100%; }
 .stack { display: flex; flex-direction: column; gap: 16px; }
 
-/* typography */
-.qj-kicker {
+/* typography — hanya slide deck, JANGAN global (bentrok dengan app di frame HP) */
+.qj-slide-inner .qj-kicker,
+.proto-info .qj-kicker {
   display: inline-block;
   font-family: 'JetBrains Mono', ui-monospace, monospace;
   font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
@@ -2534,13 +2535,15 @@ const CSS = `
   background: var(--panel);
   margin-bottom: 14px;
 }
-.qj-title {
+.qj-slide-inner .qj-title,
+.proto-info .qj-title {
   font-family: 'Georgia', 'Iowan Old Style', serif;
   font-size: clamp(38px, 4.4vw, 58px);
   line-height: 1.08; letter-spacing: -.02em;
   margin: 0; color: var(--cream-soft);
 }
-.qj-lead {
+.qj-slide-inner .qj-lead,
+.proto-info .qj-lead {
   margin-top: 16px;
   font-size: clamp(18px, 1.5vw, 22px);
   line-height: 1.6; color: var(--muted);
@@ -2550,7 +2553,7 @@ const CSS = `
 .mono { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 15.5px; line-height: 1.65; color: var(--cream); white-space: pre-wrap; margin: 0; }
 .mono-sm { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 16px; color: var(--cream); line-height: 1.6; }
 
-.qj-chip {
+.qj-slide-inner .qj-chip {
   display: inline-flex; align-items: center;
   padding: 5px 12px; border-radius: 999px;
   background: var(--panel-2);
@@ -3784,32 +3787,12 @@ const CSS = `
 .ph-app--chat .umkm-chat-thread { flex: 1; overflow-y: auto; padding: 8px 16px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
 .ph-app--chat .umkm-chat-compose { flex-shrink: 0; }
 
-/* Tombol di dalam frame: jangan pakai background cream global */
-.qj-phone .phone-screen button {
+/* App di frame HP: tipografi & tombol terisolasi dari slide deck */
+.qj-phone .phone-screen button:not(.qj-btn-primary):not(.qj-chip):not(.qj-role-card):not(.qj-job-card):not(.qj-map-cta):not(.ps-tab) {
   font-family: inherit;
   -webkit-tap-highlight-color: transparent;
 }
-.qj-phone .phone-screen .qj-btn-primary,
-.qj-phone .phone-screen .qj-onboard-footer .qj-btn-primary {
-  background: linear-gradient(135deg, #8a5f41 0%, #6e4a30 100%);
-  color: #fff;
-  border: none;
-}
-.qj-phone .phone-screen .qj-btn-ghost {
-  background: #fff;
-  color: #8a5f41;
-  border: 2px solid #8a5f41;
-}
-.qj-phone .phone-screen .qj-chip {
-  background: #fff;
-}
-.qj-phone .phone-screen .qj-chip.on {
-  background: #8a5f41;
-  color: #fff;
-}
-.qj-phone .phone-screen .ps-tab {
-  background: transparent;
-}
+.qj-phone .phone-screen .ps-tab,
 .qj-phone .phone-screen .ps-app-bar-back {
   background: transparent;
 }

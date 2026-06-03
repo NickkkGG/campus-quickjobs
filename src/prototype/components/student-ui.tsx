@@ -55,8 +55,8 @@ export function ProtoPageHero({
       <div className="qj-icon-ring" style={{ boxShadow: `0 14px 36px ${color}35` }}>
         <Icon size={36} style={{ color }} />
       </div>
-      <h2 className="qj-title">{title}</h2>
-      <p className="qj-subtitle">{subtitle}</p>
+      <h2 className="ph-onboard-title">{title}</h2>
+      <p className="ph-onboard-desc">{subtitle}</p>
     </div>
   );
 }
