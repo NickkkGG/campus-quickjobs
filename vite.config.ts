@@ -9,6 +9,8 @@ import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
 // @cloudflare/vite-plugin builds from this — wrangler.jsonc main alone is insufficient.
 export default defineConfig({
+  // Cloudflare Workers deploy needs Nitro to emit dist/server/wrangler.json
+  nitro: true,
   tanstackStart: {
     server: { entry: "server" },
   },
