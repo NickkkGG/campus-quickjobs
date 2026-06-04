@@ -979,6 +979,7 @@ type ProtoNav = {
   go: (s: ProtoScreen) => void;
   back: () => void;
   reset: (s: ProtoScreen) => void;
+  logout: () => void;
   selectJob: (id: string) => void;
   job: ProtoJob | undefined;
   showToast: (msg: string) => void;
@@ -1212,7 +1213,27 @@ function SlidePrototype() {
   const selectJob = (id: string) => setSelectedJobId(id);
   const showToast = (msg: string) => setToast(msg);
 
-  const nav: ProtoNav = { go, back, reset, selectJob, job: PROTO_JOBS.find((j) => j.id === selectedJobId), showToast };
+  const logout = () => {
+    setPhone("");
+    setOtp(["", "", "", ""]);
+    setCampus("");
+    setWelcomeSlide(0);
+    setNavDirection(1);
+    setHistory([]);
+    setScreen("welcome");
+    setLoadingBeranda(false);
+    showToast("Kamu telah keluar — masuk lagi kapan saja");
+  };
+
+  const nav: ProtoNav = {
+    go,
+    back,
+    reset,
+    logout,
+    selectJob,
+    job: PROTO_JOBS.find((j) => j.id === selectedJobId),
+    showToast,
+  };
 
   const isHome = screen === "homescreen";
   const isUmkm = UMKM_SCREENS.includes(screen);
@@ -2317,7 +2338,13 @@ function ProtoProfil({ nav }: { nav: ProtoNav }) {
               </button>
             );
           })}
-          <button type="button" style={{ width: "100%", backgroundColor: "#fff", borderRadius: 12, padding: 10, display: "flex", alignItems: "center", gap: 8, boxShadow: "0 4px 12px rgba(138,95,65,0.06)", border: "none", cursor: "pointer", textAlign: "left", marginTop: 8 }}>
+          <button
+            type="button"
+            className="ps-tap"
+            onClick={() => nav.logout()}
+            aria-label="Keluar dari akun"
+            style={{ width: "100%", backgroundColor: "#fff", borderRadius: 12, padding: 10, display: "flex", alignItems: "center", gap: 8, boxShadow: "0 4px 12px rgba(138,95,65,0.06)", border: "none", cursor: "pointer", textAlign: "left", marginTop: 8 }}
+          >
             <LogOut size={16} style={{ color: "#B5532B" }} />
             <span style={{ flex: 1, fontSize: 13, fontWeight: 500, color: "#B5532B" }}>Keluar</span>
           </button>
