@@ -128,8 +128,11 @@ function QuickJobDeck() {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      const inPhone = (e.target as HTMLElement)?.closest?.(".qj-phone");
-      if (inPhone) return;
+      const target = e.target as HTMLElement | null;
+      const typingInPhone =
+        target?.closest?.(".qj-phone") &&
+        (target.matches("input, textarea, select") || target.isContentEditable);
+      if (typingInPhone) return;
       if (e.key === "ArrowRight" || e.key === " " || e.key === "PageDown") {
         e.preventDefault();
         go(i + 1);
@@ -165,20 +168,41 @@ function QuickJobDeck() {
           <span className="qj-label">· {SLIDES[i].label}</span>
         </div>
         <div className="qj-controls">
-          <button onClick={() => go(i - 1)} aria-label="Previous">
+          <button type="button" onClick={() => go(i - 1)} disabled={i === 0} aria-label="Previous slide">
             ←
           </button>
-          <button onClick={() => go(i + 1)} aria-label="Next">
+          <button
+            type="button"
+            onClick={() => go(i + 1)}
+            disabled={i >= SLIDES.length - 1}
+            aria-label="Next slide"
+          >
             →
           </button>
         </div>
       </header>
 
-      <main className="qj-stage">
+      <main
+        className="qj-stage"
+        onClick={(e) => {
+          if (e.target !== e.currentTarget) return;
+          const rect = e.currentTarget.getBoundingClientRect();
+          const ratio = (e.clientX - rect.left) / rect.width;
+          if (ratio < 0.2) go(i - 1);
+          else if (ratio > 0.8) go(i + 1);
+        }}
+      >
         {SLIDES.map((s, idx) => {
           const state = idx === i ? "active" : idx < i ? "past" : "future";
+          const isActive = idx === i;
           return (
-            <section key={s.id} className={`qj-slide qj-slide-${state}`} data-dir={dir}>
+            <section
+              key={s.id}
+              className={`qj-slide qj-slide-${state}`}
+              data-dir={dir}
+              aria-hidden={!isActive}
+              inert={!isActive ? true : undefined}
+            >
               <div className="qj-slide-inner">{s.render()}</div>
             </section>
           );
@@ -189,10 +213,12 @@ function QuickJobDeck() {
         <div className="qj-dots">
           {SLIDES.map((s, idx) => (
             <button
+              type="button"
               key={s.id}
               className={`qj-dot ${idx === i ? "on" : ""}`}
               onClick={() => go(idx)}
-              aria-label={`Slide ${idx + 1}`}
+              aria-label={`Slide ${idx + 1}: ${s.label}`}
+              aria-current={idx === i ? "step" : undefined}
             />
           ))}
         </div>
@@ -2559,9 +2585,25 @@ const CSS = `
   transition: opacity .55s var(--ease), transform .65s var(--ease);
   pointer-events: none;
   overflow: hidden;
+  z-index: 0;
 }
-.qj-slide-past { transform: translate3d(-40px, 0, 0) scale(.98); }
-.qj-slide-active { opacity: 1; transform: translate3d(0,0,0) scale(1); pointer-events: auto; }
+.qj-slide-past { transform: translate3d(-40px, 0, 0) scale(.98); z-index: 1; }
+.qj-slide-future { z-index: 1; }
+.qj-slide-active {
+  opacity: 1;
+  transform: translate3d(0,0,0) scale(1);
+  pointer-events: auto;
+  z-index: 10;
+}
+.qj-slide:not(.qj-slide-active),
+.qj-slide:not(.qj-slide-active) * {
+  pointer-events: none !important;
+}
+.qj-controls button:disabled {
+  opacity: .35;
+  cursor: not-allowed;
+  transform: none;
+}
 .qj-slide-inner {
   height: 100%; max-width: 1320px; margin: 0 auto;
   display: flex; flex-direction: column;
